@@ -1,20 +1,22 @@
 package kstn.game;
 
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
-import kstn.game.app.root.Root;
-import kstn.game.app.screen.GameAnimationView;
-import kstn.game.view.thang.fragment.AFragment;
+
+import kstn.game.view.thang.fragment.MenuFragment;
+import kstn.game.view.thang.fragment.PlayFragment;
 
 public class MainActivity extends AppCompatActivity {
-    private GameAnimationView gameView;
-    private Root root;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +27,9 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
-        gameView = (GameAnimationView) findViewById(R.id.game_animation);
-        root = new Root(this, gameView);
-        root.init();
 
-        AddFragment(R.id.anotherMyLayout, new AFragment());
+
+        AddFragment(R.id.myLayout, new MenuFragment());
     }
 
     public void AddFragment(int id, Fragment fragment){
@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager quanlyFragment = getSupportFragmentManager();
         FragmentTransaction transaction = quanlyFragment.beginTransaction();
         transaction.replace(id,fragment);
+
         transaction.addToBackStack(name);
         transaction.commit();
     }
@@ -44,39 +45,37 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.myLayout);
-        if(!(fragment instanceof AFragment)){
-            super.onBackPressed();
+        if(fragment instanceof MenuFragment){
+            AlertDialog.Builder hopthoai = new AlertDialog.Builder(MainActivity.this);
+            hopthoai.setTitle("Bạn Có muốn thoát ? ");
+            hopthoai.setMessage("Chọn Yes để thoát, No để ở lại");
+            hopthoai.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    // an yes thi code o day thuc thi
+                    System.exit(0);
+                }
+            });
+            hopthoai.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            hopthoai.create().show();
+        } else{
+                super.onBackPressed();
+
+            }
         }
-        else{
-            super.onBackPressed();
-            System.exit(0);
-        }
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        gameView.onResume();
-    }
 
-    @Override
-    protected void onPause() {
-        gameView.onPause();
-        super.onPause();
-    }
 
-    @Override
-    public void onStop(){
-        super.onStop();
-    }
 
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-    }
+
+
+
+
+
 }

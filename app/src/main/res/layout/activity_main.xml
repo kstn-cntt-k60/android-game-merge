@@ -9,18 +9,6 @@
        android:layout_width="match_parent"
        android:layout_height="match_parent">
 
-       <kstn.game.app.screen.GameAnimationView
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:id="@+id/game_animation" />
-
-       <FrameLayout
-           android:id="@+id/anotherMyLayout"
-           android:layout_width="match_parent"
-           android:layout_height="match_parent">
-
-       </FrameLayout>
-
    </FrameLayout>
 
 </RelativeLayout>

@@ -7,5 +7,13 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="Theme_Dialog" parent="android:Theme.Holo.Light.Dialog">
+        <!--<item name="android:gravity">bottom</item>-->
+        <!--<item name="android:layout_gravity">bottom</item>-->
+        <!--<item name="android:layout_width">fill_parent</item>-->
+
+
+
+    </style>
 
 </resources>
