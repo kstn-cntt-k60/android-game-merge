@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
    >
 
-   <FrameLayout
-       android:id="@+id/myLayout"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent">
+    <kstn.game.app.screen.GameAnimationView
+        android:id="@+id/game_animation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-   </FrameLayout>
+    <FrameLayout
+        android:id="@+id/myLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 
-</RelativeLayout>
+</FrameLayout>

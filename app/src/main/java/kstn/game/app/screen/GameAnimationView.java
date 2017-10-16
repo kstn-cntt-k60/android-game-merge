@@ -120,9 +120,6 @@ public class GameAnimationView extends GLSurfaceView implements GLSurfaceView.Re
         super.onPause();
     }
 
-    // getActionMasked(): use for newer version
-    // getActionIndex(): current action index for multitouch
-    // getPointerCount(): get number of finger
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (width == 0 || height == 0)
@@ -156,7 +153,6 @@ public class GameAnimationView extends GLSurfaceView implements GLSurfaceView.Re
                 return true;
             }
         }
-
         return true;
     }
 }

@@ -1,7 +1,6 @@
 package kstn.game.view.screen;
 
 import android.opengl.Matrix;
-import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -112,6 +111,7 @@ public abstract class View {
     public final void setCenter(float centerX, float centerY) {
         this.centerX = centerX;
         this.centerY = centerY;
+        Matrix.setIdentityM(translationMatrix, 0);
         Matrix.translateM(translationMatrix, 0, centerX, centerY, 0);
         updateModelMatrix();
     }

@@ -17,9 +17,13 @@ import kstn.game.app.process.BaseProcessManager;
 import kstn.game.app.screen.GameAnimationView;
 import kstn.game.app.screen.GameViewClient;
 import kstn.game.app.screen.ShaderProgram;
+import kstn.game.logic.event.EventData;
+import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.process.Process;
 import kstn.game.view.asset.AssetManager;
+import kstn.game.view.cone.Cone;
+import kstn.game.view.events.UIEventType;
 import kstn.game.view.network.ClientFactory;
 import kstn.game.view.network.ServerFactory;
 import kstn.game.view.screen.ImageView;
@@ -43,6 +47,12 @@ public class Root implements GameViewClient {
 
     private BaseTimeManager timeManager;
     private long previousTimeStamp = 0;
+
+    private Cone gameCone;
+
+    public EventManager getUiEventManager() {
+        return uiEventManager;
+    }
 
     public Root(Activity activity, GameAnimationView gameView) {
         this.activity = activity;
@@ -71,56 +81,21 @@ public class Root implements GameViewClient {
         timeManager = new BaseTimeManager(llEventManager);
         uiEventManager = new UIEventManager(activity, llEventManager, eventManager);
 
-        ViewGroup viewGroup = gameView.getRootViewGroup();
+        final ViewGroup viewGroup = gameView.getRootViewGroup();
         gameView.setLLEventManager(llEventManager);
-        Bitmap bitmap = null;
+
         Bitmap background = null;
         try {
             background = assetManager.getBitmap("bg.jpg");
-            bitmap = assetManager.getBitmap("cute.png");
         } catch (IOException e) {
             assert (false);
         }
-        ImageView imageView = new ImageView(0, 0.6f, 1.6f, 1.6f, bitmap);
-        ImageView backgroundView = new ImageView(0, 0, 16.0f / 3 , 4, background);
-        imageView.setTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View.TouchEvent event) {
-                Log.d("onTouch", "type: " + event.getType());
-                Log.d("onTouch", "x, y: " + event.getX() + ", " + event.getY());
-                return true;
-            }
-        });
+        final ImageView backgroundView = new ImageView(0, 0, 16.0f / 3 , 4, background);
 
         viewGroup.addView(backgroundView);
-        viewGroup.addView(imageView);
-        processManager.attachProcess(new ExamProcess(imageView));
-    }
 
-    class ExamProcess extends Process {
-        private final ImageView imageView;
-        private float angle = 0;
-
-        public ExamProcess(ImageView imageView) {
-            this.imageView = imageView;
-        }
-        @Override
-        public void onUpdate(long deltaMs) {
-            angle += (deltaMs * 180) / 1000.0f;
-            imageView.rotate(angle);
-        }
-
-        @Override
-        public void onSuccess() {
-        }
-
-        @Override
-        public void onFail() {
-        }
-
-        @Override
-        public void onAbort() {
-        }
+        gameCone = new Cone(processManager, assetManager, eventManager, viewGroup);
+        gameCone.show();
     }
 
     @Override

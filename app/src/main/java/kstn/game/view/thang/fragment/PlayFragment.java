@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -47,7 +48,7 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
     private ImageView imgNon;
     private MediaPlayer song;
     private TextView txtNoiDungKim;
-
+    private ImageView kim;
     // bien cờ
     private boolean[] flag = new boolean[26];
     private int dem=0;
@@ -85,7 +86,15 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_play, container, false);
+        View result = inflater.inflate(R.layout.fragment_play, container, false);
+        result.setBackgroundColor(Color.parseColor("#00000000"));
+        result.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return false;
+            }
+        });
+        return result;
     }
 
     @Override
@@ -107,8 +116,10 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         txtCauHoi = (TextView) view.findViewById(R.id.txtCauHoi);
         txtNoiDungKim = (TextView) view.findViewById(R.id.txtNoiDungKim);
         imgNon = (ImageView) view.findViewById(R.id.imgNon);
+        kim = (ImageView) view.findViewById(R.id.kim);
         songFail = MediaPlayer.create(getActivity(), R.raw.failure);
         songTingTing = MediaPlayer.create(getActivity(), R.raw.tingting);
+
         // khởi tạo arraylist Điểm vòng quay
         data.add("800");
         data.add("Mất điểm");
@@ -307,30 +318,21 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
                                 Toast.makeText(getActivity(),"game Over",Toast.LENGTH_LONG).show();
                             }
                         }
-
                     }
                 });
-
-
             }
         });
-
-
-
     }
 
-
-
-
-public  void InitAlert(Dialog hopthoai, View view){
-    hopthoai.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-    hopthoai.setContentView(view);
-    WindowManager.LayoutParams w = hopthoai.getWindow().getAttributes();
-    w.gravity = Gravity.BOTTOM;
-    w.x=0;
-    w.height=(int)(height*0.53);
-    hopthoai.getWindow().setAttributes(w);
-}
+    public  void InitAlert(Dialog hopthoai, View view){
+        hopthoai.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        hopthoai.setContentView(view);
+        WindowManager.LayoutParams w = hopthoai.getWindow().getAttributes();
+        w.gravity = Gravity.BOTTOM;
+        w.x=0;
+        w.height=(int)(height*0.53);
+        hopthoai.getWindow().setAttributes(w);
+    }
 
     public void UpdateContext() {
         for(int i=0;i< dataLetter.size();i++){
@@ -398,26 +400,16 @@ public  void InitAlert(Dialog hopthoai, View view){
                 } else {
                     start = i;
                     break;
-
                 }
-
-
             }
 
             if (!buff.isEmpty()) {
                 c.add(buff);
                 size += buff.length();
-
             }
-
         }
         return c;
-
-
     }
-
-
-
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -426,6 +418,8 @@ public  void InitAlert(Dialog hopthoai, View view){
 
         final float x = motionEvent.getX();
         final float y = motionEvent.getY();
+
+        Log.i("Touch", "( " + x + ", " + y + " )");
 
         // txtKQ.setText("x= " + x + " , y= " + y);
 
@@ -451,8 +445,8 @@ public  void InitAlert(Dialog hopthoai, View view){
                 mCurrAngle = (int)(50*Math.toDegrees(Math.atan2( Math.abs(x - xc), Math.abs(yc - y))));
                 mCurrAngle = mCurrAngle - mCurrAngle%18;
                 // txtNhap.setText(String.valueOf(mCurrAngle/18));
-                animate(mPrevAngle, mCurrAngle, 3000);
-                mPrevAngle = mCurrAngle;
+                animate(mPrevAngle, mCurrAngle, 1000);
+//                mPrevAngle = mCurrAngle;
                 break;
 
             }
@@ -476,6 +470,11 @@ public  void InitAlert(Dialog hopthoai, View view){
             public void onAnimationStart(Animation animation) {
 
                 song.start();
+                final float xc = (imgNon.getX() + imgNon.getWidth() / 2);
+                final float yc = (imgNon.getY() + imgNon.getHeight() / 2);
+
+
+
 
 
             }

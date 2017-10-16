@@ -9,14 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
-
+import kstn.game.app.root.Root;
+import kstn.game.app.screen.GameAnimationView;
+import kstn.game.view.events.TransferToMenuEventData;
 import kstn.game.view.thang.fragment.MenuFragment;
-import kstn.game.view.thang.fragment.PlayFragment;
 
 public class MainActivity extends AppCompatActivity {
-
+    private GameAnimationView gameView;
+    private Root root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +29,13 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-
         AddFragment(R.id.myLayout, new MenuFragment());
+
+        gameView = (GameAnimationView) findViewById(R.id.game_animation);
+        root = new Root(this, gameView);
+        root.init();
+
+        MenuFragment.uiEventManager = root.getUiEventManager();
     }
 
     public void AddFragment(int id, Fragment fragment){
@@ -63,19 +69,38 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             hopthoai.create().show();
-        } else{
-                super.onBackPressed();
-
-            }
+        } else {
+            // TODO
+            root.getUiEventManager().queue(new TransferToMenuEventData());
+            super.onBackPressed();
         }
+    }
 
+    @Override
+    public void onPause() {
+        gameView.onPause();
+        super.onPause();
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        gameView.onResume();
+    }
 
+    @Override
+    public void onStop(){
+        super.onStop();
+    }
 
-
-
-
-
-
+    @Override
+    public void onDestroy(){
+        gameView.clearAnimation();
+        super.onDestroy();
+    }
 }

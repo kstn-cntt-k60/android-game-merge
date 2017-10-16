@@ -27,6 +27,11 @@ public class ViewGroup extends View implements ViewManager {
     }
 
     @Override
+    public void clear() {
+        viewList.clear();
+    }
+
+    @Override
     public View onTouch(TouchEvent event) {
         if (event.getType() == TouchEvent.TOUCH_DOWN) {
             float x = event.getX();
