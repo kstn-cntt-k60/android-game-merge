@@ -151,6 +151,7 @@ public abstract class View {
         int TOUCH_DOWN = 0;
         int TOUCH_UP = 1;
         int TOUCH_MOVE = 2;
+        int COLLISON = 3;
 
         int getType();
 

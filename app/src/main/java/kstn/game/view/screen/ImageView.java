@@ -15,6 +15,7 @@ public final class ImageView extends View implements ViewRotatable {
     private final float[] rotateMatrix = new float[16];
     private int imageTextureId = -1;
 
+
     private float[] textureCoordArray = new float[8];
     private FloatBuffer textureCoordBuffer = null;
 
@@ -37,7 +38,7 @@ public final class ImageView extends View implements ViewRotatable {
     protected void initBuffers() {
         super.initBuffers();
 
-        // Texture Coordinate Buffer
+        // Texture c Buffer
         textureCoordArray[0] = 0;
         textureCoordArray[1] = 1;
 
