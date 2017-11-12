@@ -3,6 +3,7 @@ package kstn.game.app.root;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -23,6 +24,7 @@ import kstn.game.view.cone.Needle;
 import kstn.game.view.network.ClientFactory;
 import kstn.game.view.network.ServerFactory;
 import kstn.game.view.screen.ImageView;
+import kstn.game.view.screen.View;
 import kstn.game.view.screen.ViewGroup;
 
 public class Root implements GameViewClient {
@@ -99,6 +101,8 @@ public class Root implements GameViewClient {
         gameCone = new Cone(processManager, assetManager, eventManager, timeManager, gameNeedle, viewGroup);
         gameCone.show();
         gameNeedle.show();
+
+
     }
 
     @Override

@@ -28,7 +28,6 @@ public class Cone {
     private final BaseTimeManager timeManager;
 
     private float angle = 0;
-    private float speedStart;
     private long timeToInitSpeed;
 
     // for handling touch events
@@ -43,8 +42,8 @@ public class Cone {
     public Cone(ProcessManager processManager_,
                 AssetManager assetManager,
                 EventManager eventManager_,
-                final BaseTimeManager timeManager,
-                Needle gameNeedle,
+                BaseTimeManager timeManager,
+                final Needle gameNeedle,
                 ViewGroup rootViewGroup) {
         this.rootViewGroup = rootViewGroup;
         this.eventManager = eventManager_;
@@ -72,7 +71,7 @@ public class Cone {
                     if (distance_from_event(event) >= 0.2f) {
                         allowRotate = true;
                         startAngle = event_to_angle(event);
-                        Cone.this.timeToInitSpeed = timeManager.getCurrentMillis();
+                        Cone.this.timeToInitSpeed = Cone.this.timeManager.getCurrentMillis();
                     } else allowRotate = false;
                 }
                 else if (allowRotate && event.getType() == View.TouchEvent.TOUCH_MOVE) {
@@ -82,13 +81,15 @@ public class Cone {
 
                 }
                 else if (allowRotate && event.getType() == View.TouchEvent.TOUCH_UP) {
-                    timeToInitSpeed = timeManager.getCurrentMillis() - timeToInitSpeed;
+                    timeToInitSpeed = Cone.this.timeManager.getCurrentMillis() - timeToInitSpeed;
                     endAngle = event_to_angle(event);
-                    eventManager.trigger(new ConeAccelerateEventData(
-                            normalize(baseAngle + endAngle - startAngle)));
-                    speedStart = normalize((baseAngle + endAngle - startAngle)/timeToInitSpeed);
-                    Log.i("SpeedStart ", speedStart + " " );
-                    Log.i("Time " , timeToInitSpeed + " ");
+                    float deltaAngle = startAngle - endAngle;
+                    float speedStart;
+                    if (deltaAngle>0 && deltaAngle < 180)
+                        speedStart = deltaAngle/timeToInitSpeed;
+                    else
+                        speedStart = normalize(endAngle - startAngle)/timeToInitSpeed;
+                    eventManager.trigger(new ConeAccelerateEventData(normalize(baseAngle + endAngle - startAngle), speedStart));
                 }
                 return true;
             }
@@ -109,10 +110,14 @@ public class Cone {
                 float angle = ((ConeAccelerateEventData) event).getAngle();
                 coneView.rotate(angle);
                 Cone.this.angle = angle;
-                ConeProcess coneProcess = new ConeProcess();
+                float speedStart = ((ConeAccelerateEventData) event).getSpeedStart();
+                ConeProcess coneProcess = new ConeProcess(speedStart);
                 processManager.attachProcess(coneProcess);
             }
         });
+
+
+//        isCollision();
     }
 
     public void disable() {
@@ -139,30 +144,31 @@ public class Cone {
 
     class ConeProcess extends Process {
         private float speed;
-        private long time = 0;
         private int result;
 
-        public ConeProcess() {
-            this.speed = speedStart;
+        public ConeProcess(float speedStart) {
+            this.speed = 2*speedStart;
+            Log.i("Speed init", "" + speed);
         }
+
 
         @Override
         public void onUpdate(long deltaMs) {
             if (speed > 0) {
-                time += 1;
-                Log.i("Time", "" + speed + " " + time+ " " + angle);
-                if (time < speedStart/0.75) {
-                    angle += 0.5*time/100;
+                speed -= deltaMs/3500f;
+                if (isCollision()) {
+                    eventManager.queue(new NeedleCollisonEventData(speed));
+                    speed -= 0.005;
                 }
-                else if (time < 900) angle += 0.5*speedStart/75;
-                else if ((time - speedStart/0.5)%10 < 5 ) {
-                    speed -= 0.5;
-                    angle += speed/100;
-                }
-
+                angle += speed;
                 angle = normalize(angle);
                 coneView.rotate(angle);
             }else {
+                if (isCollision()){
+                    angle -= 0.5;
+                    coneView.rotate(angle);
+
+                }
                 succeed();
             }
         }
@@ -211,6 +217,10 @@ public class Cone {
     }
 
     private boolean isCollision() {
+        int result = (int)(((int)angle - 9)/18f + 1)%20;
+        if ( gameNeedle.isStartCollison() && (result + 1)*18 - 9 - angle < 1.5){
+            return true;
+        }
         return false;
     }
 }

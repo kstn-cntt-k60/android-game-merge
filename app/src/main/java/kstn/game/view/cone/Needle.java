@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import java.io.IOException;
+import java.security.acl.LastOwnerException;
 
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
@@ -20,15 +21,19 @@ import kstn.game.view.screen.ViewGroup;
  */
 
 public class Needle {
+
     private ViewGroup rootviewGroup;
     private ImageView needleView;
     private boolean isHidden = false;
 
+    private final ProcessManager processManager;
+    private boolean isStartCollison = true;
     public Needle(final ProcessManager processManager,
                   AssetManager assetManager,
                   final EventManager eventManager,
                   ViewGroup rootviewGroup) {
         this.rootviewGroup = rootviewGroup;
+        this.processManager = processManager;
         Bitmap image = null;
         try {
             image = assetManager.getBitmap("kim.png");
@@ -36,67 +41,46 @@ public class Needle {
         }
         needleView = new ImageView(0.0f, 1.25f, 0.1f, 0.2f, image);
 
-        needleView.setTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View.TouchEvent event) {
-                if (event.getType() == View.TouchEvent.TOUCH_UP) {
-                    Log.i(getClass().getName(), "Su kien va cham voi non");
-//                    eventManager.trigger(new NeedleMoveEventData(10));
-                }
 
-                if (event.getType() == View.TouchEvent.TOUCH_MOVE) {
-                    float y = event.getY();
-                    float x = event.getX();
-
-                    Log.i("Su kien:", "Cham kim");
-
-                    eventManager.trigger(new NeedleMoveEventData(x, y));
-
-                }
-                return true;
-            }
-        });
         eventManager.addListener(NeedleEventType.COLLISION, new EventListener() {
             @Override
             public void onEvent(EventData event) {
-                //setgoc
-//                float angle = ((NeedleMoveEventData) event).getAngle();
-//                needleView.rotate(angle);
+                float angleStop = ((NeedleCollisonEventData) event).getAngle();
+                processManager.attachProcess(new NeedleProcess(angleStop));
             }
         });
-
-        eventManager.addListener(NeedleEventType.MOVE, new EventListener() {
-            @Override
-            public void onEvent(EventData event) {
-                event = (NeedleMoveEventData) event;
-                needleView.rotate(30);
-                needleView.setCenter(((NeedleMoveEventData) event).getX(), ((NeedleMoveEventData) event).getY());
-                Log.i("Vi tri ", ((NeedleMoveEventData) event).getX() + " " + ((NeedleMoveEventData) event).getY());
-//                processManager.attachProcess(new KimProcess(needleView));
-            }
-        });
-
 
 
     }
 
-    class KimProcess extends Process {
-        private final ImageView imageView;
+    class NeedleProcess extends Process {
+        private float time = 0;
         private float angle = 0;
-
-        public KimProcess(ImageView imageView) {
-            this.imageView = imageView;
+        private float angleStop;
+        public NeedleProcess(float angelStop) {
+            this.angleStop = angelStop;
         }
 
         @Override
         public void onUpdate(long deltaMs) {
-            angle += (deltaMs * 90) / 1000.0f;
-            System.out.println("quay kim" + angle);
-            imageView.rotate(angle);
+            isStartCollison = false;
+            if (time < 1) {
+                time += 0.1;
+                angle += 0.9;
+                needleView.rotate(-angle);
+            } else {
+                angle -= 0.06;
+                if (angle < 0.01) {
+                    succeed();
+                }
+            }
+
         }
 
         @Override
         public void onSuccess() {
+            needleView.rotate(0);
+            isStartCollison = true;
         }
 
         @Override
@@ -112,4 +96,10 @@ public class Needle {
     public void show() {
         if (!isHidden) rootviewGroup.addView(needleView);
     }
+
+    public boolean isStartCollison() {
+        return isStartCollison;
+    }
+
+
 }

@@ -107,4 +107,5 @@ public final class ImageView extends View implements ViewRotatable {
         GLES20.glUniformMatrix4fv(modelMatrixLocation, 1, false, modelMatrix, 0);
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, indexBuffer);
     }
+
 }
