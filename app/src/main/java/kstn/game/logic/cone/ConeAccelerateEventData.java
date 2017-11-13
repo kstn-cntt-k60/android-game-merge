@@ -1,4 +1,4 @@
-package kstn.game.view.cone;
+package kstn.game.logic.cone;
 
 import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;

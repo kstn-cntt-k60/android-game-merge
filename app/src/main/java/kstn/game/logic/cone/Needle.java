@@ -1,10 +1,8 @@
-package kstn.game.view.cone;
+package kstn.game.logic.cone;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import java.io.IOException;
-import java.security.acl.LastOwnerException;
 
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
@@ -13,7 +11,6 @@ import kstn.game.logic.process.Process;
 import kstn.game.logic.process.ProcessManager;
 import kstn.game.view.asset.AssetManager;
 import kstn.game.view.screen.ImageView;
-import kstn.game.view.screen.View;
 import kstn.game.view.screen.ViewGroup;
 
 /**

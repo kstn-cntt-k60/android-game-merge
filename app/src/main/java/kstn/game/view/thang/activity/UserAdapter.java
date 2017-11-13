@@ -51,8 +51,8 @@ public class UserAdapter extends BaseAdapter {
         TextView txtTen = (TextView) view.findViewById(R.id.txtTen);
 //        txtMang.setText("2");
 //        txtDiem.setText("0");
-        txtTen.setText(data.get(i).getTen());
-        img.setImageResource(data.get(i).getIdAnh());
+        txtTen.setText(data.get(i).getName());
+        img.setImageResource(data.get(i).getAvatarId());
         return view;
     }
 }

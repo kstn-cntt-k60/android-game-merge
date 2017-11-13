@@ -1,6 +1,4 @@
-package kstn.game.view.cone;
-
-import java.util.HashMap;
+package kstn.game.logic.cone;
 
 import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;
@@ -16,7 +14,7 @@ public class ConeStopEventData extends BaseEventData {
         this.result = result;
     }
 
-    int getResult() {
+    public int getResult() {
         return result;
     }
 

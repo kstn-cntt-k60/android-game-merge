@@ -1,4 +1,4 @@
-package kstn.game.view.cone;
+package kstn.game.logic.cone;
 
 import android.graphics.Bitmap;
 import android.util.Log;

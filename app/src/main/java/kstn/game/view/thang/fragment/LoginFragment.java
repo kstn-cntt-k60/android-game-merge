@@ -62,8 +62,8 @@ public class LoginFragment extends Fragment {
                     if (ten.getText().toString().isEmpty()) {
                         user = new PlayerModel("GUEST" + (System.currentTimeMillis()/1000), idAnh);
                     } else user = new PlayerModel(ten.getText().toString(), idAnh);
-                    Toast.makeText(getActivity(),user.getTen(),Toast.LENGTH_SHORT).show();
-                    ((MainActivity) getActivity()).AddFragment(R.id.myLayout, MutiPlayFragment.newObj(user));
+                    Toast.makeText(getActivity(),user.getName(),Toast.LENGTH_SHORT).show();
+                    ((MainActivity) getActivity()).addFragment(R.id.myLayout, MutiPlayFragment.newObj(user));
                 }
             });
 

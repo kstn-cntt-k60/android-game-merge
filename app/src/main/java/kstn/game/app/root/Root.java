@@ -1,7 +1,6 @@
 package kstn.game.app.root;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 
 import java.io.IOException;
 
@@ -19,11 +18,10 @@ import kstn.game.app.screen.ShaderProgram;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.state.LogicStateManager;
 import kstn.game.view.asset.AssetManager;
-import kstn.game.view.cone.Cone;
-import kstn.game.view.cone.Needle;
+import kstn.game.logic.cone.Cone;
+import kstn.game.logic.cone.Needle;
 import kstn.game.view.network.ClientFactory;
 import kstn.game.view.network.ServerFactory;
-import kstn.game.view.screen.ImageView;
 import kstn.game.view.screen.ViewGroup;
 import kstn.game.view.state.ViewStateManager;
 

@@ -1,5 +1,9 @@
 package kstn.game.logic.state;
 
+import android.graphics.Bitmap;
+
+import java.io.IOException;
+
 import kstn.game.view.screen.ImageView;
 
 /**
@@ -11,7 +15,13 @@ public class LogicMenuState extends LogicGameState {
 
     public LogicMenuState(LogicStateManager manager) {
         super(manager);
-        // backgroundView = new ImageView(0, 0, 1, 1.6, bitmap);
+        Bitmap background = null;
+        try {
+            background = stateManager.assetManager.getBitmap("bg.jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        backgroundView = new ImageView(0, 0, 2, 1.8f * 2, background);
     }
 
     @Override
