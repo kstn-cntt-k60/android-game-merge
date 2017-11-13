@@ -1,12 +1,11 @@
 package kstn.game.app.root;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import java.io.IOException;
 
+import kstn.game.MainActivity;
 import kstn.game.app.asset.AndroidAssetManager;
 import kstn.game.app.event.BaseEventManager;
 import kstn.game.app.event.LLBaseEventManager;
@@ -18,14 +17,15 @@ import kstn.game.app.screen.GameAnimationView;
 import kstn.game.app.screen.GameViewClient;
 import kstn.game.app.screen.ShaderProgram;
 import kstn.game.logic.event.EventManager;
+import kstn.game.logic.state.LogicStateManager;
 import kstn.game.view.asset.AssetManager;
 import kstn.game.view.cone.Cone;
 import kstn.game.view.cone.Needle;
 import kstn.game.view.network.ClientFactory;
 import kstn.game.view.network.ServerFactory;
 import kstn.game.view.screen.ImageView;
-import kstn.game.view.screen.View;
 import kstn.game.view.screen.ViewGroup;
+import kstn.game.view.state.ViewStateManager;
 
 public class Root implements GameViewClient {
 
@@ -34,7 +34,7 @@ public class Root implements GameViewClient {
 
 	private final GameAnimationView gameView;
     private final Context context;
-    private final Activity activity;
+    private final MainActivity activity;
 
     private BaseEventManager eventManager;
     private EventManager uiEventManager;
@@ -52,11 +52,14 @@ public class Root implements GameViewClient {
     private Cone gameCone;
     private Needle gameNeedle;
 
+    private ViewStateManager viewStateManager = null;
+    private LogicStateManager logicStateManager = null;
+
     public EventManager getUiEventManager() {
         return uiEventManager;
     }
 
-    public Root(Activity activity, GameAnimationView gameView) {
+    public Root(MainActivity activity, GameAnimationView gameView) {
         this.activity = activity;
         this.context = activity;
         this.gameView = gameView;
@@ -86,23 +89,9 @@ public class Root implements GameViewClient {
         final ViewGroup viewGroup = gameView.getRootViewGroup();
         gameView.setLLEventManager(llEventManager);
 
-        Bitmap background = null;
-        try {
-            background = assetManager.getBitmap("bg.jpg");
-        } catch (IOException e) {
-            assert (false);
-        }
-        final ImageView backgroundView = new ImageView(0, 0, 16.0f / 3 , 4, background);
-
-        viewGroup.addView(backgroundView);
-
-        gameNeedle = new Needle(processManager, assetManager, eventManager, viewGroup);
-
-        gameCone = new Cone(processManager, assetManager, eventManager, timeManager, gameNeedle, viewGroup);
-        gameCone.show();
-        gameNeedle.show();
-
-
+        viewStateManager = new ViewStateManager(this.activity, uiEventManager);
+        logicStateManager = new LogicStateManager(viewGroup,
+                eventManager, assetManager);
     }
 
     @Override
@@ -120,6 +109,10 @@ public class Root implements GameViewClient {
             previousTimeStamp = currentTimeStamp;
             processManager.updateProcesses(timeDifferent);
         }
+    }
+
+    public boolean onBack() {
+        return viewStateManager.onBack();
     }
 	
 	public void shutdown() {

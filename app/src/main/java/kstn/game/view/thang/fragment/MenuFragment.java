@@ -18,8 +18,7 @@ import kstn.game.R;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
-import kstn.game.view.cone.ConeEventType;
-import kstn.game.view.events.TransferToPlayEventData;
+import kstn.game.view.state.ViewStateManager;
 
 
 /**
@@ -28,10 +27,14 @@ import kstn.game.view.events.TransferToPlayEventData;
 public class MenuFragment extends Fragment {
     static public EventManager uiEventManager = null;
     private MediaPlayer song;
-
+    private ViewStateManager stateManager;
 
     public MenuFragment() {
-        // Required empty public constructor
+
+    }
+
+    public void setStateManager(ViewStateManager stateManager) {
+        this.stateManager = stateManager;
     }
 
     @Override
@@ -64,23 +67,23 @@ public class MenuFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 song.stop();
-                ((MainActivity) getActivity()).AddFragment(R.id.myLayout, new PlayFragment());
-                uiEventManager.queue(new TransferToPlayEventData());
+                ((MainActivity) getActivity()).addFragment(R.id.myLayout, new PlayFragment());
             }
         });
+
         btnTranhDau.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 song.stop();
-                ((MainActivity) getActivity()).AddFragment(R.id.myLayout, new LoginFragment());
+                ((MainActivity) getActivity()).addFragment(R.id.myLayout, new LoginFragment());
             }
         });
+
         btnBangXepHang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 song.stop();
-                ((MainActivity) getActivity()).AddFragment(R.id.myLayout, BFragment.newObj("Hello BXH"));
+                ((MainActivity) getActivity()).addFragment(R.id.myLayout, BFragment.newObj("Hello BXH"));
             }
         });
     }

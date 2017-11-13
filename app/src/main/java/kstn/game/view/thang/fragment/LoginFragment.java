@@ -2,7 +2,6 @@ package kstn.game.view.thang.fragment;
 
 
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import kstn.game.MainActivity;
 import kstn.game.R;
 import kstn.game.view.thang.activity.MyAdapter;
-import kstn.game.view.thang.model.UserModel;
+import kstn.game.logic.model.PlayerModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,17 +51,17 @@ public class LoginFragment extends Fragment {
 
         //SlideFragment fragment = (SlideFragment) adapter.getItem(vpPager.getCurrentItem());
 
-       // final UserModel user =new UserModel("thang",R.drawable.index2);
+       // final PlayerModel user =new PlayerModel("thang",R.drawable.index2);
             Button btnDau = (Button) view.findViewById(R.id.btnDau);
             btnDau.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int idAnh = data.get(vpPager.getCurrentItem());
 
-                     UserModel user;
+                     PlayerModel user;
                     if (ten.getText().toString().isEmpty()) {
-                        user = new UserModel("GUEST" + (System.currentTimeMillis()/1000), idAnh);
-                    } else user = new UserModel(ten.getText().toString(), idAnh);
+                        user = new PlayerModel("GUEST" + (System.currentTimeMillis()/1000), idAnh);
+                    } else user = new PlayerModel(ten.getText().toString(), idAnh);
                     Toast.makeText(getActivity(),user.getTen(),Toast.LENGTH_SHORT).show();
                     ((MainActivity) getActivity()).AddFragment(R.id.myLayout, MutiPlayFragment.newObj(user));
                 }

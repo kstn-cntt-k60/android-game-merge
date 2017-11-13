@@ -1,7 +1,6 @@
 package kstn.game.view.thang.activity;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,18 +11,17 @@ import java.util.ArrayList;
 
 
 import kstn.game.R;
-import kstn.game.view.screen.ImageView;
-import kstn.game.view.thang.model.UserModel;
+import kstn.game.logic.model.PlayerModel;
 
 /**
  * Created by thang on 10/1/2017.
  */
 
 public class UserAdapter extends BaseAdapter {
-    private ArrayList<UserModel> data;
+    private ArrayList<PlayerModel> data;
     private Context context;
 
-    public UserAdapter(ArrayList<UserModel> data, Context context) {
+    public UserAdapter(ArrayList<PlayerModel> data, Context context) {
         this.data = data;
         this.context = context;
     }

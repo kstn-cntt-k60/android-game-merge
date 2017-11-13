@@ -1,25 +1,24 @@
-package kstn.game.view.events;
+package kstn.game.logic.state_event;
 
 import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;
 
 /**
- * Created by qi on 16/10/2017.
+ * Created by qi on 13/11/2017.
  */
 
-public class TransferToMenuEventData extends BaseEventData {
-
-    public TransferToMenuEventData() {
+public class TransiteToMenuState extends BaseEventData {
+    public TransiteToMenuState() {
         super(0);
     }
 
     @Override
     public EventType getEventType() {
-        return UIEventType.TRANSFER_TO_MENU;
+        return StateEventType.MENU;
     }
 
     @Override
     public String getName() {
-        return "";
+        return null;
     }
 }

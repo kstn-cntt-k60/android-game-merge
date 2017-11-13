@@ -12,8 +12,8 @@ import android.widget.GridView;
 import java.util.ArrayList;
 
 import kstn.game.R;
+import kstn.game.logic.model.PlayerModel;
 import kstn.game.view.thang.activity.UserAdapter;
-import kstn.game.view.thang.model.UserModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,7 +24,7 @@ public class MutiPlayFragment extends Fragment {
     public MutiPlayFragment() {
         // Required empty public constructor
     }
-    public static MutiPlayFragment newObj (UserModel user){
+    public static MutiPlayFragment newObj (PlayerModel user){
         MutiPlayFragment fragment = new MutiPlayFragment();
         Bundle bd = new Bundle();
         bd.putSerializable("user",user);
@@ -50,11 +50,11 @@ public class MutiPlayFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         GridView gv = (GridView) view.findViewById(R.id.gv);
-        UserModel user = (UserModel) getArguments().getSerializable("user");
-        ArrayList<UserModel> data = new ArrayList<>();
+        PlayerModel user = (PlayerModel) getArguments().getSerializable("user");
+        ArrayList<PlayerModel> data = new ArrayList<>();
         data.add(user);
-        UserModel user2= new UserModel("thang",R.drawable.index3);
-        UserModel user3 = new UserModel("Quý",R.drawable.index4);
+        PlayerModel user2= new PlayerModel("thang",R.drawable.index3);
+        PlayerModel user3 = new PlayerModel("Quý",R.drawable.index4);
         data.add(user2);
         data.add(user3);
         UserAdapter adapter = new UserAdapter(data,getActivity());

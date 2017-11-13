@@ -7,7 +7,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -32,7 +31,7 @@ import java.util.Random;
 import kstn.game.MainActivity;
 import kstn.game.R;
 import kstn.game.view.thang.data.QuestionManagerDAO;
-import kstn.game.view.thang.model.CauHoiModel;
+import kstn.game.logic.model.CauHoiModel;
 
 /**
  * A simple {@link Fragment} subclass.

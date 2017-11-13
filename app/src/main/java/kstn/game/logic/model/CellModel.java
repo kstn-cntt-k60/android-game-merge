@@ -1,4 +1,4 @@
-package kstn.game.view.thang.model;
+package kstn.game.logic.model;
 
 import android.widget.TextView;
 

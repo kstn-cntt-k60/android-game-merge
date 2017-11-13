@@ -39,6 +39,10 @@ public class Cone {
     private boolean isEnabled = true;
     private Needle gameNeedle;
 
+    // Listeners
+    EventListener moveEventListener;
+    EventListener accelEventListener;
+
     public Cone(ProcessManager processManager_,
                 AssetManager assetManager,
                 EventManager eventManager_,
@@ -95,29 +99,45 @@ public class Cone {
             }
         });
 
-        eventManager.addListener(ConeEventType.MOVE, new EventListener() {
+        moveEventListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
                 float angle = ((ConeMoveEventData) event).getAngle();
-                coneView.rotate(angle);
-                Cone.this.angle = angle;
+                Cone.this.rotate(angle);
             }
-        });
-        eventManager.addListener(ConeEventType.ACCELERATE, new EventListener() {
+        };
+
+        accelEventListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
                 isRotating = true;
                 float angle = ((ConeAccelerateEventData) event).getAngle();
-                coneView.rotate(angle);
-                Cone.this.angle = angle;
+                Cone.this.rotate(angle);
                 float speedStart = ((ConeAccelerateEventData) event).getSpeedStart();
                 ConeProcess coneProcess = new ConeProcess(speedStart);
                 processManager.attachProcess(coneProcess);
             }
-        });
+        };
+
+    }
+
+    private void rotate(float angle) {
+        coneView.rotate(angle);
+        this.angle = angle;
+        // Thay doi goc cua kim
+    }
 
 
-//        isCollision();
+    public void entry() {
+        rootViewGroup.addView(coneView);
+        eventManager.addListener(ConeEventType.MOVE, moveEventListener);
+        eventManager.addListener(ConeEventType.ACCELERATE, accelEventListener);
+    }
+
+    public void exit() {
+        rootViewGroup.removeView(coneView);
+        eventManager.removeListener(ConeEventType.MOVE, moveEventListener);
+        eventManager.removeListener(ConeEventType.ACCELERATE, accelEventListener);
     }
 
     public void disable() {
@@ -162,12 +182,11 @@ public class Cone {
                 }
                 angle += speed;
                 angle = normalize(angle);
-                coneView.rotate(angle);
+                Cone.this.rotate(angle);
             }else {
                 if (isCollision()){
                     angle -= 0.5;
-                    coneView.rotate(angle);
-
+                    Cone.this.rotate(angle);
                 }
                 succeed();
             }

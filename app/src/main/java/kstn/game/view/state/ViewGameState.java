@@ -13,5 +13,7 @@ public abstract class ViewGameState {
 
     public abstract void entry();
 
+    public abstract boolean onBack();
+
     public abstract void exit();
 }

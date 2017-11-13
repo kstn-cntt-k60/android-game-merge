@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import kstn.game.view.thang.model.CauHoiModel;
+import kstn.game.logic.model.CauHoiModel;
 
 import java.util.ArrayList;
 
