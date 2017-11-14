@@ -6,44 +6,43 @@
     >
 
     <Button
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="400dp"
-        android:layout_marginBottom="20dp"
-        android:gravity="center"
-
-
         android:id="@+id/btnChoiThoi"
-        android:background="@drawable/trangthai_button"
         android:layout_width="200dp"
+
+
         android:layout_height="50dp"
-        android:textColor="#FFFF00"
+        android:layout_alignLeft="@+id/btnTranhDau"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/btnTranhDau"
+        android:layout_marginTop="140dp"
+        android:background="@drawable/trangthai_button"
+        android:gravity="center"
         android:text="Chơi Thôi"
-      />
+        android:textColor="#FFFF00" />
 
     <Button
-        android:layout_marginBottom="20dp"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/btnChoiThoi"
         android:id="@+id/btnTranhDau"
-        android:background="@drawable/trangthai_button"
-        android:textColor="#FFFF00"
         android:layout_width="200dp"
         android:layout_height="50dp"
+        android:layout_alignLeft="@+id/btnBangXepHang"
+        android:layout_alignStart="@+id/btnBangXepHang"
+        android:layout_below="@+id/btnChoiThoi"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/trangthai_button"
+        android:gravity="center"
         android:text="Tranh Đấu"
-         />
+        android:textColor="#FFFF00" />
 
     <Button
-        android:layout_marginBottom="30dp"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/btnTranhDau"
         android:id="@+id/btnBangXepHang"
-        android:background="@drawable/trangthai_button"
-        android:textColor="#FFFF00"
-        android:text="Bảng Xếp Hạng"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        />
+        android:layout_below="@+id/btnTranhDau"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="19dp"
+        android:background="@drawable/trangthai_button"
+        android:gravity="center"
+        android:text="Bảng Xếp Hạng"
+        android:textColor="#FFFF00" />
 </RelativeLayout>
 

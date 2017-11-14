@@ -82,6 +82,7 @@ public class PlayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View result = inflater.inflate(R.layout.fragment_play, container, false);
+        result.setBackgroundColor(Color.parseColor("#F30131"));
         result.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -315,13 +316,20 @@ public class PlayFragment extends Fragment {
             }
         });
         song = MediaPlayer.create(getActivity(), R.raw.quay);
+
         final int[] result = new int[1];
+        stateManager.eventManager.addListener(ConeEventType.ACCELERATE, new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                song.start();
+            }
+        });
         stateManager.eventManager.addListener(ConeEventType.STOP, new EventListener() {
             @Override
             public void onEvent(EventData event) {
                 result[0] = ((ConeStopEventData) event).getResult();
                 song.stop();
-                final Animation   scale = AnimationUtils.loadAnimation(getActivity(),R.anim.scale);
+                final Animation scale = AnimationUtils.loadAnimation(getActivity(),R.anim.scale);
                 scale.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
@@ -347,7 +355,9 @@ public class PlayFragment extends Fragment {
                                 Toast.makeText(getActivity(),"Mất Lượt",Toast.LENGTH_SHORT).show();
                             }else{
                                 stateManager.eventManager.queue(new OverCellEventData());
-                                Toast.makeText(getActivity(),"Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(),
+                                        "Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",
+                                        Toast.LENGTH_SHORT).show();
                             }
 
                         } else if (txtNoiDungKim.getText().toString().equals("Nhân 2") ) {
@@ -384,7 +394,8 @@ public class PlayFragment extends Fragment {
                                             }
                                             if(dem==len){
                                                 stateManager.eventManager.queue(new OverCellEventData());
-                                                Toast.makeText(getActivity(),"Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",Toast.LENGTH_LONG).show();
+                                                Toast.makeText(getActivity(),"Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",
+                                                        Toast.LENGTH_LONG).show();
                                             }
                                         }
                                     });
@@ -419,64 +430,63 @@ public class PlayFragment extends Fragment {
                                                 @Override
                                                 public void onClick(View view) {
                                                     scale.setAnimationListener(new Animation.AnimationListener() {
-                                                                     @Override
-                                                                     public void onAnimationStart(Animation animation) {
-                                                                         l.setBackgroundColor(Color.YELLOW);
-                                                                     }
+                                                        @Override
+                                                        public void onAnimationStart(Animation animation) {
+                                                            l.setBackgroundColor(Color.YELLOW);
+                                                        }
 
-                                                                     @Override
-                                                                     public void onAnimationEnd(Animation animation) {
-                                                                         l.setBackgroundColor(Color.GRAY);
-                                                                         flag[finalI]=false;
-                                                                         hopthoai2.dismiss();
-                                                                         int KT= 0;
+                                                        @Override
+                                                        public void onAnimationEnd(Animation animation) {
+                                                            l.setBackgroundColor(Color.GRAY);
+                                                            flag[finalI]=false;
+                                                            hopthoai2.dismiss();
+                                                            int KT= 0;
+                                                            for(int k=0;k<data_copy.length;k++){
+                                                                if(data_copy[k]==l.getText().toString().charAt(0)&&isOpen[k]==false){
+                                                                    KT +=1;
 
-                                                                         for(int k=0;k<data_copy.length;k++){
-                                                                             if(data_copy[k]==l.getText().toString().charAt(0)&&isOpen[k]==false){
-
-                                                                                 KT +=1;
-
-                                                                                 txtMoney.setText((Integer.parseInt(txtDiem.getText().toString())+Integer.parseInt(txtMoney.getText().toString()))+"") ;
-                                                                                 dataCell.get(k).setText(l.getText().toString());
-                                                                                 isOpen[k] =true;
-                                                                                 dem++;
-                                                                                 if(dem==len){
-                                                                                     stateManager.eventManager.queue(new OverCellEventData());
-                                                                                     Toast.makeText(getActivity(),"Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",Toast.LENGTH_LONG).show();
-                                                                                 }
-
-                                                                             }
-                                                                         }
-                                                                         if(KT!=0){
-
-                                                                             songTingTing.start();
-                                                                             Toast.makeText(getActivity(),"+ "+KT+"x"+txtDiem.getText().toString(),Toast.LENGTH_SHORT).show();
-                                                                         }
-                                                                         if(KT==0){
-
-                                                                             songFail.start();
-                                                                             if(Integer.parseInt(txtMang.getText().toString())>0) {
-                                                                                 txtMang.setText((Integer.parseInt(txtMang.getText().toString()) - 1) + "");
-                                                                                 Toast.makeText(getActivity(),"Mất 1 Lượt chơi",Toast.LENGTH_SHORT).show();
-                                                                             }else{
-                                                                                 stateManager.eventManager.queue(new OverCellEventData());
-                                                                                 Toast.makeText(getActivity(),"Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",Toast.LENGTH_SHORT).show();
-                                                                             }
-
-                                                                         }
+                                                                    txtMoney.setText((Integer.parseInt(txtDiem.getText().toString())+
+                                                                            Integer.parseInt(txtMoney.getText().toString()))+"") ;
+                                                                    dataCell.get(k).setText(l.getText().toString());
+                                                                    isOpen[k] =true;
+                                                                    dem++;
+                                                                    if(dem==len){
+                                                                        stateManager.eventManager.queue(new OverCellEventData());
+                                                                        Toast.makeText(getActivity(),
+                                                                                "Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",
+                                                                                Toast.LENGTH_LONG).show();
+                                                                    }
+                                                                }
+                                                            }
+                                                            if(KT!=0){
+                                                                songTingTing.start();
+                                                                Toast.makeText(getActivity(),"+ "+KT+"x"+txtDiem.getText().toString(),
+                                                                        Toast.LENGTH_SHORT).show();
+                                                            }
+                                                            if(KT==0){
+                                                                songFail.start();
+                                                                if(Integer.parseInt(txtMang.getText().toString())>0) {
+                                                                    txtMang.setText((Integer.parseInt(txtMang.getText().toString()) - 1) + "");
+                                                                    Toast.makeText(getActivity(),"Mất 1 Lượt chơi",Toast.LENGTH_SHORT).show();
+                                                                }else{
+                                                                    stateManager.eventManager.queue(new OverCellEventData());
+                                                                    Toast.makeText(getActivity(),
+                                                                            "Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",
+                                                                            Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
 
 //                                        int b= fr.Update(l.getText().toString().charAt(0));
 //                                        if(b!=0) {
 //                                            fr.UpdateMoney(true, b * Integer.parseInt(txtDiem.getText().toString()));
 //                                        }else fr.UpdateMoney(false, 0);
 //
-                                                                     }
+                                                        }
 
-                                                                     @Override
-                                                                     public void onAnimationRepeat(Animation animation) {
-
-                                                                     }
-                                                                 });
+                                                        @Override
+                                                        public void onAnimationRepeat(Animation animation) {
+                                                        }
+                                                    });
                                                     l.startAnimation(scale);
                                                 }
                                             }
