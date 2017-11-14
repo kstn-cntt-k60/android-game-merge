@@ -1,18 +1,15 @@
 package kstn.game;
 
-import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
 import kstn.game.app.root.Root;
 import kstn.game.app.screen.GameAnimationView;
-import kstn.game.view.thang.fragment.MenuFragment;
 
 public class MainActivity extends AppCompatActivity {
     private GameAnimationView gameView;
@@ -31,15 +28,13 @@ public class MainActivity extends AppCompatActivity {
         gameView = (GameAnimationView) findViewById(R.id.game_animation);
         root = new Root(this, gameView);
         root.init();
-
-        // MenuFragment.uiEventManager = root.getUiEventManager();
     }
 
-    public void addFragment(int id, Fragment fragment){
+    public void addFragment(Fragment fragment){
+        int id = R.id.myLayout;
         FragmentManager quanlyFragment = getSupportFragmentManager();
         FragmentTransaction transaction = quanlyFragment.beginTransaction();
         transaction.replace(id,fragment);
-
         transaction.commit();
     }
 

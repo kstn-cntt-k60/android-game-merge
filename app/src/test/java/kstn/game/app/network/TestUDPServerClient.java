@@ -20,7 +20,9 @@ import static org.junit.Assert.*;
 public class TestUDPServerClient {
 	private boolean running = true;
 	private TestMessage.Test msg;
-	private String hostIP = "10.10.105.179";
+	private String hostIP = "192.168.1.174";
+	private int mask = 0xFFFFFF00;
+
 	private LLBaseEventManager llBaseEventManager = new LLBaseEventManager();
 	private UDPManagerFactory managerFactory = new UDPBaseManagerFactory(llBaseEventManager);
 	private Map<EventType, EventData.Parser> parserMap = new HashMap<>();
@@ -35,12 +37,12 @@ public class TestUDPServerClient {
 	public void test() throws Exception {
 		UDPBaseManager server = (UDPBaseManager) managerFactory.create(
 				NetworkUtil.ipStringToInt(this.hostIP),
-				2013, 0xFFFF0000, parserMap);
+				2013, mask, parserMap);
         server.setReceiveDataListener(receiveListener);
 
 		UDPBaseManager client = (UDPBaseManager) managerFactory.create(
 				NetworkUtil.ipStringToInt(this.hostIP),
-				2014,0xFFFF0000, parserMap
+				2014, mask, parserMap
 		);
 
 		client.sendPort = 2013;

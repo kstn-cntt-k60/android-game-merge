@@ -6,4 +6,6 @@ public interface ViewManager {
     void removeView(View view);
 
     void clear();
+
+    int size();
 }

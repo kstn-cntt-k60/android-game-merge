@@ -2,13 +2,8 @@ package kstn.game.view.state;
 
 import android.util.Log;
 
-import kstn.game.MainActivity;
-import kstn.game.logic.event.EventManager;
 import kstn.game.logic.state_event.TransiteToMenuState;
-
-/**
- * Created by qi on 14/11/2017.
- */
+import kstn.game.view.thang.fragment.LoginFragment;
 
 public class ViewLoginState extends ViewGameState {
 
@@ -17,14 +12,14 @@ public class ViewLoginState extends ViewGameState {
     }
     @Override
     public void entry() {
-
         Log.i(this.getClass().getName(), "ViewLoginState");
+        stateManager.activity.addFragment(new LoginFragment());
     }
 
     @Override
     public boolean onBack() {
         stateManager.eventManager.queue(new TransiteToMenuState());
-        return false;
+        return true;
     }
 
     @Override

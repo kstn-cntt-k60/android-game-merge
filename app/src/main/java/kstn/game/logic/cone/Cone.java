@@ -64,7 +64,6 @@ public class Cone {
         }
         coneView = new ImageView(0, -1f, 1.2f, 1.2f, image);
 
-
         coneView.setTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View.TouchEvent event) {
@@ -105,12 +104,7 @@ public class Cone {
             @Override
             public void onEvent(EventData event) {
                 float angle = ((ConeMoveEventData) event).getAngle();
-                float movenAngleAfter = normalize(baseAngle + endAngle - startAngle);
-                Log.i("Result", "before :" + movenAngleBefore + "====== after: " + movenAngleAfter);
-                if (movenAngleAfter > movenAngleBefore) {
-                    Cone.this.rotate(angle);
-                    movenAngleBefore = movenAngleAfter;
-                }
+                Cone.this.rotate(angle);
             }
         };
 
@@ -131,7 +125,6 @@ public class Cone {
     private void rotate(float angle) {
         coneView.rotate(angle);
         this.angle = angle;
-        // Thay doi goc cua kim
         if (isCollision()) {
             eventManager.queue(new NeedleCollisonEventData(0));
         }
@@ -139,7 +132,7 @@ public class Cone {
 
 
     public void entry() {
-        Log.i("Cone", "Non da duoc paint");
+        Log.i("Cone", "entry");
         rootViewGroup.addView(coneView);
         rootViewGroup.addView(gameNeedle.needleView);
         eventManager.addListener(ConeEventType.MOVE, moveEventListener);
@@ -147,6 +140,7 @@ public class Cone {
     }
 
     public void exit() {
+        Log.i("Cone", "exit");
         rootViewGroup.removeView(coneView);
         rootViewGroup.removeView(gameNeedle.needleView);
         eventManager.removeListener(ConeEventType.MOVE, moveEventListener);

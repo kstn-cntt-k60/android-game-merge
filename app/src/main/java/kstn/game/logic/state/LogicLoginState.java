@@ -12,14 +12,22 @@ import kstn.game.view.screen.ImageView;
  */
 
 public class LogicLoginState extends LogicGameState {
+    private ImageView backgroundView;
 
     public LogicLoginState(LogicStateManager stateManager) {
         super(stateManager);
+
+        Bitmap background = null;
+        try {
+            background = stateManager.assetManager.getBitmap("bg.jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        backgroundView = new ImageView(0, 0, 2, 1.8f * 2, background);
     }
 
     @Override
     public void entry() {
-//        stateManager.root.remove();
         Bitmap background = null;
         try {
             background = stateManager.assetManager.getBitmap("cute.png");
@@ -34,6 +42,6 @@ public class LogicLoginState extends LogicGameState {
 
     @Override
     public void exit() {
-
+        stateManager.root.removeView(backgroundView);
     }
 }

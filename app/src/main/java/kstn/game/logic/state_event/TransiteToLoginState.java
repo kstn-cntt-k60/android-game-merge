@@ -20,6 +20,6 @@ public class TransiteToLoginState extends BaseEventData {
 
     @Override
     public String getName() {
-        return null;
+        return "Login State";
     }
 }

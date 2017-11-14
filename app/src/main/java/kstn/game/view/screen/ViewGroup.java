@@ -1,12 +1,13 @@
 package kstn.game.view.screen;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import kstn.game.app.screen.SurfaceTick;
+
 public class ViewGroup extends View implements ViewManager {
     protected List<View> viewList = new ArrayList<View>();
+    private int surfaceTick = 0;
 
     public ViewGroup() {
         super();
@@ -18,14 +19,10 @@ public class ViewGroup extends View implements ViewManager {
 
     @Override
     public void addView(View view) {
+        view.onSurfaceCreated();
         viewList.add(view);
     }
 
-    /*public void remove() {
-        viewList.remove(1);
-        viewList.remove(1);
-
-    }*/
     @Override
     public void removeView(View view) {
         viewList.remove(view);
@@ -34,6 +31,11 @@ public class ViewGroup extends View implements ViewManager {
     @Override
     public void clear() {
         viewList.clear();
+    }
+
+    @Override
+    public int size() {
+        return viewList.size();
     }
 
     @Override
@@ -62,6 +64,10 @@ public class ViewGroup extends View implements ViewManager {
 
     @Override
     public void onSurfaceCreated() {
+        if (SurfaceTick.get() == surfaceTick)
+            return;
+        surfaceTick = SurfaceTick.get();
+
         for (View view: viewList)
             view.onSurfaceCreated();
     }

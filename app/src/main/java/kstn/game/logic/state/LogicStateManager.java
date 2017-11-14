@@ -1,11 +1,14 @@
 package kstn.game.logic.state;
 
+import android.util.Log;
+
 import kstn.game.app.root.BaseTimeManager;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.process.ProcessManager;
 import kstn.game.logic.state_event.StateEventType;
+import kstn.game.logic.state_event.TransiteToLoginState;
 import kstn.game.view.asset.AssetManager;
 import kstn.game.view.playing_event.PlayingEventType;
 import kstn.game.view.screen.ViewGroup;
@@ -21,7 +24,8 @@ public class LogicStateManager {
     public final LogicMenuState menuState;
 
     // Multiplayer
-    public final LogicGameState loginState;
+
+    public final LogicLoginState loginState;
     public final LogicGameState createdRoomsState = null;
     public final LogicGameState roomCreatorState = null;
     public final LogicGameState waitRoomState = null;
@@ -41,11 +45,6 @@ public class LogicStateManager {
     public final BaseTimeManager timeManager;
     public final EventManager eventManager;
     public final AssetManager assetManager;
-
-    //
-    private void initAllStates() {
-
-    }
 
     private void listenToAllStateEvents() {
         eventManager.addListener(StateEventType.MENU, new EventListener() {

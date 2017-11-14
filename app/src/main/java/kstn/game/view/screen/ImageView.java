@@ -9,12 +9,13 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import kstn.game.app.screen.SurfaceTick;
+
 public final class ImageView extends View implements ViewRotatable {
-    private float angle = 0;
     private final Bitmap bitmap;
     private final float[] rotateMatrix = new float[16];
     private int imageTextureId = -1;
-
+    private int surfaceTick = 0;
 
     private float[] textureCoordArray = new float[8];
     private FloatBuffer textureCoordBuffer = null;
@@ -60,10 +61,8 @@ public final class ImageView extends View implements ViewRotatable {
         textureCoordBuffer.flip();
     }
 
-
     @Override
     public void rotate(float angle) {
-        this.angle = angle;
         Matrix.setRotateM(rotateMatrix, 0, angle, 0, 0, 1);
         updateModelMatrix();
     }
@@ -75,6 +74,11 @@ public final class ImageView extends View implements ViewRotatable {
 
     @Override
     public void onSurfaceCreated() {
+        if (SurfaceTick.get() == surfaceTick)
+            return;
+
+        surfaceTick = SurfaceTick.get();
+
         // Initialize texture
         final int tex[] = new int[1];
         GLES20.glGenTextures(1, tex, 0);

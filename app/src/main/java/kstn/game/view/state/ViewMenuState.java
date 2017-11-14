@@ -1,37 +1,39 @@
 package kstn.game.view.state;
 
-import android.util.Log;
+import android.media.MediaPlayer;
 
-import kstn.game.MainActivity;
 import kstn.game.R;
 import kstn.game.view.thang.fragment.MenuFragment;
 
-/**
- * Created by qi on 13/11/2017.
- */
-
 public class ViewMenuState extends ViewGameState {
+    private MediaPlayer song;
+    private boolean songEnded = false;
+
     public ViewMenuState(ViewStateManager manager) {
         super(manager);
+        song = MediaPlayer.create(stateManager.activity, R.raw.nhac_hieu);
     }
 
     @Override
     public void entry() {
-        MainActivity activity = stateManager.activity;
         MenuFragment fragment = new MenuFragment();
         fragment.setStateManager(stateManager);
-        activity.addFragment(R.id.myLayout, fragment);
-        Log.i("ViewMenuState", "meNUView");
+        stateManager.activity.addFragment(fragment);
+        if (!songEnded) {
+            song.start();
+        }
     }
 
     @Override
     public boolean onBack() {
-        Log.d("ViewMenuState", "onBack");
         return false;
     }
 
     @Override
     public void exit() {
-
+        if (!songEnded) {
+            song.stop();
+            songEnded = true;
+        }
     }
 }

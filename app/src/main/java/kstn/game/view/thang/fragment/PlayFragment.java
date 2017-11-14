@@ -1,14 +1,11 @@
 package kstn.game.view.thang.fragment;
 
-
 import android.app.Dialog;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,9 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,25 +23,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import kstn.game.MainActivity;
 import kstn.game.R;
 import kstn.game.logic.cone.ConeEventType;
 import kstn.game.logic.cone.ConeStopEventData;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
+import kstn.game.logic.model.CauHoiModel;
 import kstn.game.view.playing_event.NextQuestionEventData;
 import kstn.game.view.playing_event.OverCellEventData;
 import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.thang.data.QuestionManagerDAO;
-import kstn.game.logic.model.CauHoiModel;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class PlayFragment extends Fragment {
-
-    // khai báo các biến
-
     private ViewStateManager stateManager;
 
     private TextView txtMang;
@@ -54,16 +42,16 @@ public class PlayFragment extends Fragment {
     private TextView txtLevel;
     private CauHoiModel cauhoi;
     private TextView txtCauHoi;
-    //    private ImageView imgNon;
     private MediaPlayer song;
     private TextView txtNoiDungKim;
-    //    private ImageView kim;
+
     // bien cờ
     private boolean[] flag = new boolean[26];
     private int dem = 0;
     private int len;
     // list o bi mat
     ArrayList<TextView> dataCell = new ArrayList<>();
+
     // quan li cau hoi, ket noi sqlite
     private QuestionManagerDAO questionManagerDAO;
     private ArrayList<CauHoiModel> dataCauHoi;
@@ -71,7 +59,6 @@ public class PlayFragment extends Fragment {
     ArrayList<Button> dataDoan = new ArrayList<Button>();
     ArrayList<Integer> ArrayNumber = new ArrayList<>();
     private boolean[] isOpen;
-
     ArrayList<String> data = new ArrayList<>();
     private Character[] data_copy;
     Random rd = new Random();
@@ -84,9 +71,7 @@ public class PlayFragment extends Fragment {
     MediaPlayer songFail;
     MediaPlayer songTingTing;
 
-
     public PlayFragment() {
-        // Required empty public constructor
     }
 
     public void setStateManager(ViewStateManager stateManager) {
@@ -96,21 +81,18 @@ public class PlayFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View result = inflater.inflate(R.layout.fragment_play, container, false);
-        //   result.setBackgroundColor(Color.parseColor("#004342"));
-//        result.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                Log.i("Touch","");
-//                return true;
-//            }
-//        });
-        return result;
+        result.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return false;
+            }
+        });
+       return result;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // khoi tao bien cờ
         for (int i = 0; i < 26; i++) {
@@ -121,14 +103,13 @@ public class PlayFragment extends Fragment {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
+
         // ánh xạ các biến
         txtMang = (TextView) view.findViewById(R.id.txtMang);
         txtMoney = (TextView) view.findViewById(R.id.txtMoney);
         txtLevel = (TextView) view.findViewById(R.id.txtLevel);
         txtCauHoi = (TextView) view.findViewById(R.id.txtCauHoi);
         txtNoiDungKim = (TextView) view.findViewById(R.id.txtNoiDungKim);
-        /*imgNon = (ImageView) view.findViewById(R.id.imgNon);
-        kim = (ImageView) view.findViewById(R.id.kim);*/
         songFail = MediaPlayer.create(getActivity(), R.raw.failure);
         songTingTing = MediaPlayer.create(getActivity(), R.raw.tingting);
 
@@ -248,7 +229,6 @@ public class PlayFragment extends Fragment {
         btnBackSpace = (Button) view1.findViewById(R.id.btnBackSpace);
         btnSpace = (Button) view1.findViewById(R.id.btnSpace);
 
-
         // khởi tạo trình quản lí câu hỏi SQL lite
         questionManagerDAO = new QuestionManagerDAO(getActivity());
         questionManagerDAO.open();
@@ -317,14 +297,8 @@ public class PlayFragment extends Fragment {
                         if (txtTraLoi.getText().toString().equals(cauhoi.getCauTraLoi())) {
                             MediaPlayer song1 = MediaPlayer.create(getActivity(), R.raw.tingting);
                             song1.start();
-
-//                            Collections.shuffle(ArrayNumber);
-//                            cauhoi = dataCauHoi.get(ArrayNumber.get(0));
-//                            ArrayNumber.remove(0);
                             stateManager.eventManager.queue(new NextQuestionEventData(cauhoi.getId()));
-
-
-                            UpdateContext(id);
+                            UpdateContext();
                         } else {
                             songFail.start();
                             if (Integer.parseInt(txtMoney.getText().toString()) > 1000) {
@@ -346,11 +320,6 @@ public class PlayFragment extends Fragment {
             @Override
             public void onEvent(EventData event) {
                 result[0] = ((ConeStopEventData) event).getResult();
-//                Toast.makeText(getActivity(), result[0] + "", Toast.LENGTH_SHORT);
-
-
-
-
                 song.stop();
                 final Animation   scale = AnimationUtils.loadAnimation(getActivity(),R.anim.scale);
                 scale.setAnimationListener(new Animation.AnimationListener() {
@@ -445,11 +414,11 @@ public class PlayFragment extends Fragment {
                                 if (flag[i]) {
 
                                     final int finalI = i;
-                                    l.setOnClickListener(new View.OnClickListener() {
-                                                             @Override
-                                                             public void onClick(View view) {
-
-                                                                 scale.setAnimationListener(new Animation.AnimationListener() {
+                                    l.setOnClickListener(
+                                            new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    scale.setAnimationListener(new Animation.AnimationListener() {
                                                                      @Override
                                                                      public void onAnimationStart(Animation animation) {
                                                                          l.setBackgroundColor(Color.YELLOW);
@@ -508,16 +477,12 @@ public class PlayFragment extends Fragment {
 
                                                                      }
                                                                  });
-                                                                 l.startAnimation(scale);
-
-
-                                                             }
-                                                         }
+                                                    l.startAnimation(scale);
+                                                }
+                                            }
                                     );
                                 }else {l.setBackgroundColor(Color.GRAY); l.setClickable(false);}
                             }
-
-
                         }
                     }
 
@@ -528,19 +493,12 @@ public class PlayFragment extends Fragment {
                 });
 
                 txtNoiDungKim.startAnimation(scale);
-
-
-
             }
-
-
-
-
         });
 
     }
 
-    public void InitAlert(Dialog hopthoai, View view) {
+    public  void InitAlert(Dialog hopthoai, View view){
         hopthoai.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         hopthoai.setContentView(view);
         WindowManager.LayoutParams w = hopthoai.getWindow().getAttributes();
@@ -550,15 +508,15 @@ public class PlayFragment extends Fragment {
         hopthoai.getWindow().setAttributes(w);
     }
 
-    public void UpdateContext(int id) {
+    public void UpdateContext() {
         for (int i = 0; i < dataLetter.size(); i++) {
             dataLetter.get(i).setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.button_mini));
-
         }
         hopthoai1.dismiss();
         //imgNon.setEnabled(true);
         isOpen = new boolean[27];
         data_copy = new Character[27];
+
         dem = 0;
         txtMang.setText("3");
         for (int i = 0; i < 26; i++) {
@@ -569,34 +527,32 @@ public class PlayFragment extends Fragment {
             dataCell.get(i).setText("");
             isOpen[i] = false;
         }
-        //  ((MainActivity)getActivity()).AddFragment(R.id.myLayout2, new ChoiThoiFragment());
-        cauhoi = dataCauHoi.get(id);
 
+        Collections.shuffle(ArrayNumber);
+        cauhoi = dataCauHoi.get(ArrayNumber.get(0));
+        ArrayNumber.remove(0);
         txtCauHoi.setText(cauhoi.getCauhoi());
         ArrayList<String> c = ToArray(cauhoi);
 
         ArrayList<Integer> tmp = new ArrayList<>();
-        len = 0;
-        for (int i = 0; i < c.size(); i++) {
-            len += c.get(i).length();
-
-            for (int j = 0; j < c.get(i).length(); j++) {
-
-                tmp.add(i * 9 + (9 - c.get(i).length()) / 2 + j);
-                data_copy[i * 9 + (9 - c.get(i).length()) / 2 + j] = c.get(i).charAt(j);
+            len = 0;
+            for (int i = 0; i < c.size(); i++) {
+                len += c.get(i).length();
+                for (int j = 0; j < c.get(i).length(); j++) {
+                    tmp.add(i * 9 + (9 - c.get(i).length()) / 2 + j);
+                    data_copy[i * 9 + (9 - c.get(i).length()) / 2 + j] = c.get(i).charAt(j);
+                }
             }
-
-        }
-        for (int i = 0; i < 27; i++) {
-            if (!tmp.contains(i)) {
-                dataCell.get(i).setBackgroundColor(Color.GRAY);
-                data_copy[i] = '0';
+            for (int i = 0; i < 27; i++) {
+                if (!tmp.contains(i)) {
+                    dataCell.get(i).setBackgroundColor(Color.GRAY);
+                    data_copy[i] = '0';
+                }
             }
-        }
     }
 
 
-    public ArrayList<String> ToArray(CauHoiModel cauhoi) {
+    public ArrayList<String> ToArray (CauHoiModel cauhoi) {
         String[] str = cauhoi.getCauTraLoi().split(" ");
         int len = 0;
         for (int i = 0; i < str.length; i++) len += str[i].length();
@@ -607,7 +563,6 @@ public class PlayFragment extends Fragment {
             String buff = new String();
             int dem = 0;
             for (int i = start; i < str.length; i++) {
-
                 if (dem + str[i].length() <= 9) {
                     buff += str[i];
                     dem += str[i].length();
@@ -624,6 +579,7 @@ public class PlayFragment extends Fragment {
         }
         return c;
     }
-
-
 }
+
+
+

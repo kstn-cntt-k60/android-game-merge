@@ -2,15 +2,9 @@ package kstn.game.view.state;
 
 import android.util.Log;
 
-import kstn.game.logic.cone.ConeEventType;
-import kstn.game.logic.cone.ConeStopEventData;
-import kstn.game.logic.event.EventData;
-import kstn.game.logic.event.EventListener;
+import kstn.game.R;
 import kstn.game.logic.state_event.TransiteToMenuState;
-
-/**
- * Created by qi on 13/11/2017.
- */
+import kstn.game.view.thang.fragment.PlayFragment;
 
 public class ViewSinglePlayerState extends ViewGameState {
 
@@ -20,8 +14,7 @@ public class ViewSinglePlayerState extends ViewGameState {
 
     @Override
     public void entry() {
-        git p
-
+        stateManager.activity.addFragment(new PlayFragment());
     }
 
     @Override
