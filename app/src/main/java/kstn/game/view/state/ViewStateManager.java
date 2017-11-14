@@ -15,7 +15,7 @@ public class ViewStateManager {
     public final ViewMenuState menuState;
 
     // Multiplayer
-    public final ViewGameState loginState;
+    public final ViewLoginState loginState;
     public final ViewGameState createdRoomsState = null;
     public final ViewGameState roomCreatorState = null;
     public final ViewGameState waitRoomState = null;

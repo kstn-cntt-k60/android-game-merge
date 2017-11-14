@@ -1,6 +1,5 @@
 package kstn.game.view.thang.fragment;
 
-
 import android.app.Dialog;
 import android.graphics.Color;
 import android.media.MediaPlayer;
@@ -34,13 +33,7 @@ import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.thang.data.QuestionManagerDAO;
 import kstn.game.logic.model.CauHoiModel;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class PlayFragment extends Fragment implements View.OnTouchListener {
-
-    // khai báo các biến
-
+public class PlayFragment extends Fragment {
     private ViewStateManager stateManager;
 
     private TextView txtMang;
@@ -48,16 +41,16 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
     private TextView txtLevel;
     private CauHoiModel cauhoi;
     private TextView txtCauHoi;
-//    private ImageView imgNon;
     private MediaPlayer song;
     private TextView txtNoiDungKim;
-//    private ImageView kim;
+
     // bien cờ
     private boolean[] flag = new boolean[26];
     private int dem=0;
     private int len;
     // list o bi mat
     ArrayList<TextView> dataCell = new ArrayList<>();
+
     // quan li cau hoi, ket noi sqlite
     private QuestionManagerDAO questionManagerDAO;
     private ArrayList<CauHoiModel> dataCauHoi;
@@ -65,11 +58,8 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
     ArrayList<Button> dataDoan = new ArrayList<Button>();
     ArrayList<Integer> ArrayNumber = new ArrayList<>();
     private boolean[] isOpen;
-    private int mCurrAngle = 0;
-    private int mPrevAngle = 0;
     ArrayList<String> data = new ArrayList<>();
     private Character[] data_copy;
-    Random rd = new Random();
     int height;
     View view1,view2;
     Button   btnDoanX,btnBackSpace,btnSpace,btnHuy;
@@ -79,9 +69,7 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
     MediaPlayer  songFail;
     MediaPlayer  songTingTing;
 
-
     public PlayFragment() {
-        // Required empty public constructor
     }
 
     public void setStateManager(ViewStateManager stateManager) { this.stateManager = stateManager; }
@@ -89,16 +77,14 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View result = inflater.inflate(R.layout.fragment_play, container, false);
-      //  result.setBackgroundColor(Color.parseColor("#004342"));
-//        result.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                Log.i("Touch","");
-//                return true;
-//            }
-//        });
+        result.setBackgroundColor(Color.parseColor("#00000000"));
+        result.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return false;
+            }
+        });
         return result;
     }
 
@@ -114,14 +100,13 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
          height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
+
         // ánh xạ các biến
         txtMang = (TextView) view.findViewById(R.id.txtMang);
         txtMoney = (TextView) view.findViewById(R.id.txtMoney);
         txtLevel = (TextView) view.findViewById(R.id.txtLevel);
         txtCauHoi = (TextView) view.findViewById(R.id.txtCauHoi);
         txtNoiDungKim = (TextView) view.findViewById(R.id.txtNoiDungKim);
-        /*imgNon = (ImageView) view.findViewById(R.id.imgNon);
-        kim = (ImageView) view.findViewById(R.id.kim);*/
         songFail = MediaPlayer.create(getActivity(), R.raw.failure);
         songTingTing = MediaPlayer.create(getActivity(), R.raw.tingting);
 
@@ -240,7 +225,6 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         btnBackSpace = (Button) view1.findViewById(R.id.btnBackSpace);
         btnSpace = (Button) view1.findViewById(R.id.btnSpace);
 
-
         // khởi tạo trình quản lí câu hỏi SQL lite
         questionManagerDAO = new QuestionManagerDAO(getActivity());
         questionManagerDAO.open();
@@ -319,7 +303,6 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
                             else if(Integer.parseInt(txtMang.getText().toString())>0){
                                 txtMang.setText((Integer.parseInt(txtMang.getText().toString())-1)+"");
                             }else {
-                                //imgNon.setEnabled(false);
                                 Toast.makeText(getActivity(),"game Over",Toast.LENGTH_LONG).show();
                             }
                         }
@@ -358,7 +341,7 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
             dataCell.get(i).setText("");
             isOpen[i] = false;
         }
-      //  ((MainActivity)getActivity()).AddFragment(R.id.myLayout2, new ChoiThoiFragment());
+
         Collections.shuffle(ArrayNumber);
         cauhoi = dataCauHoi.get(ArrayNumber.get(0));
         ArrayNumber.remove(0);
@@ -415,266 +398,6 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         }
         return c;
     }
-
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        /*final float xc = (imgNon.getX() + imgNon.getWidth() / 2);
-        final float yc = (imgNon.getY() + imgNon.getHeight() / 2);
-
-        final float x = motionEvent.getX();
-        final float y = motionEvent.getY();
-
-        Log.i("Touch", "( " + x + ", " + y + " )");
-
-        // txtKQ.setText("x= " + x + " , y= " + y);
-
-        switch (motionEvent.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
-                // Khi chạm vào một điểm trên màn hình
-                imgNon.clearAnimation();
-
-
-                break;
-            }
-//            case MotionEvent.ACTION_MOVE: {
-//                //  ACTION_MOVE là sự kiện khi ta di chuyển ngón tay trên màn hình
-//                // Hàm này sẽ cập nhập lại vị trí của điểm chạm khi di chuyển
-//
-//
-//
-//                break;
-            // }
-            case MotionEvent.ACTION_UP: {
-                // ACTION_UP: Khi nhấc ngón tay lên
-
-                mCurrAngle = (int)(50*Math.toDegrees(Math.atan2( Math.abs(x - xc), Math.abs(yc - y))));
-                mCurrAngle = mCurrAngle - mCurrAngle%18;
-                // txtNhap.setText(String.valueOf(mCurrAngle/18));
-                animate(mPrevAngle, mCurrAngle, 1000);
-//                mPrevAngle = mCurrAngle;
-                break;
-
-            }
-
-        }*/
-        return true;
-    }
-    private void animate(double fromDegrees, double toDegrees, long durationMillis) {
-        final RotateAnimation rotate = new RotateAnimation((float) fromDegrees, (float) toDegrees,
-                RotateAnimation.RELATIVE_TO_SELF, 0.5f,
-                RotateAnimation.RELATIVE_TO_SELF, 0.5f);
-        rotate.setInterpolator(((MainActivity)getActivity()), android.R.anim.decelerate_interpolator);
-        rotate.setDuration(durationMillis);
-        rotate.setFillEnabled(true);
-        rotate.setFillAfter(true);
-        song = MediaPlayer.create(getActivity(), R.raw.quay);
-        //imgNon.startAnimation(rotate);
-        /*rotate.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-                song.start();
-                final float xc = (imgNon.getX() + imgNon.getWidth() / 2);
-                final float yc = (imgNon.getY() + imgNon.getHeight() / 2);
-
-
-
-
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                song.stop();
-                final Animation   scale = AnimationUtils.loadAnimation(getActivity(),R.anim.scale);
-                scale.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                       txtNoiDungKim.setText( data.get( (int)(mCurrAngle/18)%data.size())   );
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        if (txtNoiDungKim.getText().toString().equals("Chia 2")) {
-                          txtMoney.setText((int)(Integer.parseInt(txtMoney.getText().toString())/2)+"");
-                            Toast.makeText(getActivity(),"bạn bị chia 2 số điểm",Toast.LENGTH_SHORT).show();
-
-                            songFail.start();
-
-                        } else if (txtNoiDungKim.getText().toString().equals("Mất Lượt")) {
-
-
-                            songFail.start();
-                            if(Integer.parseInt(txtMang.getText().toString())>0) {
-                                txtMang.setText((Integer.parseInt(txtMang.getText().toString()) - 1) + "");
-                                Toast.makeText(getActivity(),"Mất Lượt",Toast.LENGTH_SHORT).show();
-                            }else{
-                                imgNon.setEnabled(false);
-                                Toast.makeText(getActivity(),"Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",Toast.LENGTH_SHORT).show();
-                            }
-
-                        } else if (txtNoiDungKim.getText().toString().equals("Nhân 2") ) {
-                          txtMoney.setText(Integer.parseInt(txtMoney.getText().toString())*2+"");
-                            Toast.makeText(getActivity(),"Nhân 2 số điểm",Toast.LENGTH_SHORT).show();
-
-                            songTingTing.start();
-                        }
-                        else if(txtNoiDungKim.getText().toString().equals("Thưởng")){
-                            int k = rd.nextInt(2400)+100;
-                            Toast.makeText(getActivity(),"Bạn được cộng thêm "+k+" điểm",Toast.LENGTH_SHORT).show();
-                            txtMoney.setText(Integer.parseInt(txtMoney.getText().toString())+k+"");
-
-                            songTingTing.start();
-
-
-                        }  else if(txtNoiDungKim.getText().toString().equals("May Mắn")){
-                            Toast.makeText(getActivity(),"Bạn hãy mở 1 ô bạn thích",Toast.LENGTH_SHORT).show();
-                            imgNon.setEnabled(false);
-                            for(int k =0;k<data_copy.length;k++){
-                                if(data_copy[k]!='0'&&isOpen[k]==false){
-                                    final int finalK = k;
-                                    dataCell.get(k).setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            imgNon.setEnabled(true);
-                                            dataCell.get(finalK).setText(data_copy[finalK].toString());
-                                            isOpen[finalK] = true;
-                                            dem++;
-                                            for(int j=0;j<data_copy.length;j++){
-                                                dataCell.get(j).setClickable(false);
-
-
-                                            }
-                                            if(dem==len){
-                                                imgNon.setEnabled(false);
-                                                Toast.makeText(getActivity(),"Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",Toast.LENGTH_LONG).show();
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-
-                        }
-                        else if (txtNoiDungKim.getText().toString().equals("Mất điểm")) {
-                            txtMoney.setText("0");
-                            Toast.makeText(getActivity(),"Mất điểm",Toast.LENGTH_SHORT).show();
-
-                            songFail.start();
-
-                        } else if (txtNoiDungKim.getText().toString().equals("Thêm Lượt")) {
-                          txtMang.setText((Integer.parseInt(txtMang.getText().toString())+1)+"");
-                            Toast.makeText(getActivity(),"Bạn được thêm +1 lượt",Toast.LENGTH_SHORT).show();
-
-                            songTingTing.start();
-
-
-                        } else {
-                            final TextView txtDiem = (TextView) view2.findViewById(R.id.txtDiem);
-                            txtDiem.setText(txtNoiDungKim.getText().toString());
-                            hopthoai2.show();
-                            for(int i=0;i<dataLetter.size();i++){
-                                final Button l = dataLetter.get(i);
-                                if (flag[i]) {
-
-                                    final int finalI = i;
-                                    l.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-
-                                        scale.setAnimationListener(new Animation.AnimationListener() {
-                                        @Override
-                                        public void onAnimationStart(Animation animation) {
-                                        l.setBackgroundColor(Color.YELLOW);
-                                        }
-
-                                        @Override
-                                        public void onAnimationEnd(Animation animation) {
-                                        l.setBackgroundColor(Color.GRAY);
-                                            flag[finalI]=false;
-                                            hopthoai2.dismiss();
-                                            int KT= 0;
-
-                                            for(int k=0;k<data_copy.length;k++){
-                                                if(data_copy[k]==l.getText().toString().charAt(0)&&isOpen[k]==false){
-
-                                                    KT +=1;
-
-                                                    txtMoney.setText((Integer.parseInt(txtDiem.getText().toString())+Integer.parseInt(txtMoney.getText().toString()))+"") ;
-                                                    dataCell.get(k).setText(l.getText().toString());
-                                                    isOpen[k] =true;
-                                                    dem++;
-                                                    if(dem==len){
-                                                        imgNon.setEnabled(false);
-                                                        Toast.makeText(getActivity(),"Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",Toast.LENGTH_LONG).show();
-                                                    }
-
-                                                }
-                                            }
-                                            if(KT!=0){
-
-                                                songTingTing.start();
-                                                Toast.makeText(getActivity(),"+ "+KT+"x"+txtDiem.getText().toString(),Toast.LENGTH_SHORT).show();
-                                            }
-                                            if(KT==0){
-
-                                                songFail.start();
-                                                if(Integer.parseInt(txtMang.getText().toString())>0) {
-                                                    txtMang.setText((Integer.parseInt(txtMang.getText().toString()) - 1) + "");
-                                                    Toast.makeText(getActivity(),"Mất 1 Lượt chơi",Toast.LENGTH_SHORT).show();
-                                                }else{
-                                                    imgNon.setEnabled(false);
-                                                    Toast.makeText(getActivity(),"Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",Toast.LENGTH_SHORT).show();
-                                                }
-
-                                            }
-
-//                                        int b= fr.Update(l.getText().toString().charAt(0));
-//                                        if(b!=0) {
-//                                            fr.UpdateMoney(true, b * Integer.parseInt(txtDiem.getText().toString()));
-//                                        }else fr.UpdateMoney(false, 0);
-//
-                                   }
-
-                                        @Override
-                                        public void onAnimationRepeat(Animation animation) {
-
-                                        }
-                                    });
-                                    l.startAnimation(scale);
-
-
-                        }
-                    }
-                );
-                        }else {l.setBackgroundColor(Color.GRAY); l.setClickable(false);}
-                        }
-
-
-                        }
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-
-                txtNoiDungKim.startAnimation(scale);
-
-
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });*/
-
-    }
-
-
 }
 
 

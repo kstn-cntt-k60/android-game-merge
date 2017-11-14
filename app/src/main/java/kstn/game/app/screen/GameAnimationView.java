@@ -73,6 +73,7 @@ public class GameAnimationView extends GLSurfaceView implements GLSurfaceView.Re
 
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
+        SurfaceTick.increase();
         program.onSurfaceCreated();
         projectionMatrixLocation = program.getUniformLocation("projectionMatrix");
         assert (projectionMatrixLocation == 0);
@@ -92,7 +93,7 @@ public class GameAnimationView extends GLSurfaceView implements GLSurfaceView.Re
     public void onDrawFrame(GL10 gl10) {
         viewClient.onDrawFrame();
 
-        GLES20.glClearColor(0.3f, 0.2f, 1.0f, 1f);
+        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);

@@ -7,6 +7,8 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
+import kstn.game.app.screen.SurfaceTick;
+
 public abstract class View {
     protected float width, height;
     protected float centerX, centerY;
@@ -68,6 +70,7 @@ public abstract class View {
     }
 
     public void onSurfaceCreated() {}
+
     public void onSurfaceChanged(float screenWidth, float screenHeight) {}
 
     public void onDraw() {}

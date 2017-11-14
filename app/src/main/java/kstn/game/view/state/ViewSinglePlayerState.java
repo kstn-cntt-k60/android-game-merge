@@ -1,10 +1,8 @@
 package kstn.game.view.state;
 
+import kstn.game.R;
 import kstn.game.logic.state_event.TransiteToMenuState;
-
-/**
- * Created by qi on 13/11/2017.
- */
+import kstn.game.view.thang.fragment.PlayFragment;
 
 public class ViewSinglePlayerState extends ViewGameState {
 
@@ -14,7 +12,7 @@ public class ViewSinglePlayerState extends ViewGameState {
 
     @Override
     public void entry() {
-
+        stateManager.activity.addFragment(new PlayFragment());
     }
 
     @Override

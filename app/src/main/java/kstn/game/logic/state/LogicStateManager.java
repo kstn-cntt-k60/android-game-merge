@@ -20,7 +20,7 @@ public class LogicStateManager {
     public final LogicMenuState menuState;
 
     // Multiplayer
-    public final LogicGameState loginState = null;
+    public final LogicLoginState loginState;
     public final LogicGameState createdRoomsState = null;
     public final LogicGameState roomCreatorState = null;
     public final LogicGameState waitRoomState = null;
@@ -40,11 +40,6 @@ public class LogicStateManager {
     public final BaseTimeManager timeManager;
     public final EventManager eventManager;
     public final AssetManager assetManager;
-
-    //
-    private void initAllStates() {
-
-    }
 
     private void listenToAllStateEvents() {
         eventManager.addListener(StateEventType.MENU, new EventListener() {
@@ -68,6 +63,13 @@ public class LogicStateManager {
             }
         });
 
+        eventManager.addListener(StateEventType.LOGIN, new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                makeTransitionTo(loginState);
+            }
+        });
+
     }
 
     public LogicStateManager(ViewGroup root,
@@ -85,6 +87,7 @@ public class LogicStateManager {
         menuState = new LogicMenuState(this);
         singlePlayerState = new LogicSinglePlayerState(this);
         singleResultState = new LogicSingleResultState(this);
+        loginState = new LogicLoginState(this);
 
         listenToAllStateEvents();
         currentState = menuState;
