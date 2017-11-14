@@ -2,18 +2,19 @@ package kstn.game.logic.state_event;
 
 import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;
-import kstn.game.logic.model.PlayerModel;
 
 /**
  * Created by qi on 13/11/2017.
  */
 
 public class TransiteToCreatedRoomsState extends BaseEventData {
-    public final PlayerModel player;
+    public final String playerName;
+    public final int avatarId;
 
-    public TransiteToCreatedRoomsState(PlayerModel player) {
+    public TransiteToCreatedRoomsState(String playerName, int avatarId) {
         super(0);
-        this.player = player;
+        this.playerName = playerName;
+        this.avatarId = avatarId;
     }
 
     @Override

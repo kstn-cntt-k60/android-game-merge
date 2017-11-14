@@ -1,4 +1,4 @@
-package kstn.game.view.playing_event;
+package kstn.game.logic.playing_event;
 
 import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 import kstn.game.R;
 import kstn.game.view.thang.activity.MyAdapter;
-import kstn.game.logic.model.PlayerModel;
 
 public class LoginFragment extends Fragment {
 
@@ -31,7 +30,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final EditText ten = (EditText) view.findViewById(R.id.ten);
+        final EditText nameEditText = (EditText) view.findViewById(R.id.ten);
         final ViewPager vpPager = view.findViewById(R.id.vpPager);
         MyAdapter adapter = new MyAdapter(getActivity().getSupportFragmentManager());
         vpPager.setAdapter(adapter);
@@ -41,21 +40,20 @@ public class LoginFragment extends Fragment {
         data.add(R.drawable.index3);
         data.add(R.drawable.index4);
 
-       // final PlayerModel user =new PlayerModel("thang",R.drawable.index2);
+       // final Player user =new Player("thang",R.drawable.index2);
         Button btnDau = (Button) view.findViewById(R.id.btnDau);
         btnDau.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int idAnh = data.get(vpPager.getCurrentItem());
-
-                PlayerModel user;
-                if (ten.getText().toString().isEmpty()) {
-                    user = new PlayerModel("GUEST" + (System.currentTimeMillis()/1000), idAnh);
+                int avatarId = data.get(vpPager.getCurrentItem());
+                String playerName;
+                if (nameEditText.getText().toString().isEmpty()) {
+                    playerName = "GUEST" + (System.currentTimeMillis()/1000);
                 }
                 else {
-                    user = new PlayerModel(ten.getText().toString(), idAnh);
+                    playerName = nameEditText.getText().toString();
                 }
-                Toast.makeText(getActivity(),user.getName(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), playerName,Toast.LENGTH_SHORT).show();
             }
         });
     }

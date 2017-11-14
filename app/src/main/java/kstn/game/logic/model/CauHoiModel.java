@@ -1,9 +1,5 @@
 package kstn.game.logic.model;
 
-/**
- * Created by thang on 9/11/2017.
- */
-
 public class CauHoiModel {
     int id;
     private String cauhoi;

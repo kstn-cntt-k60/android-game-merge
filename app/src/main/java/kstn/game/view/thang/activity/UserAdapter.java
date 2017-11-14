@@ -11,17 +11,13 @@ import java.util.ArrayList;
 
 
 import kstn.game.R;
-import kstn.game.logic.model.PlayerModel;
-
-/**
- * Created by thang on 10/1/2017.
- */
+import kstn.game.logic.model.Player;
 
 public class UserAdapter extends BaseAdapter {
-    private ArrayList<PlayerModel> data;
+    private ArrayList<Player> data;
     private Context context;
 
-    public UserAdapter(ArrayList<PlayerModel> data, Context context) {
+    public UserAdapter(ArrayList<Player> data, Context context) {
         this.data = data;
         this.context = context;
     }

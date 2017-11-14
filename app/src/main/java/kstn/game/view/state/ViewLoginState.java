@@ -12,7 +12,6 @@ public class ViewLoginState extends ViewGameState {
     }
     @Override
     public void entry() {
-        Log.i(this.getClass().getName(), "ViewLoginState");
         stateManager.activity.addFragment(new LoginFragment());
     }
 

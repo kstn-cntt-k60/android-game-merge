@@ -14,7 +14,9 @@ public class ViewSinglePlayerState extends ViewGameState {
 
     @Override
     public void entry() {
-        stateManager.activity.addFragment(new PlayFragment());
+        PlayFragment fragment = new PlayFragment();
+        fragment.setStateManager(stateManager);
+        stateManager.activity.addFragment(fragment);
     }
 
     @Override
