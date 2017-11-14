@@ -44,7 +44,7 @@ public class MenuFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View result = inflater.inflate(R.layout.fragment_menu, container, false);
-        result.setBackgroundColor(Color.parseColor("#00000000"));
+//        result.setBackgroundColor(Color.parseColor("#CC0000"));
         result.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -69,7 +69,9 @@ public class MenuFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 song.stop();
-                ((MainActivity) getActivity()).addFragment(R.id.myLayout, new PlayFragment());
+                PlayFragment playFragment = new PlayFragment();
+                playFragment.setStateManager(stateManager);
+                ((MainActivity) getActivity()).addFragment(R.id.myLayout, playFragment);
                 stateManager.eventManager.queue(new TransiteToSinglePlayerState());
             }
         });

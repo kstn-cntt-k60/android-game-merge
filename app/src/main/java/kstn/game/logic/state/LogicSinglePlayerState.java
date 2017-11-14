@@ -1,7 +1,9 @@
 package kstn.game.logic.state;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,8 @@ import kstn.game.logic.cone.ConeEventType;
 import kstn.game.logic.cone.ConeStopEventData;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
+import kstn.game.view.playing_event.PlayingEventType;
+import kstn.game.view.screen.ImageView;
 
 /**
  * Created by qi on 13/11/2017.
@@ -21,7 +25,9 @@ public class LogicSinglePlayerState extends LogicGameState {
     private List<String> coneCells;
     private String question, answer;
     private EventListener coneStopListener;
+    private EventListener overCellListener;
     private Cone cone;
+    private ImageView backgroundView;
 
     public LogicSinglePlayerState(LogicStateManager stateManager) {
         super(stateManager);
@@ -54,8 +60,23 @@ public class LogicSinglePlayerState extends LogicGameState {
                 coneStopAt(event.getResult());
             }
         };
+
+        overCellListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                cone.disable();
+            }
+        };
         cone = new Cone(stateManager.processManager, stateManager.assetManager,
                         stateManager.eventManager,stateManager.timeManager,stateManager.root);
+        Bitmap background = null;
+        try {
+            background = stateManager.assetManager.getBitmap("bg.jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        backgroundView = new ImageView(0, 0, 2, 1.8f * 2, background);
+
 
     }
 
@@ -67,14 +88,16 @@ public class LogicSinglePlayerState extends LogicGameState {
         Log.i("LogicSingle", "State");
         score = 0;
         life = 3;
-        cone.entry();
+       /* stateManager.root.addView(backgroundView);
+        cone.entry();*/
         stateManager.eventManager.addListener(ConeEventType.STOP, coneStopListener);
+        stateManager.eventManager.addListener(PlayingEventType.OVER_CELL, overCellListener);
 
     }
 
     @Override
     public void exit() {
         stateManager.eventManager.removeListener(ConeEventType.STOP, coneStopListener);
-        cone.exit();
+//        cone.exit();
     }
 }

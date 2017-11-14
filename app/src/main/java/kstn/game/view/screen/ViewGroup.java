@@ -21,6 +21,11 @@ public class ViewGroup extends View implements ViewManager {
         viewList.add(view);
     }
 
+    /*public void remove() {
+        viewList.remove(1);
+        viewList.remove(1);
+
+    }*/
     @Override
     public void removeView(View view) {
         viewList.remove(view);

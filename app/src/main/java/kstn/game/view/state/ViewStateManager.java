@@ -1,4 +1,6 @@
 package kstn.game.view.state;
+import android.util.Log;
+
 import kstn.game.MainActivity;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
@@ -89,6 +91,7 @@ public class ViewStateManager {
         currentState.exit();
         currentState = other;
         currentState.entry();
+        Log.i("CurrentState", currentState.toString());
     }
 
     public boolean onBack() {

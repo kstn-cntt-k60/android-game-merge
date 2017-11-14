@@ -24,6 +24,10 @@ public class CauHoiModel {
         return CauTraLoi;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public CauHoiModel(String cauhoi, String cauTraLoi) {
         this.cauhoi = cauhoi;
         this.CauTraLoi = cauTraLoi;

@@ -30,6 +30,12 @@ import java.util.Random;
 
 import kstn.game.MainActivity;
 import kstn.game.R;
+import kstn.game.logic.cone.ConeEventType;
+import kstn.game.logic.cone.ConeStopEventData;
+import kstn.game.logic.event.EventData;
+import kstn.game.logic.event.EventListener;
+import kstn.game.view.playing_event.NextQuestionEventData;
+import kstn.game.view.playing_event.OverCellEventData;
 import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.thang.data.QuestionManagerDAO;
 import kstn.game.logic.model.CauHoiModel;
@@ -37,7 +43,7 @@ import kstn.game.logic.model.CauHoiModel;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlayFragment extends Fragment implements View.OnTouchListener {
+public class PlayFragment extends Fragment {
 
     // khai báo các biến
 
@@ -48,13 +54,13 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
     private TextView txtLevel;
     private CauHoiModel cauhoi;
     private TextView txtCauHoi;
-//    private ImageView imgNon;
+    //    private ImageView imgNon;
     private MediaPlayer song;
     private TextView txtNoiDungKim;
-//    private ImageView kim;
+    //    private ImageView kim;
     // bien cờ
     private boolean[] flag = new boolean[26];
-    private int dem=0;
+    private int dem = 0;
     private int len;
     // list o bi mat
     ArrayList<TextView> dataCell = new ArrayList<>();
@@ -65,33 +71,34 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
     ArrayList<Button> dataDoan = new ArrayList<Button>();
     ArrayList<Integer> ArrayNumber = new ArrayList<>();
     private boolean[] isOpen;
-    private int mCurrAngle = 0;
-    private int mPrevAngle = 0;
+
     ArrayList<String> data = new ArrayList<>();
     private Character[] data_copy;
     Random rd = new Random();
     int height;
-    View view1,view2;
-    Button   btnDoanX,btnBackSpace,btnSpace,btnHuy;
+    View view1, view2;
+    Button btnDoanX, btnBackSpace, btnSpace, btnHuy;
     TextView txtTraLoi;
-    Dialog hopthoai1,hopthoai2;
+    Dialog hopthoai1, hopthoai2;
     Button btnDoan;
-    MediaPlayer  songFail;
-    MediaPlayer  songTingTing;
+    MediaPlayer songFail;
+    MediaPlayer songTingTing;
 
 
     public PlayFragment() {
         // Required empty public constructor
     }
 
-    public void setStateManager(ViewStateManager stateManager) { this.stateManager = stateManager; }
+    public void setStateManager(ViewStateManager stateManager) {
+        this.stateManager = stateManager;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View result = inflater.inflate(R.layout.fragment_play, container, false);
-      //  result.setBackgroundColor(Color.parseColor("#004342"));
+        //   result.setBackgroundColor(Color.parseColor("#004342"));
 //        result.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
 //            public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -112,7 +119,7 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         // get chiều dài rộng mà hình
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-         height = displayMetrics.heightPixels;
+        height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
         // ánh xạ các biến
         txtMang = (TextView) view.findViewById(R.id.txtMang);
@@ -127,27 +134,28 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
 
         // khởi tạo arraylist Điểm vòng quay
         data.add("800");
-        data.add("Mất điểm");
-        data.add("100");
-        data.add("200");
-        data.add("Nhân 2");
-        data.add("300");
-        data.add("400");
-        data.add("May Mắn");
-        data.add("300");
-        data.add("700");
-        data.add("Mất Lượt");
-        data.add("600");
-        data.add("Chia 2");
-        data.add("500");
-        data.add("100");
-        data.add("Thêm Lượt");
-        data.add("200");
-        data.add("300");
-        data.add("Thưởng");
         data.add("900");
+        data.add("Thêm Lượt");
+        data.add("300");
+        data.add("200");
+        data.add("Thêm Lượt");
+        data.add("100");
+        data.add("500");
+        data.add("Chia 2");
+        data.add("600");
+        data.add("Mất Lượt");
+        data.add("700");
+        data.add("300");
+        data.add("May Mắn");
+        data.add("400");
+        data.add("300");
+        data.add("Nhân 2");
+        data.add("200");
+        data.add("100");
+        data.add("Mất điểm");
 
-       // khởi tạo ds các ô bí mật
+
+        // khởi tạo ds các ô bí mật
         dataCell.add((TextView) view.findViewById(R.id.txt0));
         dataCell.add((TextView) view.findViewById(R.id.txt1));
         dataCell.add((TextView) view.findViewById(R.id.txt2));
@@ -177,8 +185,8 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         dataCell.add((TextView) view.findViewById(R.id.txt26));
 
         LayoutInflater inflater = LayoutInflater.from(getActivity());
-        view1 = inflater.inflate(R.layout.giaodien_alert_doan,null);
-        view2 = inflater.inflate(R.layout.giaodien_alert_letter,null);
+        view1 = inflater.inflate(R.layout.giaodien_alert_doan, null);
+        view2 = inflater.inflate(R.layout.giaodien_alert_letter, null);
         // anh xa o letter
         dataLetter.add((Button) view2.findViewById(R.id.btnA));
         dataLetter.add((Button) view2.findViewById(R.id.btnB));
@@ -208,34 +216,34 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         dataLetter.add((Button) view2.findViewById(R.id.btnZ));
 
 
-        btnHuy =(Button) view1.findViewById(R.id.btnHuy);
+        btnHuy = (Button) view1.findViewById(R.id.btnHuy);
         btnDoanX = (Button) view1.findViewById(R.id.btnDoanX);
         dataDoan.add((Button) view1.findViewById(R.id.btnQ));
         dataDoan.add((Button) view1.findViewById(R.id.btnW));
         dataDoan.add((Button) view1.findViewById(R.id.btnE));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnR));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnT));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnY));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnU));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnI));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnO));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnP));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnA));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnS));
+        dataDoan.add((Button) view1.findViewById(R.id.btnR));
+        dataDoan.add((Button) view1.findViewById(R.id.btnT));
+        dataDoan.add((Button) view1.findViewById(R.id.btnY));
+        dataDoan.add((Button) view1.findViewById(R.id.btnU));
+        dataDoan.add((Button) view1.findViewById(R.id.btnI));
+        dataDoan.add((Button) view1.findViewById(R.id.btnO));
+        dataDoan.add((Button) view1.findViewById(R.id.btnP));
+        dataDoan.add((Button) view1.findViewById(R.id.btnA));
+        dataDoan.add((Button) view1.findViewById(R.id.btnS));
         dataDoan.add((Button) view1.findViewById(R.id.btnD));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnF));
+        dataDoan.add((Button) view1.findViewById(R.id.btnF));
         dataDoan.add((Button) view1.findViewById(R.id.btnG));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnH));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnJ));
+        dataDoan.add((Button) view1.findViewById(R.id.btnH));
+        dataDoan.add((Button) view1.findViewById(R.id.btnJ));
         dataDoan.add((Button) view1.findViewById(R.id.btnK));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnL));
+        dataDoan.add((Button) view1.findViewById(R.id.btnL));
         dataDoan.add((Button) view1.findViewById(R.id.btnZ));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnX));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnC));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnV));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnB));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnN));
-        dataDoan.add( (Button) view1.findViewById(R.id.btnM));
+        dataDoan.add((Button) view1.findViewById(R.id.btnX));
+        dataDoan.add((Button) view1.findViewById(R.id.btnC));
+        dataDoan.add((Button) view1.findViewById(R.id.btnV));
+        dataDoan.add((Button) view1.findViewById(R.id.btnB));
+        dataDoan.add((Button) view1.findViewById(R.id.btnN));
+        dataDoan.add((Button) view1.findViewById(R.id.btnM));
         txtTraLoi = (TextView) view1.findViewById(R.id.txtTraLoi);
         btnBackSpace = (Button) view1.findViewById(R.id.btnBackSpace);
         btnSpace = (Button) view1.findViewById(R.id.btnSpace);
@@ -246,25 +254,25 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         questionManagerDAO.open();
         dataCauHoi = questionManagerDAO.getData();
         questionManagerDAO.close();
-        for(int i=0;i<dataCauHoi.size();i++){
+        for (int i = 0; i < dataCauHoi.size(); i++) {
             ArrayNumber.add(i);
 
         }
-        hopthoai1 = new Dialog(getActivity(),R.style.Theme_Dialog);
-        hopthoai2 = new Dialog(getActivity(),R.style.Theme_Dialog);
-        this.InitAlert(hopthoai2,view2);
+        hopthoai1 = new Dialog(getActivity(), R.style.Theme_Dialog);
+        hopthoai2 = new Dialog(getActivity(), R.style.Theme_Dialog);
+        this.InitAlert(hopthoai2, view2);
         hopthoai2.setCancelable(false);
         hopthoai2.setCanceledOnTouchOutside(false);
-        this.InitAlert(hopthoai1,view1);
+        this.InitAlert(hopthoai1, view1);
 
-       this.UpdateContext();
-        if(Integer.parseInt(txtMang.getText().toString())>0&&(dem<len)) {
+        this.UpdateContext();
+        if (Integer.parseInt(txtMang.getText().toString()) > 0 && (dem < len)) {
             //imgNon.setOnTouchListener(this);
-        } else{
-            if(dem==len){
-                Toast.makeText(getActivity(),"Nhấn button để Đoán Luôn",Toast.LENGTH_LONG);
+        } else {
+            if (dem == len) {
+                Toast.makeText(getActivity(), "Nhấn button để Đoán Luôn", Toast.LENGTH_LONG);
             }
-           // imgNon.setOnTouchListener(null);
+            // imgNon.setOnTouchListener(null);
         }
 
         btnDoan = (Button) view.findViewById(R.id.btnDoan);
@@ -273,7 +281,7 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
             public void onClick(View view) {
                 hopthoai1.show();
                 txtTraLoi.setText("");
-                for(final Button btn:dataDoan) {
+                for (final Button btn : dataDoan) {
                     btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -284,18 +292,18 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
                 btnSpace.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        txtTraLoi.setText(txtTraLoi.getText().toString()+" ");
+                        txtTraLoi.setText(txtTraLoi.getText().toString() + " ");
                     }
                 });
                 btnBackSpace.setOnClickListener(new View.OnClickListener() {
                     @Override
 
                     public void onClick(View view) {
-                        if(txtTraLoi.getText().length()>0) {
+                        if (txtTraLoi.getText().length() > 0) {
                             txtTraLoi.setText(txtTraLoi.getText().subSequence(0, txtTraLoi.getText().length() - 1));
                         }
                     }
-            });
+                });
 
                 btnHuy.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -306,41 +314,244 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
                 btnDoanX.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if(txtTraLoi.getText().toString().equals(cauhoi.getCauTraLoi())){
-                            MediaPlayer  song1 = MediaPlayer.create(getActivity(), R.raw.tingting);
+                        if (txtTraLoi.getText().toString().equals(cauhoi.getCauTraLoi())) {
+                            MediaPlayer song1 = MediaPlayer.create(getActivity(), R.raw.tingting);
                             song1.start();
-                            UpdateContext();
-                        }
-                        else{
+
+//                            Collections.shuffle(ArrayNumber);
+//                            cauhoi = dataCauHoi.get(ArrayNumber.get(0));
+//                            ArrayNumber.remove(0);
+                            stateManager.eventManager.queue(new NextQuestionEventData(cauhoi.getId()));
+
+
+                            UpdateContext(id);
+                        } else {
                             songFail.start();
-                            if(Integer.parseInt(txtMoney.getText().toString())>1000){
-                                txtMoney.setText((Integer.parseInt(txtMoney.getText().toString())-1000)+"");
-                            }
-                            else if(Integer.parseInt(txtMang.getText().toString())>0){
-                                txtMang.setText((Integer.parseInt(txtMang.getText().toString())-1)+"");
-                            }else {
+                            if (Integer.parseInt(txtMoney.getText().toString()) > 1000) {
+                                txtMoney.setText((Integer.parseInt(txtMoney.getText().toString()) - 1000) + "");
+                            } else if (Integer.parseInt(txtMang.getText().toString()) > 0) {
+                                txtMang.setText((Integer.parseInt(txtMang.getText().toString()) - 1) + "");
+                            } else {
                                 //imgNon.setEnabled(false);
-                                Toast.makeText(getActivity(),"game Over",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), "game Over", Toast.LENGTH_LONG).show();
                             }
                         }
                     }
                 });
             }
         });
+        song = MediaPlayer.create(getActivity(), R.raw.quay);
+        final int[] result = new int[1];
+        stateManager.eventManager.addListener(ConeEventType.STOP, new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                result[0] = ((ConeStopEventData) event).getResult();
+//                Toast.makeText(getActivity(), result[0] + "", Toast.LENGTH_SHORT);
+
+
+
+
+                song.stop();
+                final Animation   scale = AnimationUtils.loadAnimation(getActivity(),R.anim.scale);
+                scale.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                        txtNoiDungKim.setText(data.get(result[0]));
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        if (txtNoiDungKim.getText().toString().equals("Chia 2")) {
+                            txtMoney.setText((int)(Integer.parseInt(txtMoney.getText().toString())/2)+"");
+                            Toast.makeText(getActivity(),"bạn bị chia 2 số điểm",Toast.LENGTH_SHORT).show();
+
+                            songFail.start();
+
+                        }
+                        else if (txtNoiDungKim.getText().toString().equals("Mất Lượt")) {
+
+
+                            songFail.start();
+                            if(Integer.parseInt(txtMang.getText().toString())>0) {
+                                txtMang.setText((Integer.parseInt(txtMang.getText().toString()) - 1) + "");
+                                Toast.makeText(getActivity(),"Mất Lượt",Toast.LENGTH_SHORT).show();
+                            }else{
+                                stateManager.eventManager.queue(new OverCellEventData());
+                                Toast.makeText(getActivity(),"Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else if (txtNoiDungKim.getText().toString().equals("Nhân 2") ) {
+                            txtMoney.setText(Integer.parseInt(txtMoney.getText().toString())*2+"");
+                            Toast.makeText(getActivity(),"Nhân 2 số điểm",Toast.LENGTH_SHORT).show();
+
+                            songTingTing.start();
+                        }
+                        else if(txtNoiDungKim.getText().toString().equals("Thưởng")){
+                            int k = rd.nextInt(2400)+100;
+                            Toast.makeText(getActivity(),"Bạn được cộng thêm "+k+" điểm",Toast.LENGTH_SHORT).show();
+                            txtMoney.setText(Integer.parseInt(txtMoney.getText().toString())+k+"");
+
+                            songTingTing.start();
+
+
+                        }  else if(txtNoiDungKim.getText().toString().equals("May Mắn")){
+                            Toast.makeText(getActivity(),"Bạn hãy mở 1 ô bạn thích",Toast.LENGTH_SHORT).show();
+
+                            for(int k =0;k<data_copy.length;k++){
+                                if(data_copy[k]!='0'&&isOpen[k]==false){
+                                    final int finalK = k;
+                                    dataCell.get(k).setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                            dataCell.get(finalK).setText(data_copy[finalK].toString());
+                                            isOpen[finalK] = true;
+                                            dem++;
+                                            for(int j=0;j<data_copy.length;j++){
+                                                dataCell.get(j).setClickable(false);
+
+
+                                            }
+                                            if(dem==len){
+                                                stateManager.eventManager.queue(new OverCellEventData());
+                                                Toast.makeText(getActivity(),"Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+
+                        }
+                        else if (txtNoiDungKim.getText().toString().equals("Mất điểm")) {
+                            txtMoney.setText("0");
+                            Toast.makeText(getActivity(),"Mất điểm",Toast.LENGTH_SHORT).show();
+
+                            songFail.start();
+
+                        } else if (txtNoiDungKim.getText().toString().equals("Thêm Lượt")) {
+                            txtMang.setText((Integer.parseInt(txtMang.getText().toString())+1)+"");
+                            Toast.makeText(getActivity(),"Bạn được thêm +1 lượt",Toast.LENGTH_SHORT).show();
+
+                            songTingTing.start();
+
+
+                        } else {
+                            final TextView txtDiem = (TextView) view2.findViewById(R.id.txtDiem);
+                            txtDiem.setText(txtNoiDungKim.getText().toString());
+                            hopthoai2.show();
+                            for(int i=0;i<dataLetter.size();i++){
+                                final Button l = dataLetter.get(i);
+                                if (flag[i]) {
+
+                                    final int finalI = i;
+                                    l.setOnClickListener(new View.OnClickListener() {
+                                                             @Override
+                                                             public void onClick(View view) {
+
+                                                                 scale.setAnimationListener(new Animation.AnimationListener() {
+                                                                     @Override
+                                                                     public void onAnimationStart(Animation animation) {
+                                                                         l.setBackgroundColor(Color.YELLOW);
+                                                                     }
+
+                                                                     @Override
+                                                                     public void onAnimationEnd(Animation animation) {
+                                                                         l.setBackgroundColor(Color.GRAY);
+                                                                         flag[finalI]=false;
+                                                                         hopthoai2.dismiss();
+                                                                         int KT= 0;
+
+                                                                         for(int k=0;k<data_copy.length;k++){
+                                                                             if(data_copy[k]==l.getText().toString().charAt(0)&&isOpen[k]==false){
+
+                                                                                 KT +=1;
+
+                                                                                 txtMoney.setText((Integer.parseInt(txtDiem.getText().toString())+Integer.parseInt(txtMoney.getText().toString()))+"") ;
+                                                                                 dataCell.get(k).setText(l.getText().toString());
+                                                                                 isOpen[k] =true;
+                                                                                 dem++;
+                                                                                 if(dem==len){
+                                                                                     stateManager.eventManager.queue(new OverCellEventData());
+                                                                                     Toast.makeText(getActivity(),"Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",Toast.LENGTH_LONG).show();
+                                                                                 }
+
+                                                                             }
+                                                                         }
+                                                                         if(KT!=0){
+
+                                                                             songTingTing.start();
+                                                                             Toast.makeText(getActivity(),"+ "+KT+"x"+txtDiem.getText().toString(),Toast.LENGTH_SHORT).show();
+                                                                         }
+                                                                         if(KT==0){
+
+                                                                             songFail.start();
+                                                                             if(Integer.parseInt(txtMang.getText().toString())>0) {
+                                                                                 txtMang.setText((Integer.parseInt(txtMang.getText().toString()) - 1) + "");
+                                                                                 Toast.makeText(getActivity(),"Mất 1 Lượt chơi",Toast.LENGTH_SHORT).show();
+                                                                             }else{
+                                                                                 stateManager.eventManager.queue(new OverCellEventData());
+                                                                                 Toast.makeText(getActivity(),"Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",Toast.LENGTH_SHORT).show();
+                                                                             }
+
+                                                                         }
+
+//                                        int b= fr.Update(l.getText().toString().charAt(0));
+//                                        if(b!=0) {
+//                                            fr.UpdateMoney(true, b * Integer.parseInt(txtDiem.getText().toString()));
+//                                        }else fr.UpdateMoney(false, 0);
+//
+                                                                     }
+
+                                                                     @Override
+                                                                     public void onAnimationRepeat(Animation animation) {
+
+                                                                     }
+                                                                 });
+                                                                 l.startAnimation(scale);
+
+
+                                                             }
+                                                         }
+                                    );
+                                }else {l.setBackgroundColor(Color.GRAY); l.setClickable(false);}
+                            }
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
+                txtNoiDungKim.startAnimation(scale);
+
+
+
+            }
+
+
+
+
+        });
+
     }
 
-    public  void InitAlert(Dialog hopthoai, View view){
+    public void InitAlert(Dialog hopthoai, View view) {
         hopthoai.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         hopthoai.setContentView(view);
         WindowManager.LayoutParams w = hopthoai.getWindow().getAttributes();
         w.gravity = Gravity.BOTTOM;
-        w.x=0;
-        w.height=(int)(height*0.53);
+        w.x = 0;
+        w.height = (int) (height * 0.53);
         hopthoai.getWindow().setAttributes(w);
     }
 
-    public void UpdateContext() {
-        for(int i=0;i< dataLetter.size();i++){
+    public void UpdateContext(int id) {
+        for (int i = 0; i < dataLetter.size(); i++) {
             dataLetter.get(i).setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.button_mini));
 
         }
@@ -348,7 +559,7 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         //imgNon.setEnabled(true);
         isOpen = new boolean[27];
         data_copy = new Character[27];
-        dem=0;
+        dem = 0;
         txtMang.setText("3");
         for (int i = 0; i < 26; i++) {
             flag[i] = true;
@@ -358,18 +569,16 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
             dataCell.get(i).setText("");
             isOpen[i] = false;
         }
-      //  ((MainActivity)getActivity()).AddFragment(R.id.myLayout2, new ChoiThoiFragment());
-        Collections.shuffle(ArrayNumber);
-        cauhoi = dataCauHoi.get(ArrayNumber.get(0));
-        ArrayNumber.remove(0);
+        //  ((MainActivity)getActivity()).AddFragment(R.id.myLayout2, new ChoiThoiFragment());
+        cauhoi = dataCauHoi.get(id);
 
         txtCauHoi.setText(cauhoi.getCauhoi());
         ArrayList<String> c = ToArray(cauhoi);
 
         ArrayList<Integer> tmp = new ArrayList<>();
-        len =0;
+        len = 0;
         for (int i = 0; i < c.size(); i++) {
-            len+=c.get(i).length();
+            len += c.get(i).length();
 
             for (int j = 0; j < c.get(i).length(); j++) {
 
@@ -416,265 +625,5 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         return c;
     }
 
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        /*final float xc = (imgNon.getX() + imgNon.getWidth() / 2);
-        final float yc = (imgNon.getY() + imgNon.getHeight() / 2);
-
-        final float x = motionEvent.getX();
-        final float y = motionEvent.getY();
-
-        Log.i("Touch", "( " + x + ", " + y + " )");
-
-        // txtKQ.setText("x= " + x + " , y= " + y);
-
-        switch (motionEvent.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
-                // Khi chạm vào một điểm trên màn hình
-                imgNon.clearAnimation();
-
-
-                break;
-            }
-//            case MotionEvent.ACTION_MOVE: {
-//                //  ACTION_MOVE là sự kiện khi ta di chuyển ngón tay trên màn hình
-//                // Hàm này sẽ cập nhập lại vị trí của điểm chạm khi di chuyển
-//
-//
-//
-//                break;
-            // }
-            case MotionEvent.ACTION_UP: {
-                // ACTION_UP: Khi nhấc ngón tay lên
-
-                mCurrAngle = (int)(50*Math.toDegrees(Math.atan2( Math.abs(x - xc), Math.abs(yc - y))));
-                mCurrAngle = mCurrAngle - mCurrAngle%18;
-                // txtNhap.setText(String.valueOf(mCurrAngle/18));
-                animate(mPrevAngle, mCurrAngle, 1000);
-//                mPrevAngle = mCurrAngle;
-                break;
-
-            }
-
-        }*/
-        return true;
-    }
-    private void animate(double fromDegrees, double toDegrees, long durationMillis) {
-        final RotateAnimation rotate = new RotateAnimation((float) fromDegrees, (float) toDegrees,
-                RotateAnimation.RELATIVE_TO_SELF, 0.5f,
-                RotateAnimation.RELATIVE_TO_SELF, 0.5f);
-        rotate.setInterpolator(((MainActivity)getActivity()), android.R.anim.decelerate_interpolator);
-        rotate.setDuration(durationMillis);
-        rotate.setFillEnabled(true);
-        rotate.setFillAfter(true);
-        song = MediaPlayer.create(getActivity(), R.raw.quay);
-        //imgNon.startAnimation(rotate);
-        /*rotate.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-                song.start();
-                final float xc = (imgNon.getX() + imgNon.getWidth() / 2);
-                final float yc = (imgNon.getY() + imgNon.getHeight() / 2);
-
-
-
-
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                song.stop();
-                final Animation   scale = AnimationUtils.loadAnimation(getActivity(),R.anim.scale);
-                scale.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                       txtNoiDungKim.setText( data.get( (int)(mCurrAngle/18)%data.size())   );
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        if (txtNoiDungKim.getText().toString().equals("Chia 2")) {
-                          txtMoney.setText((int)(Integer.parseInt(txtMoney.getText().toString())/2)+"");
-                            Toast.makeText(getActivity(),"bạn bị chia 2 số điểm",Toast.LENGTH_SHORT).show();
-
-                            songFail.start();
-
-                        } else if (txtNoiDungKim.getText().toString().equals("Mất Lượt")) {
-
-
-                            songFail.start();
-                            if(Integer.parseInt(txtMang.getText().toString())>0) {
-                                txtMang.setText((Integer.parseInt(txtMang.getText().toString()) - 1) + "");
-                                Toast.makeText(getActivity(),"Mất Lượt",Toast.LENGTH_SHORT).show();
-                            }else{
-                                imgNon.setEnabled(false);
-                                Toast.makeText(getActivity(),"Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",Toast.LENGTH_SHORT).show();
-                            }
-
-                        } else if (txtNoiDungKim.getText().toString().equals("Nhân 2") ) {
-                          txtMoney.setText(Integer.parseInt(txtMoney.getText().toString())*2+"");
-                            Toast.makeText(getActivity(),"Nhân 2 số điểm",Toast.LENGTH_SHORT).show();
-
-                            songTingTing.start();
-                        }
-                        else if(txtNoiDungKim.getText().toString().equals("Thưởng")){
-                            int k = rd.nextInt(2400)+100;
-                            Toast.makeText(getActivity(),"Bạn được cộng thêm "+k+" điểm",Toast.LENGTH_SHORT).show();
-                            txtMoney.setText(Integer.parseInt(txtMoney.getText().toString())+k+"");
-
-                            songTingTing.start();
-
-
-                        }  else if(txtNoiDungKim.getText().toString().equals("May Mắn")){
-                            Toast.makeText(getActivity(),"Bạn hãy mở 1 ô bạn thích",Toast.LENGTH_SHORT).show();
-                            imgNon.setEnabled(false);
-                            for(int k =0;k<data_copy.length;k++){
-                                if(data_copy[k]!='0'&&isOpen[k]==false){
-                                    final int finalK = k;
-                                    dataCell.get(k).setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            imgNon.setEnabled(true);
-                                            dataCell.get(finalK).setText(data_copy[finalK].toString());
-                                            isOpen[finalK] = true;
-                                            dem++;
-                                            for(int j=0;j<data_copy.length;j++){
-                                                dataCell.get(j).setClickable(false);
-
-
-                                            }
-                                            if(dem==len){
-                                                imgNon.setEnabled(false);
-                                                Toast.makeText(getActivity(),"Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",Toast.LENGTH_LONG).show();
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-
-                        }
-                        else if (txtNoiDungKim.getText().toString().equals("Mất điểm")) {
-                            txtMoney.setText("0");
-                            Toast.makeText(getActivity(),"Mất điểm",Toast.LENGTH_SHORT).show();
-
-                            songFail.start();
-
-                        } else if (txtNoiDungKim.getText().toString().equals("Thêm Lượt")) {
-                          txtMang.setText((Integer.parseInt(txtMang.getText().toString())+1)+"");
-                            Toast.makeText(getActivity(),"Bạn được thêm +1 lượt",Toast.LENGTH_SHORT).show();
-
-                            songTingTing.start();
-
-
-                        } else {
-                            final TextView txtDiem = (TextView) view2.findViewById(R.id.txtDiem);
-                            txtDiem.setText(txtNoiDungKim.getText().toString());
-                            hopthoai2.show();
-                            for(int i=0;i<dataLetter.size();i++){
-                                final Button l = dataLetter.get(i);
-                                if (flag[i]) {
-
-                                    final int finalI = i;
-                                    l.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-
-                                        scale.setAnimationListener(new Animation.AnimationListener() {
-                                        @Override
-                                        public void onAnimationStart(Animation animation) {
-                                        l.setBackgroundColor(Color.YELLOW);
-                                        }
-
-                                        @Override
-                                        public void onAnimationEnd(Animation animation) {
-                                        l.setBackgroundColor(Color.GRAY);
-                                            flag[finalI]=false;
-                                            hopthoai2.dismiss();
-                                            int KT= 0;
-
-                                            for(int k=0;k<data_copy.length;k++){
-                                                if(data_copy[k]==l.getText().toString().charAt(0)&&isOpen[k]==false){
-
-                                                    KT +=1;
-
-                                                    txtMoney.setText((Integer.parseInt(txtDiem.getText().toString())+Integer.parseInt(txtMoney.getText().toString()))+"") ;
-                                                    dataCell.get(k).setText(l.getText().toString());
-                                                    isOpen[k] =true;
-                                                    dem++;
-                                                    if(dem==len){
-                                                        imgNon.setEnabled(false);
-                                                        Toast.makeText(getActivity(),"Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",Toast.LENGTH_LONG).show();
-                                                    }
-
-                                                }
-                                            }
-                                            if(KT!=0){
-
-                                                songTingTing.start();
-                                                Toast.makeText(getActivity(),"+ "+KT+"x"+txtDiem.getText().toString(),Toast.LENGTH_SHORT).show();
-                                            }
-                                            if(KT==0){
-
-                                                songFail.start();
-                                                if(Integer.parseInt(txtMang.getText().toString())>0) {
-                                                    txtMang.setText((Integer.parseInt(txtMang.getText().toString()) - 1) + "");
-                                                    Toast.makeText(getActivity(),"Mất 1 Lượt chơi",Toast.LENGTH_SHORT).show();
-                                                }else{
-                                                    imgNon.setEnabled(false);
-                                                    Toast.makeText(getActivity(),"Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",Toast.LENGTH_SHORT).show();
-                                                }
-
-                                            }
-
-//                                        int b= fr.Update(l.getText().toString().charAt(0));
-//                                        if(b!=0) {
-//                                            fr.UpdateMoney(true, b * Integer.parseInt(txtDiem.getText().toString()));
-//                                        }else fr.UpdateMoney(false, 0);
-//
-                                   }
-
-                                        @Override
-                                        public void onAnimationRepeat(Animation animation) {
-
-                                        }
-                                    });
-                                    l.startAnimation(scale);
-
-
-                        }
-                    }
-                );
-                        }else {l.setBackgroundColor(Color.GRAY); l.setClickable(false);}
-                        }
-
-
-                        }
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-
-                txtNoiDungKim.startAnimation(scale);
-
-
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });*/
-
-    }
-
 
 }
-
-

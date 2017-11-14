@@ -7,6 +7,7 @@ import kstn.game.logic.event.EventManager;
 import kstn.game.logic.process.ProcessManager;
 import kstn.game.logic.state_event.StateEventType;
 import kstn.game.view.asset.AssetManager;
+import kstn.game.view.playing_event.PlayingEventType;
 import kstn.game.view.screen.ViewGroup;
 
 /**
@@ -20,7 +21,7 @@ public class LogicStateManager {
     public final LogicMenuState menuState;
 
     // Multiplayer
-    public final LogicGameState loginState = null;
+    public final LogicGameState loginState;
     public final LogicGameState createdRoomsState = null;
     public final LogicGameState roomCreatorState = null;
     public final LogicGameState waitRoomState = null;
@@ -67,6 +68,12 @@ public class LogicStateManager {
                 makeTransitionTo(singleResultState);
             }
         });
+        eventManager.addListener(StateEventType.LOGIN, new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                makeTransitionTo(loginState);
+            }
+        });
 
     }
 
@@ -85,6 +92,7 @@ public class LogicStateManager {
         menuState = new LogicMenuState(this);
         singlePlayerState = new LogicSinglePlayerState(this);
         singleResultState = new LogicSingleResultState(this);
+        loginState = new LogicLoginState(this);
 
         listenToAllStateEvents();
         currentState = menuState;

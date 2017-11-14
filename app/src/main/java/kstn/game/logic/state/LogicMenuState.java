@@ -39,8 +39,10 @@ public class LogicMenuState extends LogicGameState {
 
     @Override
     public void exit() {
-        cone.exit();
-        stateManager.root.removeView(backgroundView);
+//        cone.exit();
+//        stateManager.root.removeView(backgroundView);
+        Log.i("Thoat", this.toString());
+
 
     }
 }
