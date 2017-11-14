@@ -21,6 +21,7 @@ public class ViewMenuState extends ViewGameState {
         MenuFragment fragment = new MenuFragment();
         fragment.setStateManager(stateManager);
         activity.addFragment(R.id.myLayout, fragment);
+        Log.i("ViewMenuState", "meNUView");
     }
 
     @Override

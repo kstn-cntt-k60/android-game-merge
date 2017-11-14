@@ -1,5 +1,7 @@
 package kstn.game.logic.state;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,7 @@ public class LogicSinglePlayerState extends LogicGameState {
     private List<String> coneCells;
     private String question, answer;
     private EventListener coneStopListener;
+    private Cone cone;
 
     public LogicSinglePlayerState(LogicStateManager stateManager) {
         super(stateManager);
@@ -51,6 +54,9 @@ public class LogicSinglePlayerState extends LogicGameState {
                 coneStopAt(event.getResult());
             }
         };
+        cone = new Cone(stateManager.processManager, stateManager.assetManager,
+                        stateManager.eventManager,stateManager.timeManager,stateManager.root);
+
     }
 
     private void coneStopAt(int index) {
@@ -58,13 +64,17 @@ public class LogicSinglePlayerState extends LogicGameState {
 
     @Override
     public void entry() {
+        Log.i("LogicSingle", "State");
         score = 0;
         life = 3;
+        cone.entry();
         stateManager.eventManager.addListener(ConeEventType.STOP, coneStopListener);
+
     }
 
     @Override
     public void exit() {
         stateManager.eventManager.removeListener(ConeEventType.STOP, coneStopListener);
+        cone.exit();
     }
 }

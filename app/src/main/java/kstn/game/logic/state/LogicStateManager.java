@@ -1,8 +1,10 @@
 package kstn.game.logic.state;
 
+import kstn.game.app.root.BaseTimeManager;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
+import kstn.game.logic.process.ProcessManager;
 import kstn.game.logic.state_event.StateEventType;
 import kstn.game.view.asset.AssetManager;
 import kstn.game.view.screen.ViewGroup;
@@ -34,6 +36,8 @@ public class LogicStateManager {
 
     // Managers
     public final ViewGroup root;
+    public final ProcessManager processManager;
+    public final BaseTimeManager timeManager;
     public final EventManager eventManager;
     public final AssetManager assetManager;
 
@@ -67,9 +71,13 @@ public class LogicStateManager {
     }
 
     public LogicStateManager(ViewGroup root,
+                             ProcessManager processManager,
+                             BaseTimeManager timeManager,
                              EventManager eventManager,
                              AssetManager assetManager) {
         this.root = root;
+        this.processManager = processManager;
+        this.timeManager = timeManager;
         this.eventManager = eventManager;
         this.assetManager = assetManager;
 

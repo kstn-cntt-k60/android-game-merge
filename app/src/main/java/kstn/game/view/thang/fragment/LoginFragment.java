@@ -1,6 +1,7 @@
 package kstn.game.view.thang.fragment;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -34,7 +35,9 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        View v= inflater.inflate(R.layout.fragment_login, container, false);
+        //v.setBackgroundColor(Color.parseColor("#3F51B5"));
+        return v;
     }
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

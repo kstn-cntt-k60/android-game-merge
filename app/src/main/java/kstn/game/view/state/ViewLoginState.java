@@ -1,20 +1,23 @@
 package kstn.game.view.state;
 
+import android.util.Log;
+
+import kstn.game.MainActivity;
+import kstn.game.logic.event.EventManager;
 import kstn.game.logic.state_event.TransiteToMenuState;
 
 /**
- * Created by qi on 13/11/2017.
+ * Created by qi on 14/11/2017.
  */
 
-public class ViewSinglePlayerState extends ViewGameState {
+public class ViewLoginState extends ViewGameState {
 
-    public ViewSinglePlayerState(ViewStateManager stateManager) {
+    public ViewLoginState(ViewStateManager stateManager) {
         super(stateManager);
     }
-
     @Override
     public void entry() {
-
+        Log.i(this.getClass().getName(), "ViewLoginState");
     }
 
     @Override

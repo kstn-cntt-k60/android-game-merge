@@ -18,6 +18,8 @@ import kstn.game.R;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
+import kstn.game.logic.state_event.TransiteToLoginState;
+import kstn.game.logic.state_event.TransiteToSinglePlayerState;
 import kstn.game.view.state.ViewStateManager;
 
 
@@ -68,6 +70,7 @@ public class MenuFragment extends Fragment {
             public void onClick(View view) {
                 song.stop();
                 ((MainActivity) getActivity()).addFragment(R.id.myLayout, new PlayFragment());
+                stateManager.eventManager.queue(new TransiteToSinglePlayerState());
             }
         });
 
@@ -76,6 +79,7 @@ public class MenuFragment extends Fragment {
             public void onClick(View view) {
                 song.stop();
                 ((MainActivity) getActivity()).addFragment(R.id.myLayout, new LoginFragment());
+                stateManager.eventManager.queue(new TransiteToLoginState());
             }
         });
 

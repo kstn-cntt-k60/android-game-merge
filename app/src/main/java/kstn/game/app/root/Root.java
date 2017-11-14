@@ -28,7 +28,6 @@ import kstn.game.view.state.ViewStateManager;
 public class Root implements GameViewClient {
 
     private float start = 0;
-    private final String TAG = getClass().getSimpleName();
 
 	private final GameAnimationView gameView;
     private final Context context;
@@ -47,8 +46,8 @@ public class Root implements GameViewClient {
     private BaseTimeManager timeManager;
     private long previousTimeStamp = 0;
 
-    private Cone gameCone;
-    private Needle gameNeedle;
+    /*private Cone gameCone;
+    private Needle gameNeedle;*/
 
     private ViewStateManager viewStateManager = null;
     private LogicStateManager logicStateManager = null;
@@ -88,7 +87,7 @@ public class Root implements GameViewClient {
         gameView.setLLEventManager(llEventManager);
 
         viewStateManager = new ViewStateManager(this.activity, uiEventManager);
-        logicStateManager = new LogicStateManager(viewGroup,
+        logicStateManager = new LogicStateManager(viewGroup, processManager, timeManager,
                 eventManager, assetManager);
     }
 

@@ -20,15 +20,13 @@ import kstn.game.view.screen.ViewGroup;
 public class Needle {
 
     private ViewGroup rootviewGroup;
-    private ImageView needleView;
-    private boolean isHidden = false;
+    public ImageView needleView;
 
     private final ProcessManager processManager;
     private boolean isStartCollison = true;
     public Needle(final ProcessManager processManager,
                   AssetManager assetManager,
-                  final EventManager eventManager,
-                  ViewGroup rootviewGroup) {
+                  final EventManager eventManager) {
         this.rootviewGroup = rootviewGroup;
         this.processManager = processManager;
         Bitmap image = null;
@@ -36,7 +34,7 @@ public class Needle {
             image = assetManager.getBitmap("kim.png");
         } catch (IOException e) {
         }
-        needleView = new ImageView(0.0f, 1.25f, 0.1f, 0.2f, image);
+        needleView = new ImageView(0.0f, 1.65f, 0.1f, 0.2f, image);
 
 
         eventManager.addListener(NeedleEventType.COLLISION, new EventListener() {
@@ -89,9 +87,6 @@ public class Needle {
         }
 
 
-    }
-    public void show() {
-        if (!isHidden) rootviewGroup.addView(needleView);
     }
 
     public boolean isStartCollison() {

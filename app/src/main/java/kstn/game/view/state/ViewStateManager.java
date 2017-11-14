@@ -15,7 +15,7 @@ public class ViewStateManager {
     public final ViewMenuState menuState;
 
     // Multiplayer
-    public final ViewGameState loginState = null;
+    public final ViewGameState loginState;
     public final ViewGameState createdRoomsState = null;
     public final ViewGameState roomCreatorState = null;
     public final ViewGameState waitRoomState = null;
@@ -55,6 +55,13 @@ public class ViewStateManager {
                 makeTransitionTo(singleResultState);
             }
         });
+
+        eventManager.addListener(StateEventType.LOGIN, new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                makeTransitionTo(loginState);
+            }
+        });
     }
 
     public ViewStateManager(MainActivity activity,
@@ -66,7 +73,7 @@ public class ViewStateManager {
         menuState = new ViewMenuState(this);
         singlePlayerState = new ViewSinglePlayerState(this);
         singleResultState = new ViewSingleResultState(this);
-
+        loginState = new ViewLoginState(this);
 
         listenToAllStateEvents();
         currentState = menuState;

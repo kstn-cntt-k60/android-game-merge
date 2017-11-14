@@ -30,6 +30,7 @@ import java.util.Random;
 
 import kstn.game.MainActivity;
 import kstn.game.R;
+import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.thang.data.QuestionManagerDAO;
 import kstn.game.logic.model.CauHoiModel;
 
@@ -39,15 +40,18 @@ import kstn.game.logic.model.CauHoiModel;
 public class PlayFragment extends Fragment implements View.OnTouchListener {
 
     // khai báo các biến
+
+    private ViewStateManager stateManager;
+
     private TextView txtMang;
     private TextView txtMoney;
     private TextView txtLevel;
     private CauHoiModel cauhoi;
     private TextView txtCauHoi;
-    private ImageView imgNon;
+//    private ImageView imgNon;
     private MediaPlayer song;
     private TextView txtNoiDungKim;
-    private ImageView kim;
+//    private ImageView kim;
     // bien cờ
     private boolean[] flag = new boolean[26];
     private int dem=0;
@@ -80,19 +84,21 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         // Required empty public constructor
     }
 
+    public void setStateManager(ViewStateManager stateManager) { this.stateManager = stateManager; }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View result = inflater.inflate(R.layout.fragment_play, container, false);
-        result.setBackgroundColor(Color.parseColor("#00000000"));
-        result.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return false;
-            }
-        });
+      //  result.setBackgroundColor(Color.parseColor("#004342"));
+//        result.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                Log.i("Touch","");
+//                return true;
+//            }
+//        });
         return result;
     }
 
@@ -114,8 +120,8 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         txtLevel = (TextView) view.findViewById(R.id.txtLevel);
         txtCauHoi = (TextView) view.findViewById(R.id.txtCauHoi);
         txtNoiDungKim = (TextView) view.findViewById(R.id.txtNoiDungKim);
-        imgNon = (ImageView) view.findViewById(R.id.imgNon);
-        kim = (ImageView) view.findViewById(R.id.kim);
+        /*imgNon = (ImageView) view.findViewById(R.id.imgNon);
+        kim = (ImageView) view.findViewById(R.id.kim);*/
         songFail = MediaPlayer.create(getActivity(), R.raw.failure);
         songTingTing = MediaPlayer.create(getActivity(), R.raw.tingting);
 
@@ -253,12 +259,12 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
 
        this.UpdateContext();
         if(Integer.parseInt(txtMang.getText().toString())>0&&(dem<len)) {
-            imgNon.setOnTouchListener(this);
+            //imgNon.setOnTouchListener(this);
         } else{
             if(dem==len){
                 Toast.makeText(getActivity(),"Nhấn button để Đoán Luôn",Toast.LENGTH_LONG);
             }
-            imgNon.setOnTouchListener(null);
+           // imgNon.setOnTouchListener(null);
         }
 
         btnDoan = (Button) view.findViewById(R.id.btnDoan);
@@ -313,7 +319,7 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
                             else if(Integer.parseInt(txtMang.getText().toString())>0){
                                 txtMang.setText((Integer.parseInt(txtMang.getText().toString())-1)+"");
                             }else {
-                                imgNon.setEnabled(false);
+                                //imgNon.setEnabled(false);
                                 Toast.makeText(getActivity(),"game Over",Toast.LENGTH_LONG).show();
                             }
                         }
@@ -339,7 +345,7 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
 
         }
         hopthoai1.dismiss();
-        imgNon.setEnabled(true);
+        //imgNon.setEnabled(true);
         isOpen = new boolean[27];
         data_copy = new Character[27];
         dem=0;
@@ -412,7 +418,7 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        final float xc = (imgNon.getX() + imgNon.getWidth() / 2);
+        /*final float xc = (imgNon.getX() + imgNon.getWidth() / 2);
         final float yc = (imgNon.getY() + imgNon.getHeight() / 2);
 
         final float x = motionEvent.getX();
@@ -450,10 +456,9 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
 
             }
 
-        }
+        }*/
         return true;
     }
-
     private void animate(double fromDegrees, double toDegrees, long durationMillis) {
         final RotateAnimation rotate = new RotateAnimation((float) fromDegrees, (float) toDegrees,
                 RotateAnimation.RELATIVE_TO_SELF, 0.5f,
@@ -463,8 +468,8 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
         rotate.setFillEnabled(true);
         rotate.setFillAfter(true);
         song = MediaPlayer.create(getActivity(), R.raw.quay);
-        imgNon.startAnimation(rotate);
-        rotate.setAnimationListener(new Animation.AnimationListener() {
+        //imgNon.startAnimation(rotate);
+        /*rotate.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
 
@@ -665,7 +670,7 @@ public class PlayFragment extends Fragment implements View.OnTouchListener {
             public void onAnimationRepeat(Animation animation) {
 
             }
-        });
+        });*/
 
     }
 

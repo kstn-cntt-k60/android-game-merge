@@ -34,6 +34,8 @@ public class Cone {
     private float baseAngle = 0;
     private float startAngle = 0;
     private float endAngle = 0;
+    private  float movenAngleBefore = 0;
+
     private boolean allowRotate = false;
     private boolean isRotating = false;
     private boolean isEnabled = true;
@@ -47,13 +49,12 @@ public class Cone {
                 AssetManager assetManager,
                 EventManager eventManager_,
                 BaseTimeManager timeManager,
-                final Needle gameNeedle,
                 ViewGroup rootViewGroup) {
         this.rootViewGroup = rootViewGroup;
         this.eventManager = eventManager_;
         this.processManager = processManager_;
         this.timeManager = timeManager;
-        this.gameNeedle = gameNeedle;
+        this.gameNeedle = new Needle(this.processManager, assetManager, this.eventManager);
         Bitmap image = null;
 
         try {
@@ -61,7 +62,7 @@ public class Cone {
         } catch (IOException e) {
             Log.e("Cone", "Can't load non.png");
         }
-        coneView = new ImageView(0, 0.6f, 1.2f, 1.2f, image);
+        coneView = new ImageView(0, -1f, 1.2f, 1.2f, image);
 
 
         coneView.setTouchListener(new View.OnTouchListener() {
@@ -75,6 +76,7 @@ public class Cone {
                     if (distance_from_event(event) >= 0.2f) {
                         allowRotate = true;
                         startAngle = event_to_angle(event);
+                        Log.i("StartAngle", startAngle + " ");
                         Cone.this.timeToInitSpeed = Cone.this.timeManager.getCurrentMillis();
                     } else allowRotate = false;
                 }
@@ -89,7 +91,7 @@ public class Cone {
                     endAngle = event_to_angle(event);
                     float deltaAngle = startAngle - endAngle;
                     float speedStart;
-                    if (deltaAngle>0 && deltaAngle < 180)
+                    if (deltaAngle > 0 && deltaAngle < 180)
                         speedStart = deltaAngle/timeToInitSpeed;
                     else
                         speedStart = normalize(endAngle - startAngle)/timeToInitSpeed;
@@ -103,7 +105,12 @@ public class Cone {
             @Override
             public void onEvent(EventData event) {
                 float angle = ((ConeMoveEventData) event).getAngle();
-                Cone.this.rotate(angle);
+                float movenAngleAfter = normalize(baseAngle + endAngle - startAngle);
+                Log.i("Result", "before :" + movenAngleBefore + "====== after: " + movenAngleAfter);
+                if (movenAngleAfter > movenAngleBefore) {
+                    Cone.this.rotate(angle);
+                    movenAngleBefore = movenAngleAfter;
+                }
             }
         };
 
@@ -125,17 +132,23 @@ public class Cone {
         coneView.rotate(angle);
         this.angle = angle;
         // Thay doi goc cua kim
+        if (isCollision()) {
+            eventManager.queue(new NeedleCollisonEventData(0));
+        }
     }
 
 
     public void entry() {
+        Log.i("Cone", "Non da duoc paint");
         rootViewGroup.addView(coneView);
+        rootViewGroup.addView(gameNeedle.needleView);
         eventManager.addListener(ConeEventType.MOVE, moveEventListener);
         eventManager.addListener(ConeEventType.ACCELERATE, accelEventListener);
     }
 
     public void exit() {
         rootViewGroup.removeView(coneView);
+        rootViewGroup.removeView(gameNeedle.needleView);
         eventManager.removeListener(ConeEventType.MOVE, moveEventListener);
         eventManager.removeListener(ConeEventType.ACCELERATE, accelEventListener);
     }
@@ -194,7 +207,7 @@ public class Cone {
 
         @Override
         public void onSuccess() {
-            result = (int)(((int)angle - 9)/18f + 1)%20;
+            result = getResult(angle);
             Log.i("Cone", "Show Result: " + result);
             eventManager.trigger(new ConeStopEventData(result));
             Cone.this.isRotating = false;
@@ -236,10 +249,14 @@ public class Cone {
     }
 
     private boolean isCollision() {
-        int result = (int)(((int)angle - 9)/18f + 1)%20;
+        int result = getResult(angle);
         if ( gameNeedle.isStartCollison() && (result + 1)*18 - 9 - angle < 1.5){
             return true;
         }
         return false;
+    }
+
+    private int getResult(float angle) {
+        return (int)(((int)angle - 9)/18f + 1)%20;
     }
 }
