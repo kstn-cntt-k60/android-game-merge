@@ -88,7 +88,7 @@ public class PlayFragment extends Fragment {
                 return false;
             }
         });
-       return result;
+        return result;
     }
 
     @Override

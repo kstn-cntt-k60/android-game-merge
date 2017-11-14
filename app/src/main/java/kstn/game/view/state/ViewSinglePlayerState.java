@@ -1,12 +1,10 @@
 package kstn.game.view.state;
 
-import android.util.Log;
-
-import kstn.game.R;
 import kstn.game.logic.state_event.TransiteToMenuState;
 import kstn.game.view.thang.fragment.PlayFragment;
 
 public class ViewSinglePlayerState extends ViewGameState {
+    private PlayFragment fragment;
 
     public ViewSinglePlayerState(ViewStateManager stateManager) {
         super(stateManager);
@@ -14,7 +12,7 @@ public class ViewSinglePlayerState extends ViewGameState {
 
     @Override
     public void entry() {
-        PlayFragment fragment = new PlayFragment();
+        fragment = new PlayFragment();
         fragment.setStateManager(stateManager);
         stateManager.activity.addFragment(fragment);
     }
@@ -22,7 +20,6 @@ public class ViewSinglePlayerState extends ViewGameState {
     @Override
     public boolean onBack() {
         stateManager.eventManager.queue(new TransiteToMenuState());
-        Log.i(this.toString(),  "onBack");
         return false;
     }
 
