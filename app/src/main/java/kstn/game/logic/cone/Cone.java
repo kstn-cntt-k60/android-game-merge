@@ -34,7 +34,8 @@ public class Cone {
     private float baseAngle = 0;
     private float startAngle = 0;
     private float endAngle = 0;
-    private  float movenAngleBefore = 0;
+    private float touchStartX = 0;
+
 
     private boolean allowRotate = false;
     private boolean isRotating = false;
@@ -62,7 +63,7 @@ public class Cone {
         } catch (IOException e) {
             Log.e("Cone", "Can't load non.png");
         }
-        coneView = new ImageView(0, -1f, 1.2f, 1.2f, image);
+        coneView = new ImageView(0, -1.75f, 1.5f, 1.5f, image);
 
         coneView.setTouchListener(new View.OnTouchListener() {
             @Override
@@ -74,6 +75,7 @@ public class Cone {
                     baseAngle = angle;
                     if (distance_from_event(event) >= 0.2f) {
                         allowRotate = true;
+                        touchStartX = event.getX();
                         startAngle = event_to_angle(event);
                         Log.i("StartAngle", startAngle + " ");
                         Cone.this.timeToInitSpeed = Cone.this.timeManager.getCurrentMillis();
@@ -81,20 +83,25 @@ public class Cone {
                 }
                 else if (allowRotate && event.getType() == View.TouchEvent.TOUCH_MOVE) {
                     endAngle = event_to_angle(event);
-                    eventManager.trigger(new ConeMoveEventData(
-                            normalize(baseAngle + endAngle - startAngle)));
+                    float touchCurrentX = event.getX();
+                    if (touchCurrentX < touchStartX) {
+                        eventManager.trigger(new ConeMoveEventData(normalize(baseAngle + endAngle - startAngle)));
+                        touchStartX = touchCurrentX;
+                    }
+
 
                 }
                 else if (allowRotate && event.getType() == View.TouchEvent.TOUCH_UP) {
+                    float touchCurrentX = event.getX();
                     timeToInitSpeed = Cone.this.timeManager.getCurrentMillis() - timeToInitSpeed;
                     endAngle = event_to_angle(event);
-                    float deltaAngle = startAngle - endAngle;
                     float speedStart;
-                    if (deltaAngle > 0 && deltaAngle < 180)
-                        speedStart = deltaAngle/timeToInitSpeed;
-                    else
-                        speedStart = normalize(endAngle - startAngle)/timeToInitSpeed;
-                    eventManager.trigger(new ConeAccelerateEventData(normalize(baseAngle + endAngle - startAngle), speedStart));
+                    speedStart = normalize(endAngle - startAngle) / timeToInitSpeed;
+                    Log.i("SpeedStart", speedStart + " .....set SpeedStart");
+
+                    if (touchCurrentX <= touchStartX && speedStart >= 0.3f) {
+                        eventManager.trigger(new ConeAccelerateEventData(normalize(baseAngle + endAngle - startAngle), speedStart));
+                    }
                 }
                 return true;
             }
@@ -132,7 +139,6 @@ public class Cone {
 
 
     public void entry() {
-        Log.i("Cone", "entry");
         rootViewGroup.addView(coneView);
         rootViewGroup.addView(gameNeedle.needleView);
         eventManager.addListener(ConeEventType.MOVE, moveEventListener);
@@ -140,7 +146,6 @@ public class Cone {
     }
 
     public void exit() {
-        Log.i("Cone", "exit");
         rootViewGroup.removeView(coneView);
         rootViewGroup.removeView(gameNeedle.needleView);
         eventManager.removeListener(ConeEventType.MOVE, moveEventListener);
@@ -174,7 +179,7 @@ public class Cone {
         private int result;
 
         public ConeProcess(float speedStart) {
-            this.speed = 2*speedStart;
+            this.speed = 3*speedStart;
             Log.i("Speed init", "" + speed);
         }
 

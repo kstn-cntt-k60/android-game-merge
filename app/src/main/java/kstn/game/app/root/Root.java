@@ -15,11 +15,10 @@ import kstn.game.app.process.BaseProcessManager;
 import kstn.game.app.screen.GameAnimationView;
 import kstn.game.app.screen.GameViewClient;
 import kstn.game.app.screen.ShaderProgram;
+import kstn.game.logic.cone.Cone;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.state.LogicStateManager;
 import kstn.game.view.asset.AssetManager;
-import kstn.game.logic.cone.Cone;
-import kstn.game.logic.cone.Needle;
 import kstn.game.view.network.ClientFactory;
 import kstn.game.view.network.ServerFactory;
 import kstn.game.view.screen.ViewGroup;
@@ -28,7 +27,7 @@ import kstn.game.view.state.ViewStateManager;
 public class Root implements GameViewClient {
 
     private float start = 0;
-
+    private Cone cone;
 	private final GameAnimationView gameView;
     private final Context context;
     private final MainActivity activity;
@@ -86,9 +85,13 @@ public class Root implements GameViewClient {
         final ViewGroup viewGroup = gameView.getRootViewGroup();
         gameView.setLLEventManager(llEventManager);
 
+        cone = new Cone(processManager, assetManager, eventManager, timeManager, viewGroup);
+        cone.entry();
+
         viewStateManager = new ViewStateManager(this.activity, uiEventManager);
         logicStateManager = new LogicStateManager(viewGroup, processManager, timeManager,
                 eventManager, assetManager);
+
     }
 
     @Override

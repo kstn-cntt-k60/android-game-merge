@@ -1,7 +1,5 @@
 package kstn.game.view.state;
 
-import android.util.Log;
-
 import kstn.game.logic.state_event.TransiteToMenuState;
 import kstn.game.view.thang.fragment.LoginFragment;
 

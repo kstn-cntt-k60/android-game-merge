@@ -2,7 +2,9 @@ package kstn.game.logic.state;
 
 import android.graphics.Bitmap;
 import android.util.Log;
+
 import java.io.IOException;
+
 import kstn.game.view.screen.ImageView;
 
 /**
@@ -26,6 +28,7 @@ public class LogicMenuState extends LogicGameState {
     @Override
     public void entry() {
         stateManager.root.addView(backgroundView);
+        Log.i("BG", "Da add");
     }
 
     @Override

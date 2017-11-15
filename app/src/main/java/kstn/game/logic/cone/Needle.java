@@ -34,7 +34,7 @@ public class Needle {
             image = assetManager.getBitmap("kim.png");
         } catch (IOException e) {
         }
-        needleView = new ImageView(0.0f, -0.35f, 0.1f, 0.2f, image);
+        needleView = new ImageView(0.0f, -0.95f, 0.1f, 0.2f, image);
         eventManager.addListener(NeedleEventType.COLLISION, new EventListener() {
             @Override
             public void onEvent(EventData event) {
