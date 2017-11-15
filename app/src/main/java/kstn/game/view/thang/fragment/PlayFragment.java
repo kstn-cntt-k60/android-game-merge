@@ -295,7 +295,7 @@ public class PlayFragment extends Fragment {
                         if (txtTraLoi.getText().toString().equals(cauhoi.getCauTraLoi())) {
                             MediaPlayer song1 = MediaPlayer.create(getActivity(), R.raw.tingting);
                             song1.start();
-                            stateManager.eventManager.queue(new NextQuestionEvent(cauhoi.getId()));
+                            // stateManager.eventManager.queue(new NextQuestionEvent(cauhoi.getId()));
                             UpdateContext();
                         } else {
                             songFail.start();

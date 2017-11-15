@@ -27,17 +27,7 @@ public class LogicSinglePlayerState extends LogicGameState {
     private Cone cone;
     private ImageView backgroundView;
 
-    public LogicSinglePlayerState(LogicStateManager stateManager) {
-        super(stateManager);
-
-        Bitmap background = null;
-        try {
-            background = stateManager.assetManager.getBitmap("bg.jpg");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        backgroundView = new ImageView(0, 0, 2, 1.8f * 2, background);
-
+    private void initConeCells() {
         coneCells = new ArrayList<>(20);
         coneCells.add("800");
         coneCells.add("Mất điểm");
@@ -59,7 +49,20 @@ public class LogicSinglePlayerState extends LogicGameState {
         coneCells.add("300");
         coneCells.add("Thưởng");
         coneCells.add("900");
+    }
 
+    public LogicSinglePlayerState(LogicStateManager stateManager) {
+        super(stateManager);
+
+        initConeCells();
+
+        Bitmap background = null;
+        try {
+            background = stateManager.assetManager.getBitmap("bg.jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        backgroundView = new ImageView(0, 0, 2, 1.8f * 2, background);
         overCellListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
