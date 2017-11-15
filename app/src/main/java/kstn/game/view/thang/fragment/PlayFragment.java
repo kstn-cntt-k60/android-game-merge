@@ -29,7 +29,6 @@ import kstn.game.logic.cone.ConeStopEventData;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.model.CauHoiModel;
-import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.OverCellEvent;
 import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.thang.data.QuestionManagerDAO;
@@ -316,13 +315,14 @@ public class PlayFragment extends Fragment {
         song = MediaPlayer.create(getActivity(), R.raw.quay);
 
         final int[] result = new int[1];
-        stateManager.eventManager.addListener(ConeEventType.ACCELERATE, new EventListener() {
+      /*  stateManager.eventManager.addListener(ConeEventType.ACCELERATE, new EventListener() {
             @Override
             public void onEvent(EventData event) {
                 song.start();
             }
-        });
-        stateManager.eventManager.addListener(ConeEventType.STOP, new EventListener() {
+        });*/
+
+        EventListener stopListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
                 result[0] = ((ConeStopEventData) event).getResult();
@@ -489,7 +489,6 @@ public class PlayFragment extends Fragment {
                                                 }
 
                                             });
-                                            l.startAnimation(scale);
                                 }else {
                                     l.setBackgroundColor(Color.GRAY);
                                     l.setClickable(false);
@@ -505,7 +504,8 @@ public class PlayFragment extends Fragment {
                 });
                 txtNoiDungKim.startAnimation(scale);
             }
-        });
+        };
+        stateManager.eventManager.addListener(ConeEventType.STOP, stopListener);
 
     }
 
