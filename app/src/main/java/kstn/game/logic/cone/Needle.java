@@ -84,12 +84,10 @@ public class Needle {
         public void onAbort() {
         }
 
-
     }
 
     public boolean isStartCollison() {
         return isStartCollison;
     }
-
 
 }

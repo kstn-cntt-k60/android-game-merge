@@ -179,7 +179,8 @@ public class Cone {
         private int result;
 
         public ConeProcess(float speedStart) {
-            this.speed = 3*speedStart;
+            if (speedStart < 1) this.speed = 3*speedStart;
+            else this.speed = 2*speedStart;
             Log.i("Speed init", "" + speed);
         }
 

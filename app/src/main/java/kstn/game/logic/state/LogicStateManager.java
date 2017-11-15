@@ -1,5 +1,7 @@
 package kstn.game.logic.state;
 
+import android.util.Log;
+
 import kstn.game.app.root.BaseTimeManager;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
@@ -103,5 +105,6 @@ public class LogicStateManager {
         currentState.exit();
         currentState = other;
         currentState.entry();
+        Log.i("CurrentState", currentState.toString());
     }
 }
