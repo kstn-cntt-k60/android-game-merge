@@ -12,28 +12,20 @@ import android.widget.GridView;
 import java.util.ArrayList;
 
 import kstn.game.R;
-import kstn.game.logic.model.PlayerModel;
+import kstn.game.logic.model.Player;
 import kstn.game.view.thang.activity.UserAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class MutiPlayFragment extends Fragment {
 
 
     public MutiPlayFragment() {
         // Required empty public constructor
     }
-    public static MutiPlayFragment newObj (PlayerModel user){
+    public static MutiPlayFragment newObj (Player user){
         MutiPlayFragment fragment = new MutiPlayFragment();
         Bundle bd = new Bundle();
         bd.putSerializable("user",user);
         fragment.setArguments(bd); // luu gia tri
-
-
-
-
-
         return fragment;
     }
 
@@ -43,21 +35,20 @@ public class MutiPlayFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_muti_play, container, false);
-
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         GridView gv = (GridView) view.findViewById(R.id.gv);
-        PlayerModel user = (PlayerModel) getArguments().getSerializable("user");
-        ArrayList<PlayerModel> data = new ArrayList<>();
+        Player user = (Player) getArguments().getSerializable("user");
+        ArrayList<Player> data = new ArrayList<>();
         data.add(user);
-        PlayerModel user2= new PlayerModel("thang",R.drawable.index3);
-        PlayerModel user3 = new PlayerModel("Quý",R.drawable.index4);
-        data.add(user2);
-        data.add(user3);
-        UserAdapter adapter = new UserAdapter(data,getActivity());
-        gv.setAdapter(adapter);
+        // Player user2= new Player("thang",R.drawable.index3);
+        // Player user3 = new Player("Quý",R.drawable.index4);
+        // data.add(user2);
+        // data.add(user3);
+        // UserAdapter adapter = new UserAdapter(data,getActivity());
+        // gv.setAdapter(adapter);
     }
 }

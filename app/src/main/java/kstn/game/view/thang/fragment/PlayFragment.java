@@ -29,8 +29,8 @@ import kstn.game.logic.cone.ConeStopEventData;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.model.CauHoiModel;
-import kstn.game.view.playing_event.NextQuestionEventData;
-import kstn.game.view.playing_event.OverCellEventData;
+import kstn.game.logic.playing_event.NextQuestionEvent;
+import kstn.game.logic.playing_event.OverCellEvent;
 import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.thang.data.QuestionManagerDAO;
 
@@ -89,7 +89,7 @@ public class PlayFragment extends Fragment {
                 return false;
             }
         });
-       return result;
+        return result;
     }
 
     @Override
@@ -248,12 +248,10 @@ public class PlayFragment extends Fragment {
 
         this.UpdateContext();
         if (Integer.parseInt(txtMang.getText().toString()) > 0 && (dem < len)) {
-            //imgNon.setOnTouchListener(this);
         } else {
             if (dem == len) {
                 Toast.makeText(getActivity(), "Nhấn button để Đoán Luôn", Toast.LENGTH_LONG);
             }
-            // imgNon.setOnTouchListener(null);
         }
 
         btnDoan = (Button) view.findViewById(R.id.btnDoan);
@@ -298,7 +296,7 @@ public class PlayFragment extends Fragment {
                         if (txtTraLoi.getText().toString().equals(cauhoi.getCauTraLoi())) {
                             MediaPlayer song1 = MediaPlayer.create(getActivity(), R.raw.tingting);
                             song1.start();
-                            stateManager.eventManager.queue(new NextQuestionEventData(cauhoi.getId()));
+                            stateManager.eventManager.queue(new NextQuestionEvent(cauhoi.getId()));
                             UpdateContext();
                         } else {
                             songFail.start();
@@ -354,7 +352,7 @@ public class PlayFragment extends Fragment {
                                 txtMang.setText((Integer.parseInt(txtMang.getText().toString()) - 1) + "");
                                 Toast.makeText(getActivity(),"Mất Lượt",Toast.LENGTH_SHORT).show();
                             }else{
-                                stateManager.eventManager.queue(new OverCellEventData());
+                                stateManager.eventManager.queue(new OverCellEvent());
                                 Toast.makeText(getActivity(),
                                         "Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",
                                         Toast.LENGTH_SHORT).show();
@@ -393,7 +391,7 @@ public class PlayFragment extends Fragment {
 
                                             }
                                             if(dem==len){
-                                                stateManager.eventManager.queue(new OverCellEventData());
+                                                stateManager.eventManager.queue(new OverCellEvent());
                                                 Toast.makeText(getActivity(),"Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",
                                                         Toast.LENGTH_LONG).show();
                                             }
@@ -451,7 +449,7 @@ public class PlayFragment extends Fragment {
                                                                     isOpen[k] =true;
                                                                     dem++;
                                                                     if(dem==len){
-                                                                        stateManager.eventManager.queue(new OverCellEventData());
+                                                                        stateManager.eventManager.queue(new OverCellEvent());
                                                                         Toast.makeText(getActivity(),
                                                                                 "Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",
                                                                                 Toast.LENGTH_LONG).show();
@@ -469,7 +467,7 @@ public class PlayFragment extends Fragment {
                                                                     txtMang.setText((Integer.parseInt(txtMang.getText().toString()) - 1) + "");
                                                                     Toast.makeText(getActivity(),"Mất 1 Lượt chơi",Toast.LENGTH_SHORT).show();
                                                                 }else{
-                                                                    stateManager.eventManager.queue(new OverCellEventData());
+                                                                    stateManager.eventManager.queue(new OverCellEvent());
                                                                     Toast.makeText(getActivity(),
                                                                             "Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",
                                                                             Toast.LENGTH_SHORT).show();
@@ -489,10 +487,14 @@ public class PlayFragment extends Fragment {
                                                     });
                                                     l.startAnimation(scale);
                                                 }
-                                            }
-                                    );
-                                }else {l.setBackgroundColor(Color.GRAY); l.setClickable(false);}
-                            }
+
+                                            });
+                                            l.startAnimation(scale);
+                                }else {
+                                    l.setBackgroundColor(Color.GRAY);
+                                    l.setClickable(false);
+                                }
+                            };
                         }
                     }
 
@@ -501,7 +503,6 @@ public class PlayFragment extends Fragment {
 
                     }
                 });
-
                 txtNoiDungKim.startAnimation(scale);
             }
         });

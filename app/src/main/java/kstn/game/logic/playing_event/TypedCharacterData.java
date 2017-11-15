@@ -1,4 +1,4 @@
-package kstn.game.view.playing_event;
+package kstn.game.logic.playing_event;
 
 import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;
@@ -26,7 +26,7 @@ public class TypedCharacterData extends BaseEventData {
 
     @Override
     public EventType getEventType() {
-        return PlayingEventType.TYPED_CHARACTER;
+        return null;
     }
 
     @Override

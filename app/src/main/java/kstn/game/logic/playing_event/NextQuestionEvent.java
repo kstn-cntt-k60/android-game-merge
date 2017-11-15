@@ -1,4 +1,4 @@
-package kstn.game.view.playing_event;
+package kstn.game.logic.playing_event;
 
 import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;
@@ -7,7 +7,7 @@ import kstn.game.logic.event.EventType;
  * Created by qi on 14/11/2017.
  */
 
-public class NextQuestionEventData extends BaseEventData {
+public class NextQuestionEvent extends BaseEventData {
     private final int idQuestion;
 
     @Override
@@ -19,7 +19,7 @@ public class NextQuestionEventData extends BaseEventData {
         return idQuestion;
     }
 
-    public NextQuestionEventData(int idQuestion) {
+    public NextQuestionEvent(int idQuestion) {
 
         super(0);
         this.idQuestion = idQuestion;

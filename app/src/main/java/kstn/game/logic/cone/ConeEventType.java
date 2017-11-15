@@ -7,9 +7,9 @@ import kstn.game.logic.event.EventType;
  */
 
 public enum ConeEventType implements EventType {
-    MOVE(5000),
-    ACCELERATE(5001),
-    STOP(5002);
+    MOVE(25000),
+    ACCELERATE(25001),
+    STOP(25002);
 
     private int value;
 
