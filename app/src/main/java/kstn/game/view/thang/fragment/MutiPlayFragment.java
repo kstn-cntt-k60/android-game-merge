@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 import kstn.game.R;
 import kstn.game.logic.model.Player;
-import kstn.game.view.thang.activity.UserAdapter;
 
 public class MutiPlayFragment extends Fragment {
 
@@ -24,7 +23,7 @@ public class MutiPlayFragment extends Fragment {
     public static MutiPlayFragment newObj (Player user){
         MutiPlayFragment fragment = new MutiPlayFragment();
         Bundle bd = new Bundle();
-        bd.putSerializable("user",user);
+//        bd.putSerializable("user",user);
         fragment.setArguments(bd); // luu gia tri
         return fragment;
     }

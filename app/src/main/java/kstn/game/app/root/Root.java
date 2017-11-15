@@ -85,9 +85,6 @@ public class Root implements GameViewClient {
         final ViewGroup viewGroup = gameView.getRootViewGroup();
         gameView.setLLEventManager(llEventManager);
 
-        cone = new Cone(processManager, assetManager, eventManager, timeManager, viewGroup);
-        cone.entry();
-
         viewStateManager = new ViewStateManager(this.activity, uiEventManager);
         logicStateManager = new LogicStateManager(viewGroup, processManager, timeManager,
                 eventManager, assetManager);
