@@ -7,10 +7,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import kstn.game.R;
 import kstn.game.view.thang.fragment.SlideFragment;
 
-/**
- * Created by thang on 10/1/2017.
- */
-
 public class MyAdapter extends FragmentPagerAdapter {
     public MyAdapter(FragmentManager fm) {
         super(fm);

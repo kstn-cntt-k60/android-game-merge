@@ -82,7 +82,7 @@ public class PlayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View result = inflater.inflate(R.layout.fragment_play, container, false);
-        result.setBackgroundColor(Color.parseColor("#F30131"));
+        // result.setBackgroundColor(Color.parseColor("#00000000"));
         result.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -296,7 +296,7 @@ public class PlayFragment extends Fragment {
                         if (txtTraLoi.getText().toString().equals(cauhoi.getCauTraLoi())) {
                             MediaPlayer song1 = MediaPlayer.create(getActivity(), R.raw.tingting);
                             song1.start();
-                            stateManager.eventManager.queue(new NextQuestionEvent(cauhoi.getId()));
+                            // stateManager.eventManager.queue(new NextQuestionEvent(cauhoi.getId()));
                             UpdateContext();
                         } else {
                             songFail.start();

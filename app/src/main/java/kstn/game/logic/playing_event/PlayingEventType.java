@@ -9,7 +9,6 @@ public enum PlayingEventType implements EventType {
     NEXT_LEVEL(2303),
     ROTATE_RESULT(2304),
     NEXT_QUESTION(2323),
-    NEXT_TURN(2321),
     OVER_CELL(2322),
 
     REQUEST_JOIN_ROOM(2400),
