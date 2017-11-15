@@ -32,17 +32,18 @@ import kstn.game.logic.model.CauHoiModel;
 import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.OverCellEvent;
 import kstn.game.view.state.ViewStateManager;
+import kstn.game.view.state.singleplayer.SongManager;
 import kstn.game.view.thang.data.QuestionManagerDAO;
 
 public class PlayFragment extends Fragment {
     private ViewStateManager stateManager;
+    private SongManager songManager;
 
     private TextView txtMang;
     private TextView txtMoney;
     private TextView txtLevel;
     private CauHoiModel cauhoi;
     private TextView txtCauHoi;
-    private MediaPlayer song;
     private TextView txtNoiDungKim;
 
     // bien cờ
@@ -68,14 +69,16 @@ public class PlayFragment extends Fragment {
     TextView txtTraLoi;
     Dialog hopthoai1, hopthoai2;
     Button btnDoan;
-    MediaPlayer songFail;
-    MediaPlayer songTingTing;
 
     public PlayFragment() {
     }
 
     public void setStateManager(ViewStateManager stateManager) {
         this.stateManager = stateManager;
+    }
+
+    public void setSongManager(SongManager songManager) {
+        this.songManager = songManager;
     }
 
     @Override
@@ -95,6 +98,8 @@ public class PlayFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        songManager.onViewCreated(view);
+
         // khoi tao bien cờ
         for (int i = 0; i < 26; i++) {
             flag[i] = true;
@@ -111,8 +116,6 @@ public class PlayFragment extends Fragment {
         txtLevel = (TextView) view.findViewById(R.id.txtLevel);
         txtCauHoi = (TextView) view.findViewById(R.id.txtCauHoi);
         txtNoiDungKim = (TextView) view.findViewById(R.id.txtNoiDungKim);
-        songFail = MediaPlayer.create(getActivity(), R.raw.failure);
-        songTingTing = MediaPlayer.create(getActivity(), R.raw.tingting);
 
         // khởi tạo arraylist Điểm vòng quay
         data.add("800");
@@ -299,7 +302,7 @@ public class PlayFragment extends Fragment {
                             // stateManager.eventManager.queue(new NextQuestionEvent(cauhoi.getId()));
                             UpdateContext();
                         } else {
-                            songFail.start();
+                            songManager.startFail();
                             if (Integer.parseInt(txtMoney.getText().toString()) > 1000) {
                                 txtMoney.setText((Integer.parseInt(txtMoney.getText().toString()) - 1000) + "");
                             } else if (Integer.parseInt(txtMang.getText().toString()) > 0) {
@@ -313,20 +316,13 @@ public class PlayFragment extends Fragment {
                 });
             }
         });
-        song = MediaPlayer.create(getActivity(), R.raw.quay);
 
         final int[] result = new int[1];
-        stateManager.eventManager.addListener(ConeEventType.ACCELERATE, new EventListener() {
-            @Override
-            public void onEvent(EventData event) {
-                song.start();
-            }
-        });
         stateManager.eventManager.addListener(ConeEventType.STOP, new EventListener() {
             @Override
             public void onEvent(EventData event) {
                 result[0] = ((ConeStopEventData) event).getResult();
-                song.stop();
+                songManager.endConeRotation();
                 final Animation scale = AnimationUtils.loadAnimation(getActivity(),R.anim.scale);
                 scale.setAnimationListener(new Animation.AnimationListener() {
                     @Override
@@ -341,13 +337,11 @@ public class PlayFragment extends Fragment {
                             txtMoney.setText((int)(Integer.parseInt(txtMoney.getText().toString())/2)+"");
                             Toast.makeText(getActivity(),"bạn bị chia 2 số điểm",Toast.LENGTH_SHORT).show();
 
-                            songFail.start();
-
+                            songManager.startFail();
                         }
                         else if (txtNoiDungKim.getText().toString().equals("Mất Lượt")) {
+                            songManager.startFail();
 
-
-                            songFail.start();
                             if(Integer.parseInt(txtMang.getText().toString())>0) {
                                 txtMang.setText((Integer.parseInt(txtMang.getText().toString()) - 1) + "");
                                 Toast.makeText(getActivity(),"Mất Lượt",Toast.LENGTH_SHORT).show();
@@ -362,16 +356,14 @@ public class PlayFragment extends Fragment {
                             txtMoney.setText(Integer.parseInt(txtMoney.getText().toString())*2+"");
                             Toast.makeText(getActivity(),"Nhân 2 số điểm",Toast.LENGTH_SHORT).show();
 
-                            songTingTing.start();
+                            songManager.startTingTing();
                         }
                         else if(txtNoiDungKim.getText().toString().equals("Thưởng")){
                             int k = rd.nextInt(2400)+100;
                             Toast.makeText(getActivity(),"Bạn được cộng thêm "+k+" điểm",Toast.LENGTH_SHORT).show();
                             txtMoney.setText(Integer.parseInt(txtMoney.getText().toString())+k+"");
 
-                            songTingTing.start();
-
-
+                            songManager.startTingTing();
                         }  else if(txtNoiDungKim.getText().toString().equals("May Mắn")){
                             Toast.makeText(getActivity(),"Bạn hãy mở 1 ô bạn thích",Toast.LENGTH_SHORT).show();
 
@@ -405,15 +397,12 @@ public class PlayFragment extends Fragment {
                             txtMoney.setText("0");
                             Toast.makeText(getActivity(),"Mất điểm",Toast.LENGTH_SHORT).show();
 
-                            songFail.start();
-
+                            songManager.startFail();
                         } else if (txtNoiDungKim.getText().toString().equals("Thêm Lượt")) {
                             txtMang.setText((Integer.parseInt(txtMang.getText().toString())+1)+"");
                             Toast.makeText(getActivity(),"Bạn được thêm +1 lượt",Toast.LENGTH_SHORT).show();
 
-                            songTingTing.start();
-
-
+                            songManager.startTingTing();
                         } else {
                             final TextView txtDiem = (TextView) view2.findViewById(R.id.txtDiem);
                             txtDiem.setText(txtNoiDungKim.getText().toString());
@@ -457,12 +446,13 @@ public class PlayFragment extends Fragment {
                                                                 }
                                                             }
                                                             if(KT!=0){
-                                                                songTingTing.start();
+                                                                songManager.startTingTing();
                                                                 Toast.makeText(getActivity(),"+ "+KT+"x"+txtDiem.getText().toString(),
                                                                         Toast.LENGTH_SHORT).show();
                                                             }
                                                             if(KT==0){
-                                                                songFail.start();
+                                                                songManager.startFail();
+
                                                                 if(Integer.parseInt(txtMang.getText().toString())>0) {
                                                                     txtMang.setText((Integer.parseInt(txtMang.getText().toString()) - 1) + "");
                                                                     Toast.makeText(getActivity(),"Mất 1 Lượt chơi",Toast.LENGTH_SHORT).show();
