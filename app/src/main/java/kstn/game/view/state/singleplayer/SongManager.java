@@ -27,16 +27,15 @@ public class SongManager {
     }
 
     public void onViewCreated(View view) {
-        fail = MediaPlayer.create(stateManager.activity, R.raw.failure);
-        tingTing = MediaPlayer.create(stateManager.activity, R.raw.tingting);
-        coneRotation = MediaPlayer.create(stateManager.activity, R.raw.quay);
     }
 
     public void startFail() {
+        fail = MediaPlayer.create(stateManager.activity, R.raw.failure);
         fail.start();
     }
 
     private void startConeRotation() {
+        coneRotation = MediaPlayer.create(stateManager.activity, R.raw.quay);
         coneRotation.start();
     }
 
@@ -45,6 +44,7 @@ public class SongManager {
     }
 
     public void startTingTing() {
+        tingTing = MediaPlayer.create(stateManager.activity, R.raw.tingting);
         tingTing.start();
     }
 
