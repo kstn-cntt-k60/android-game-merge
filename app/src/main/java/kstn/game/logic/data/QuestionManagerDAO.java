@@ -1,12 +1,14 @@
-package kstn.game.view.thang.data;
+package kstn.game.logic.data;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import kstn.game.logic.model.CauHoiModel;
-
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import kstn.game.logic.model.QuestionModel;
 
 /**
  * Created by thang on 9/12/2017.
@@ -15,19 +17,36 @@ import java.util.ArrayList;
 public class QuestionManagerDAO {
     private QuestionManagerDatabase questionManagerDatabase;
     private SQLiteDatabase database;
+    private Random random = new Random();
+
     public QuestionManagerDAO(Context context){
         questionManagerDatabase = new QuestionManagerDatabase(context);
     }
+
     public void open() {
         database = questionManagerDatabase.getWritableDatabase();
     }
+
     public  void close() {
         database.close();
     }
 
+    List<QuestionModel> questionModels = null;
+
+    public QuestionModel getRandomQuestion() {
+        if (questionModels == null)
+            questionModels = getData();
+        int index;
+        do {
+            index = random.nextInt(questionModels.size());
+        } while (questionModels.get(index).isUsed());
+        questionModels.get(index).use();
+        return questionModels.get(index);
+    }
+
     // xem( lay) du lieu
-    public ArrayList<CauHoiModel> getData(){
-        ArrayList<CauHoiModel> data = new ArrayList<>();
+    private ArrayList<QuestionModel> getData(){
+        ArrayList<QuestionModel> data = new ArrayList<>();
         String sql ="SELECT * FROM question";
 
         Cursor contro =  database.rawQuery(sql,null);
@@ -37,7 +56,7 @@ public class QuestionManagerDAO {
             int id = contro.getInt(contro.getColumnIndex("id"));
             String tencauhoi = contro.getString(contro.getColumnIndex("tencauhoi"));
             String cautraloi  = contro.getString(contro.getColumnIndex("cautraloi"));
-            CauHoiModel sv = new CauHoiModel(id,tencauhoi,cautraloi);
+            QuestionModel sv = new QuestionModel(id,tencauhoi,cautraloi);
             data.add(sv);
             contro.moveToNext();
         }

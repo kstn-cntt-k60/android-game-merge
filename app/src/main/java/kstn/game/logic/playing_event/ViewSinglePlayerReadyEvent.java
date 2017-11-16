@@ -4,17 +4,18 @@ import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;
 
 /**
- * Created by qi on 14/11/2017.
+ * Created by qi on 16/11/2017.
  */
 
-public class OverCellEvent extends BaseEventData {
-    public OverCellEvent() {
+public class ViewSinglePlayerReadyEvent extends BaseEventData {
+
+    public ViewSinglePlayerReadyEvent() {
         super(0);
     }
 
     @Override
     public EventType getEventType() {
-        return PlayingEventType.OVER_CELL;
+        return PlayingEventType.VIEW_SINGLE_PLAYER_READY;
     }
 
     @Override

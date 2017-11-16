@@ -7,6 +7,7 @@ import java.util.Random;
 import kstn.game.logic.cone.Cone;
 import kstn.game.logic.cone.ConeEventType;
 import kstn.game.logic.cone.ConeStopEventData;
+import kstn.game.logic.data.QuestionManagerDAO;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.playing_event.AnswerEvent;
@@ -14,7 +15,10 @@ import kstn.game.logic.playing_event.BonusEvent;
 import kstn.game.logic.playing_event.CellChoosenEvent;
 import kstn.game.logic.playing_event.GiveAnswerEvent;
 import kstn.game.logic.playing_event.GiveChooseCellEvent;
+import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.OpenCellEvent;
+import kstn.game.logic.playing_event.OpenMultipleCellEvent;
+import kstn.game.logic.playing_event.PlayerStateChangeEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.RotateResultEvent;
 import kstn.game.logic.state.LogicStateManager;
@@ -29,11 +33,14 @@ public class SinglePlayerManager {
     private int state;
     private int playerLife;
 
+    private QuestionManagerDAO questionManager;
+
     private final static int NON_ROTATABLE = 0;
     private final static int ROTATABLE = 1;
     private final static int ROTATING = 2;
     private final static int END_ROTATION = 3;
 
+    private EventListener viewReadyListener;
     private EventListener coneAccelListener;
     private EventListener coneStopListener;
     private EventListener answerListener;
@@ -74,21 +81,23 @@ public class SinglePlayerManager {
         coneCells.add("Mất điểm");
     }
 
-    public void setQuestion(String question, String answer) {
-        this.question = question;
-        this.answer = answer;
-    }
-
     public SinglePlayerManager(
             Cone cone_,
-            LogicStateManager logicStateManager) {
-        this.question = question;
-        this.answer = answer;
-        this.stateManager = logicStateManager;
+            LogicStateManager stateManager_) {
+        this.stateManager = stateManager_;
         this.cone = cone_;
+        questionManager = new QuestionManagerDAO(stateManager.mainActivity);
+        questionManager.open();
+
         initConeCells();
 
-        cone.enable();
+        viewReadyListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                getNewQuestion();
+            }
+        };
+
         coneAccelListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
@@ -135,6 +144,7 @@ public class SinglePlayerManager {
                         CellChoosenEvent event = (CellChoosenEvent) event_;
                         stateManager.eventManager.trigger(new OpenCellEvent(event.getIndex()));
                         cone.enable();
+                        state = ROTATABLE;
                         break;
                 }
             }
@@ -153,11 +163,29 @@ public class SinglePlayerManager {
         int count = countCharOccurrences(answer, ch);
         if (count > 0) {
             player.increaseScore(count * rotatedScore);
+            stateManager.eventManager.trigger(new OpenMultipleCellEvent(ch));
         }
         else {
-            playerLife--;
+            if (playerLife > 0) {
+                playerLife--;
+            }
+            else {
+                stateManager.eventManager.trigger(new PlayerStateChangeEvent(player.getScore(), playerLife));
+                state = NON_ROTATABLE;
+                return;
+            }
         }
+        stateManager.eventManager.trigger(new PlayerStateChangeEvent(player.getScore(), playerLife));
+        state = ROTATABLE;
         cone.enable();
+    }
+
+    private void getNewQuestion() {
+        QuestionModel questionModel = questionManager.getRandomQuestion();
+        stateManager.eventManager.trigger(new NextQuestionEvent(
+                questionModel.getQuestion(), questionModel.getAnswer()));
+        this.question = questionModel.getQuestion();
+        this.answer = questionModel.getAnswer();
     }
 
     private void handleResult(int result) {
@@ -201,40 +229,59 @@ public class SinglePlayerManager {
         }
         else if (str.equals("Mất điểm")) {
             player.lostScore();
+            stateManager.eventManager.trigger(new PlayerStateChangeEvent(player.getScore(), playerLife));
             cone.enable();
+            state = ROTATABLE;
         }
         else if (str.equals("Thưởng")) {
             int value = random.nextInt(9);
+            int score = 100 + value * 100;
             player.increaseScore(100 + value * 100);
-            stateManager.eventManager.trigger(new BonusEvent(value));
+            stateManager.eventManager.trigger(new BonusEvent(score));
             cone.enable();
+            state = ROTATABLE;
         }
         else if (str.equals("Mất Lượt")) {
-            playerLife--;
-            cone.enable();
+            if (playerLife > 0) {
+                playerLife--;
+                stateManager.eventManager.trigger(new PlayerStateChangeEvent(player.getScore(), playerLife));
+                state = ROTATABLE;
+            }
+            else {
+                cone.enable();
+                state = NON_ROTATABLE;
+            }
         }
         else if (str.equals("Nhân 2")) {
             player.x2Score();
+            stateManager.eventManager.trigger(new PlayerStateChangeEvent(player.getScore(), playerLife));
             cone.enable();
+            state = ROTATABLE;
         }
         else if (str.equals("Chia 2")) {
             player.divideScoreByHalf();
+            stateManager.eventManager.trigger(new PlayerStateChangeEvent(player.getScore(), playerLife));
             cone.enable();
+            state = ROTATABLE;
         }
         else if (str.equals("May Mắn")) {
             stateManager.eventManager.trigger(new GiveChooseCellEvent());
         }
         else if (str.equals("Thêm Lượt")) {
             playerLife++;
+            stateManager.eventManager.trigger(new PlayerStateChangeEvent(player.getScore(), playerLife));
             cone.enable();
+            state = ROTATABLE;
         }
     }
 
     public void entry() {
+        cone.enable();
         state = ROTATABLE;
         playerLife = 4;
         player = new Player();
 
+        stateManager.eventManager.addListener(PlayingEventType.VIEW_SINGLE_PLAYER_READY, viewReadyListener);
         stateManager.eventManager.addListener(ConeEventType.ACCELERATE, coneAccelListener);
         stateManager.eventManager.addListener(ConeEventType.STOP, coneStopListener);
         stateManager.eventManager.addListener(PlayingEventType.ANSWER, answerListener);
@@ -246,5 +293,6 @@ public class SinglePlayerManager {
         stateManager.eventManager.removeListener(ConeEventType.STOP, coneStopListener);
         stateManager.eventManager.removeListener(PlayingEventType.ANSWER, answerListener);
         stateManager.eventManager.removeListener(PlayingEventType.CELL_CHOSEN, cellChosenListener);
+        stateManager.eventManager.removeListener(PlayingEventType.VIEW_SINGLE_PLAYER_READY, viewReadyListener);
     }
 }

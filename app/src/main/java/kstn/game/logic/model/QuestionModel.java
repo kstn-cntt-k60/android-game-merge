@@ -1,22 +1,30 @@
 package kstn.game.logic.model;
 
-public class CauHoiModel {
+public class QuestionModel {
     int id;
     private String cauhoi;
-
+    private boolean used = false;
     private String CauTraLoi;
 
-    public CauHoiModel(int id, String cauhoi, String cauTraLoi) {
+    public QuestionModel(int id, String cauhoi, String cauTraLoi) {
         this.id = id;
         this.cauhoi = cauhoi;
         this.CauTraLoi = cauTraLoi;
     }
 
-    public String getCauhoi() {
+    public void use() {
+        used = true;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public String getQuestion() {
         return cauhoi;
     }
 
-    public String getCauTraLoi() {
+    public String getAnswer() {
         return CauTraLoi;
     }
 
@@ -24,7 +32,7 @@ public class CauHoiModel {
         return id;
     }
 
-    public CauHoiModel(String cauhoi, String cauTraLoi) {
+    public QuestionModel(String cauhoi, String cauTraLoi) {
         this.cauhoi = cauhoi;
         this.CauTraLoi = cauTraLoi;
     }

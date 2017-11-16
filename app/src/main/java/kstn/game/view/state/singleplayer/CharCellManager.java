@@ -15,7 +15,8 @@ import kstn.game.logic.event.EventListener;
 import kstn.game.logic.playing_event.CellChoosenEvent;
 import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.OpenCellEvent;
-import kstn.game.logic.playing_event.OverCellEvent;
+import kstn.game.logic.playing_event.OpenMultipleCellEvent;
+import kstn.game.logic.playing_event.OutOfLifeEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.view.state.ViewStateManager;
 
@@ -31,7 +32,9 @@ public class CharCellManager {
     public  static  int dem;
 
     private EventListener nextQuestionListener;
+    private EventListener giveChooseCellListener;
     private EventListener openCellListener;
+    private EventListener openMultipleCellListener;
 
 
     public CharCellManager(ViewStateManager stateManager) {
@@ -46,11 +49,26 @@ public class CharCellManager {
             }
         };
 
+        giveChooseCellListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                startLuckyChooseCellListener();
+            }
+        };
+
         openCellListener = new EventListener() {
             @Override
             public void onEvent(EventData event_) {
                 OpenCellEvent event = (OpenCellEvent)event_;
                 openCell(event.getIndex());
+            }
+        };
+
+        openMultipleCellListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event_) {
+                OpenMultipleCellEvent event = (OpenMultipleCellEvent)event_;
+                openMultiCell(event.getCharacter());
             }
         };
     }
@@ -152,12 +170,16 @@ public class CharCellManager {
 
     public void entry() {
         stateManager.eventManager.addListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
+        stateManager.eventManager.addListener(PlayingEventType.GIVE_CHOOSE_CELL, giveChooseCellListener);
         stateManager.eventManager.addListener(PlayingEventType.OPEN_CELL, openCellListener);
+        stateManager.eventManager.addListener(PlayingEventType.OPEN_MULTIPLE_CELL, openMultipleCellListener);
     }
 
 
     public void exit() {
+        stateManager.eventManager.removeListener(PlayingEventType.OPEN_MULTIPLE_CELL, openMultipleCellListener);
         stateManager.eventManager.removeListener(PlayingEventType.OPEN_CELL, openCellListener);
+        stateManager.eventManager.removeListener(PlayingEventType.GIVE_CHOOSE_CELL, giveChooseCellListener);
         stateManager.eventManager.removeListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
     }
 
@@ -169,7 +191,7 @@ public class CharCellManager {
         int start = 0;
         int size = 0;
         while (size != len) {
-            String buff = new String();
+            String buff = "";
             int dem = 0;
             for (int i = start; i < str.length; i++) {
                 if (dem + str[i].length() <= 9) {
@@ -191,10 +213,25 @@ public class CharCellManager {
 
     public void openCell(int index){
         int i = index + findFirstDataCopyCharIndex();
+        isOpen[i] = true;
         String ch = data_copy[i].toString();
-        isOpen[i]=true;
         dem++;
         charCells.get(i).setText(ch);
+    }
+
+    public boolean contains(char character) {
+        for (Character e: data_copy) {
+            if (e != null && e == character)
+                return true;
+        }
+        return false;
+    }
+
+    public void openMultiCell(char ch) {
+        for (int i = 0; i < charCells.size(); i++) {
+            if (data_copy[i] == ch)
+                openCellAbsoluteIndex(i);
+        }
     }
 
     public void openCellAbsoluteIndex(int index) {
@@ -205,15 +242,12 @@ public class CharCellManager {
         charCells.get(i).setText(ch);
     }
 
-    public void setIsOpen(int i){
-        isOpen[i] = true;
-    }
-
     public  boolean IsOpen(int i){
         return isOpen[i];
     }
 
-    public void startLuckyChooseCellListener(){
+    private void startLuckyChooseCellListener(){
+        Toast.makeText(stateManager.activity, "Bạn hãy mở 1 ô bạn thích",Toast.LENGTH_SHORT).show();
         for (int i=0;i<charCells.size();i++){
             if(!IsOpen(i) && isActive[i] && dem < lenghtAnswer){
                 final int finalI = i;
@@ -223,7 +257,7 @@ public class CharCellManager {
                         stateManager.eventManager.queue(new CellChoosenEvent(finalI - findFirstDataCopyCharIndex()));
                         StopListener();
                         if(isOverCell()){
-                            stateManager.eventManager.queue(new OverCellEvent());
+                            stateManager.eventManager.queue(new OutOfLifeEvent());
                             Toast.makeText(activity,"Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",
                                     Toast.LENGTH_LONG).show();
                         }
@@ -232,10 +266,6 @@ public class CharCellManager {
             }
 
         }
-    }
-
-    public Character[] getData_copy() {
-        return data_copy;
     }
 
     public void StopListener(){

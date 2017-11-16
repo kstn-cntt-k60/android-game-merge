@@ -86,8 +86,9 @@ public class Root implements GameViewClient {
         gameView.setLLEventManager(llEventManager);
 
         viewStateManager = new ViewStateManager(this.activity, uiEventManager);
-        logicStateManager = new LogicStateManager(viewGroup, processManager, timeManager,
-                eventManager, assetManager);
+        logicStateManager = new LogicStateManager(
+                viewGroup, processManager, timeManager,
+                eventManager, assetManager, activity);
 
     }
 

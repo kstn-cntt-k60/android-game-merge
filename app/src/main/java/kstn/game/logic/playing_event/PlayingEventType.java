@@ -3,8 +3,11 @@ package kstn.game.logic.playing_event;
 import kstn.game.logic.event.EventType;
 
 public enum PlayingEventType implements EventType {
+    VIEW_SINGLE_PLAYER_READY(2299),
     GIVE_ANSWER(2300),
     ANSWER(2301),
+    OPEN_MULTIPLE_CELL(2399),
+    PLAYER_STATE_CHANGE(2398),
     NEXT_PLAYER(2302),
     NEXT_LEVEL(2303),
     ROTATE_RESULT(2304),

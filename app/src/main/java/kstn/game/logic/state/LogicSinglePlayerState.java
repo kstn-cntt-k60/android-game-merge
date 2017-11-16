@@ -5,16 +5,10 @@ import android.graphics.Bitmap;
 import java.io.IOException;
 
 import kstn.game.logic.cone.Cone;
-import kstn.game.logic.event.EventData;
-import kstn.game.logic.event.EventListener;
 import kstn.game.logic.model.SinglePlayerManager;
 import kstn.game.view.screen.ImageView;
 
 public class LogicSinglePlayerState extends LogicGameState {
-    private int score;
-    private int life;
-    private String question, answer;
-    private EventListener overCellListener;
     private Cone cone;
     private ImageView backgroundView;
     private SinglePlayerManager playerManager;
@@ -29,12 +23,6 @@ public class LogicSinglePlayerState extends LogicGameState {
             e.printStackTrace();
         }
         backgroundView = new ImageView(0, 0, 2, 1.8f * 2, background);
-        overCellListener = new EventListener() {
-            @Override
-            public void onEvent(EventData event) {
-                cone.disable();
-            }
-        };
         cone = new Cone(stateManager.processManager, stateManager.assetManager,
                         stateManager.eventManager, stateManager.timeManager, stateManager.root);
 
@@ -43,8 +31,6 @@ public class LogicSinglePlayerState extends LogicGameState {
 
     @Override
     public void entry() {
-        score = 0;
-        life = 3;
         stateManager.root.addView(backgroundView);
         cone.entry();
         // playerManager.setQuestion();

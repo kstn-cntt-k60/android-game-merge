@@ -2,21 +2,58 @@ package kstn.game.view.state.singleplayer;
 
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import kstn.game.R;
+import kstn.game.logic.event.EventData;
+import kstn.game.logic.event.EventListener;
+import kstn.game.logic.playing_event.OutOfLifeEvent;
+import kstn.game.logic.playing_event.PlayerStateChangeEvent;
+import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.view.state.ViewStateManager;
-
-/**
- * Created by tung on 15/11/2017.
- */
 
 public class LifeManager {
     private ViewStateManager stateManager;
+    private SongManager songManager;
     private int lifeCount;
     private TextView txtLife;
 
-    public LifeManager(ViewStateManager stateManager) {
-        this.stateManager = stateManager;
+    private EventListener playerStateListener;
+
+    public LifeManager(ViewStateManager stateManager_, final SongManager songManager_) {
+        this.stateManager = stateManager_;
+        this.songManager = songManager_;
+
+        playerStateListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event_) {
+                PlayerStateChangeEvent event = (PlayerStateChangeEvent)event_;
+                int oldLife = lifeCount;
+                setLife(event.getLife());
+                int newLife = lifeCount;
+
+                if (newLife == 0) {
+                    stateManager.eventManager.queue(new OutOfLifeEvent());
+                    Toast.makeText(stateManager.activity,
+                            "Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",
+                            Toast.LENGTH_SHORT).show();
+                    songManager.startFail();
+                    return;
+                }
+
+                if (newLife > oldLife) {
+                    Toast.makeText(stateManager.activity,
+                            "Bạn được thêm +1 lượt",Toast.LENGTH_SHORT).show();
+                }
+
+                if(newLife < oldLife) {
+                    songManager.startFail();
+                    Toast.makeText(stateManager.activity, "Bạn bị mất Lượt",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        };
     }
 
     public void onViewCreated(View view) {
@@ -26,26 +63,16 @@ public class LifeManager {
     }
 
     public void entry() {
+        stateManager.eventManager.addListener(PlayingEventType.PLAYER_STATE_CHANGE, playerStateListener);
     }
 
     public void exit() {
+        stateManager.eventManager.removeListener(PlayingEventType.PLAYER_STATE_CHANGE, playerStateListener);
     }
 
-    public int count() {
-        return lifeCount;
-    }
-
-    public void increase(int value) {
+    public void setLife(int value) {
         assert (value > 0);
-        lifeCount += value;
+        lifeCount = value;
         txtLife.setText("" + lifeCount);
-    }
-
-    public void decrease(int value) {
-        assert (value > 0);
-        if (lifeCount >= value) {
-            lifeCount -= value;
-            txtLife.setText("" + lifeCount);
-        }
     }
 }

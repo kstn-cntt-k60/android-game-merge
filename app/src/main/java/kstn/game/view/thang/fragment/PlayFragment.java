@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,14 +18,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Random;
 
-import kstn.game.MainActivity;
 import kstn.game.R;
-import kstn.game.logic.cone.ConeEventType;
-import kstn.game.logic.cone.ConeStopEventData;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
-import kstn.game.logic.model.CauHoiModel;
-import kstn.game.logic.playing_event.OverCellEvent;
+import kstn.game.logic.model.QuestionModel;
+import kstn.game.logic.playing_event.AnswerEvent;
+import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.RotateResultEvent;
 import kstn.game.view.state.ViewStateManager;
@@ -33,7 +32,6 @@ import kstn.game.view.state.singleplayer.KeyboardManager;
 import kstn.game.view.state.singleplayer.LifeManager;
 import kstn.game.view.state.singleplayer.ScoreManager;
 import kstn.game.view.state.singleplayer.SongManager;
-import kstn.game.view.thang.data.QuestionManagerDAO;
 
 import static kstn.game.view.state.singleplayer.CharCellManager.dem;
 
@@ -44,14 +42,12 @@ public class PlayFragment extends Fragment {
     private LifeManager lifeManager;
     private CharCellManager charCellManager;
     private TextView txtLevel;
-    private CauHoiModel cauhoi;
+    private QuestionModel cauhoi;
     private TextView txtCauHoi;
     private TextView txtNoiDungKim;
     private  KeyboardManager keyboardManager;
 
-    // Database
-    private QuestionManagerDAO questionManagerDAO;
-    private ArrayList<CauHoiModel> dataCauHoi;
+    private ArrayList<QuestionModel> dataCauHoi;
 
     Random rd = new Random();
     int height;
@@ -60,13 +56,41 @@ public class PlayFragment extends Fragment {
     TextView txtTraLoi;
 
     Button btnDoan;
+    private Animation scaleAnimation;
 
     // Listeners
     private EventListener rotateResultListener;
-    private EventListener giveChooseCellListener;
+    private EventListener giveAnswerListener;
+    private EventListener nextQuestionListener;
+
+    private String question;
+    private String answer;
+    private String prevResult;
 
     public PlayFragment() {
-    }
+        rotateResultListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event_) {
+                RotateResultEvent event = (RotateResultEvent)event_;
+                handleRotateResult(event.getResult());
+            }
+        };
+
+        giveAnswerListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                handleGiveAnswerEvent();
+            }
+        };
+
+        nextQuestionListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event_) {
+                NextQuestionEvent event = (NextQuestionEvent)event_;
+                handleNextQuestion(event.getQuestion(), event.getAnswer());
+            }
+        };
+   }
 
     public void setStateManager(ViewStateManager stateManager) {
         this.stateManager = stateManager;
@@ -83,8 +107,25 @@ public class PlayFragment extends Fragment {
     public void setLifeManager(LifeManager lifeManager) {
         this.lifeManager = lifeManager;
     }
+
     public void setCharCellManager(CharCellManager charCellManager) {
         this.charCellManager = charCellManager;
+    }
+
+    public void setKeyboardManager(KeyboardManager keyboardManager) {
+        this.keyboardManager = keyboardManager;
+    }
+
+    public void entry() {
+        stateManager.eventManager.addListener(PlayingEventType.ROTATE_RESULT, rotateResultListener);
+        stateManager.eventManager.addListener(PlayingEventType.GIVE_ANSWER, giveAnswerListener);
+        stateManager.eventManager.addListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
+    }
+
+    public void exit() {
+        stateManager.eventManager.removeListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
+        stateManager.eventManager.removeListener(PlayingEventType.ROTATE_RESULT, rotateResultListener);
+        stateManager.eventManager.removeListener(PlayingEventType.GIVE_ANSWER, giveAnswerListener);
     }
 
     @Override
@@ -129,16 +170,9 @@ public class PlayFragment extends Fragment {
         btnDoanX = (Button) guessView.findViewById(R.id.btnDoanX);
         txtTraLoi = (TextView) guessView.findViewById(R.id.txtTraLoi);
 
+        keyboardManager.onViewGuessKeyboard(guessView, txtTraLoi, height);
+        keyboardManager.onViewGiveAnswer(giveAnswerView, height);
 
-        // khởi tạo trình quản lí câu hỏi SQL lite
-        questionManagerDAO = new QuestionManagerDAO(getActivity());
-        questionManagerDAO.open();
-        dataCauHoi = questionManagerDAO.getData();
-        questionManagerDAO.close();
-
-        keyboardManager = new KeyboardManager();
-        keyboardManager.onViewGuessKeyboard((MainActivity) getActivity(),guessView,txtTraLoi,height);
-        keyboardManager.onViewGiveAnswer((MainActivity) getActivity(),giveAnswerView,height);
         btnDoan = (Button) view.findViewById(R.id.btnDoan);
         btnDoan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,44 +191,24 @@ public class PlayFragment extends Fragment {
                 btnDoanX.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (txtTraLoi.getText().toString().equals(cauhoi.getCauTraLoi())) {
+                        if (txtTraLoi.getText().toString().equals(answer)) {
                             songManager.startTingTing();
-                            // stateManager.eventManager.queue(new NextQuestionEvent(cauhoi.getId()));
-                            // handleNextQuestion(dataCauHoi.get(rd.nextInt(dataCauHoi.size())));
                         } else {
                             songManager.startFail();
-                            scoreManager.decrease(1000);
-                            if (lifeManager.count() > 0) {
-                                lifeManager.decrease(1);
-                            } else {
-                                //imgNon.setEnabled(false);
-                                Toast.makeText(getActivity(), "game Over", Toast.LENGTH_LONG).show();
-                            }
                         }
                     }
                 });
             }
         });
 
-        rotateResultListener = new EventListener() {
-            @Override
-            public void onEvent(EventData event_) {
-                RotateResultEvent event = (RotateResultEvent)event_;
-                handleRotateResult(event.getResult());
-            }
-        };
-
-        giveChooseCellListener = new EventListener() {
-            @Override
-            public void onEvent(EventData event) {
-                charCellManager.startLuckyChooseCellListener();
-            }
-        };
+        scaleAnimation = AnimationUtils.loadAnimation(getActivity(),R.anim.scale);
     }
 
 
-
     public void handleNextQuestion(String question, String answer) {
+        Log.i("Fragment", "handleNextQuestion");
+        this.question = question;
+        this.answer = answer;
         keyboardManager.resetGiveAnswerKeyboard(stateManager.activity);
         keyboardManager.getDialogGuess().getHopthoai().dismiss();
         dem = 0;
@@ -202,8 +216,8 @@ public class PlayFragment extends Fragment {
     }
 
     private void handleRotateResult(final String result) {
-        final Animation scale = AnimationUtils.loadAnimation(getActivity(),R.anim.scale);
-        scale.setAnimationListener(new Animation.AnimationListener() {
+        prevResult = result;
+        scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 txtNoiDungKim.setText(result);
@@ -211,69 +225,9 @@ public class PlayFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if (txtNoiDungKim.getText().toString().equals("Chia 2")) {
-                    scoreManager.divideByHalf();
-                    Toast.makeText(getActivity(),"Bạn bị chia 2 số điểm",Toast.LENGTH_SHORT).show();
-                    songManager.startFail();
-                }
-                else if (txtNoiDungKim.getText().toString().equals("Mất Lượt")) {
-                    songManager.startFail();
-
-                    if(lifeManager.count() > 0) {
-                        lifeManager.decrease(1);
-                        Toast.makeText(getActivity(),"Mất Lượt",Toast.LENGTH_SHORT).show();
-                    }else{
-                        stateManager.eventManager.queue(new OverCellEvent());
-                        Toast.makeText(getActivity(),
-                                "Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",
-                                Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-                else if (txtNoiDungKim.getText().toString().equals("Nhân 2") ) {
-                    scoreManager.x2();
-                    Toast.makeText(getActivity(),"Nhân 2 số điểm",Toast.LENGTH_SHORT).show();
-                    songManager.startTingTing();
-                }
-                else if(txtNoiDungKim.getText().toString().equals("Thưởng")){
-                    int k = rd.nextInt(2400)+100;
-                    Toast.makeText(getActivity(),"Bạn được cộng thêm "+k+" điểm",Toast.LENGTH_SHORT).show();
-                    scoreManager.increase(k);
-                    songManager.startTingTing();
-
-                }
-                else if(txtNoiDungKim.getText().toString().equals("May Mắn")) {
-                    Toast.makeText(getActivity(),"Bạn hãy mở 1 ô bạn thích",Toast.LENGTH_SHORT).show();
-                }
-
-                else if (txtNoiDungKim.toString().equals("Mất điểm")) {
-                    scoreManager.setScore(0);
+                String content = txtNoiDungKim.getText().toString();
+                if (content.equals("Mất điểm")) {
                     Toast.makeText(getActivity(),"Mất điểm",Toast.LENGTH_SHORT).show();
-
-                    songManager.startFail();
-                } else if (txtNoiDungKim.getText().toString().equals("Thêm Lượt")) {
-                    lifeManager.increase(1);
-                    Toast.makeText(getActivity(),"Bạn được thêm +1 lượt",Toast.LENGTH_SHORT).show();
-                    songManager.startTingTing();
-                } else {
-                    final TextView txtDiem = (TextView) giveAnswerView.findViewById(R.id.txtDiem);
-                    txtDiem.setText(txtNoiDungKim.getText().toString());
-                    keyboardManager.showDialogGuess();
-                    for(int i = 0;i < keyboardManager.getGiveAnswer().size();i++){
-                        final Button button = keyboardManager.getGiveAnswer().get(i);
-                        if (keyboardManager.Active(i)) {
-                            final int finalI = i;
-                            button.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    handleGiveAnswerButton(button, scale, txtDiem, finalI);
-                                }
-                            });
-                        }else {
-                            button.setBackgroundColor(Color.GRAY);
-                            button.setClickable(false);
-                        }
-                    };
                 }
             }
 
@@ -282,12 +236,32 @@ public class PlayFragment extends Fragment {
 
             }
         });
-        txtNoiDungKim.startAnimation(scale);
+        txtNoiDungKim.startAnimation(scaleAnimation);
     }
 
-    private void handleGiveAnswerButton(final Button button, Animation scale,
-                                        final TextView txtDiem, final int index) {
-        scale.setAnimationListener(new Animation.AnimationListener() {
+    private void handleGiveAnswerEvent() {
+        TextView txtDiem = (TextView) giveAnswerView.findViewById(R.id.txtDiem);
+        txtDiem.setText(prevResult);
+        keyboardManager.showDialogGiveAnswer();
+        for(int i = 0; i < keyboardManager.getGiveAnswer().size(); i++){
+            final Button button = keyboardManager.getGiveAnswer().get(i);
+            if (keyboardManager.Active(i)) {
+                final int finalI = i;
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        handleGiveAnswerButton(button, finalI);
+                    }
+                });
+            }else {
+                button.setBackgroundColor(Color.GRAY);
+                button.setClickable(false);
+            }
+        };
+    }
+
+    private void handleGiveAnswerButton(final Button button, final int index) {
+        scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 button.setBackgroundColor(Color.YELLOW);
@@ -298,50 +272,19 @@ public class PlayFragment extends Fragment {
                 button.setBackgroundColor(Color.GRAY);
                 keyboardManager.DisActive(index);
                 keyboardManager.getDialogGuess().getHopthoai().dismiss();
-                int KT= 0;
-                Character []Answer = charCellManager.getData_copy();
-                for(int k=0;k<Answer.length;k++){
-                    if(Answer[k]==button.getText().toString().charAt(0)&&charCellManager.IsOpen(k)==false){
-                        KT +=1;
-                        scoreManager.increase(Integer.parseInt(txtDiem.getText().toString()));
-                        charCellManager.openCellAbsoluteIndex(k);
-                        charCellManager.setIsOpen(k);
 
-                        if(charCellManager.isOverCell()){
-                            stateManager.eventManager.queue(new OverCellEvent());
-                            Toast.makeText(getActivity(),
-                                    "Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }
-                if(KT!=0){
-                    songManager.startTingTing();
-                    Toast.makeText(getActivity(),"+ "+KT+"x"+txtDiem.getText().toString(),
-                            Toast.LENGTH_SHORT).show();
-                }
-                if(KT==0){
-                    songManager.startFail();
+                char character = button.getText().toString().charAt(0);
+                keyboardManager.getDialogGiveAnswer().getHopthoai().dismiss();
 
-                    if (lifeManager.count() > 0) {
-                        lifeManager.decrease(1);
-                        Toast.makeText(getActivity(),"Mất 1 Lượt chơi",Toast.LENGTH_SHORT).show();
-                    }else{
-                        stateManager.eventManager.queue(new OverCellEvent());
-                        Toast.makeText(getActivity(),
-                                "Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
+                stateManager.eventManager.queue(new AnswerEvent(character));
             }
 
             @Override
             public void onAnimationRepeat(Animation animation) {
             }
         });
-        button.startAnimation(scale);
+        button.startAnimation(scaleAnimation);
     }
-
 }
 
 

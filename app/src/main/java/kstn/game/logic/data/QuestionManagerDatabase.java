@@ -1,4 +1,4 @@
-package kstn.game.view.thang.data;
+package kstn.game.logic.data;
 
 /**
  * Created by thang on 9/12/2017.
