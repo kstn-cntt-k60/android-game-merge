@@ -413,6 +413,7 @@
     <Button
         android:background="@drawable/button_mini"
         android:id="@+id/btnSpace"
+        android:text=" "
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp" />

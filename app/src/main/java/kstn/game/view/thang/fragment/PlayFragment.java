@@ -1,18 +1,13 @@
 package kstn.game.view.thang.fragment;
 
-import android.app.Dialog;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -20,55 +15,53 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
+import kstn.game.MainActivity;
 import kstn.game.R;
 import kstn.game.logic.cone.ConeEventType;
 import kstn.game.logic.cone.ConeStopEventData;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.model.CauHoiModel;
-import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.OverCellEvent;
 import kstn.game.view.state.ViewStateManager;
+import kstn.game.view.state.singleplayer.CharCellManager;
+import kstn.game.view.state.singleplayer.KeyboardManager;
 import kstn.game.view.state.singleplayer.LifeManager;
 import kstn.game.view.state.singleplayer.ScoreManager;
 import kstn.game.view.state.singleplayer.SongManager;
 import kstn.game.view.thang.data.QuestionManagerDAO;
+
+import static kstn.game.view.state.singleplayer.CharCellManager.dem;
 
 public class PlayFragment extends Fragment {
     private ViewStateManager stateManager;
     private SongManager songManager;
     private ScoreManager scoreManager;
     private LifeManager lifeManager;
-
+    private CharCellManager charCellManager;
     private TextView txtLevel;
     private CauHoiModel cauhoi;
     private TextView txtCauHoi;
     private TextView txtNoiDungKim;
+    private  KeyboardManager keyboardManager;
 
-    // bien cờ
-    private boolean[] flag = new boolean[26];
-    private int dem = 0;
-    private int len;
+//    // bien cờ
+//    private boolean[] flag = new boolean[26];
+
     // list o bi mat
 
     // quan li cau hoi, ket noi sqlite
     private QuestionManagerDAO questionManagerDAO;
     private ArrayList<CauHoiModel> dataCauHoi;
-    ArrayList<Button> dataLetter = new ArrayList<Button>();
-    ArrayList<Button> dataDoan = new ArrayList<Button>();
-    ArrayList<Integer> ArrayNumber = new ArrayList<>();
-    private boolean[] isOpen;
     ArrayList<String> data = new ArrayList<>();
-    private Character[] data_copy;
     Random rd = new Random();
     int height;
     View view1, view2;
-    Button btnDoanX, btnBackSpace, btnSpace, btnHuy;
+    Button btnDoanX, btnHuy;
     TextView txtTraLoi;
-    Dialog hopthoai1, hopthoai2;
+
     Button btnDoan;
 
     public PlayFragment() {
@@ -110,11 +103,14 @@ public class PlayFragment extends Fragment {
         songManager.onViewCreated(view);
         scoreManager.onViewCreated(view);
         lifeManager.onViewCreated(view);
+        charCellManager = new CharCellManager(stateManager, (MainActivity) getActivity());
+        charCellManager.onViewCreated(view);
 
-        // khoi tao bien cờ
-        for (int i = 0; i < 26; i++) {
-            flag[i] = true;
-        }
+//
+//        // khoi tao bien cờ
+//        for (int i = 0; i < 26; i++) {
+//            flag[i] = true;
+//        }
         // get chiều dài rộng mà hình
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -154,134 +150,44 @@ public class PlayFragment extends Fragment {
         view1 = inflater.inflate(R.layout.giaodien_alert_doan, null);
         view2 = inflater.inflate(R.layout.giaodien_alert_letter, null);
         // anh xa o letter
-        dataLetter.add((Button) view2.findViewById(R.id.btnA));
-        dataLetter.add((Button) view2.findViewById(R.id.btnB));
-        dataLetter.add((Button) view2.findViewById(R.id.btnC));
-        dataLetter.add((Button) view2.findViewById(R.id.btnD));
-        dataLetter.add((Button) view2.findViewById(R.id.btnE));
-        dataLetter.add((Button) view2.findViewById(R.id.btnF));
-        dataLetter.add((Button) view2.findViewById(R.id.btnG));
-        dataLetter.add((Button) view2.findViewById(R.id.btnH));
-        dataLetter.add((Button) view2.findViewById(R.id.btnI));
-        dataLetter.add((Button) view2.findViewById(R.id.btnJ));
-        dataLetter.add((Button) view2.findViewById(R.id.btnK));
-        dataLetter.add((Button) view2.findViewById(R.id.btnL));
-        dataLetter.add((Button) view2.findViewById(R.id.btnM));
-        dataLetter.add((Button) view2.findViewById(R.id.btnN));
-        dataLetter.add((Button) view2.findViewById(R.id.btnO));
-        dataLetter.add((Button) view2.findViewById(R.id.btnP));
-        dataLetter.add((Button) view2.findViewById(R.id.btnQ));
-        dataLetter.add((Button) view2.findViewById(R.id.btnR));
-        dataLetter.add((Button) view2.findViewById(R.id.btnS));
-        dataLetter.add((Button) view2.findViewById(R.id.btnT));
-        dataLetter.add((Button) view2.findViewById(R.id.btnU));
-        dataLetter.add((Button) view2.findViewById(R.id.btnV));
-        dataLetter.add((Button) view2.findViewById(R.id.btnW));
-        dataLetter.add((Button) view2.findViewById(R.id.btnX));
-        dataLetter.add((Button) view2.findViewById(R.id.btnY));
-        dataLetter.add((Button) view2.findViewById(R.id.btnZ));
+
 
 
         btnHuy = (Button) view1.findViewById(R.id.btnHuy);
         btnDoanX = (Button) view1.findViewById(R.id.btnDoanX);
-        dataDoan.add((Button) view1.findViewById(R.id.btnQ));
-        dataDoan.add((Button) view1.findViewById(R.id.btnW));
-        dataDoan.add((Button) view1.findViewById(R.id.btnE));
-        dataDoan.add((Button) view1.findViewById(R.id.btnR));
-        dataDoan.add((Button) view1.findViewById(R.id.btnT));
-        dataDoan.add((Button) view1.findViewById(R.id.btnY));
-        dataDoan.add((Button) view1.findViewById(R.id.btnU));
-        dataDoan.add((Button) view1.findViewById(R.id.btnI));
-        dataDoan.add((Button) view1.findViewById(R.id.btnO));
-        dataDoan.add((Button) view1.findViewById(R.id.btnP));
-        dataDoan.add((Button) view1.findViewById(R.id.btnA));
-        dataDoan.add((Button) view1.findViewById(R.id.btnS));
-        dataDoan.add((Button) view1.findViewById(R.id.btnD));
-        dataDoan.add((Button) view1.findViewById(R.id.btnF));
-        dataDoan.add((Button) view1.findViewById(R.id.btnG));
-        dataDoan.add((Button) view1.findViewById(R.id.btnH));
-        dataDoan.add((Button) view1.findViewById(R.id.btnJ));
-        dataDoan.add((Button) view1.findViewById(R.id.btnK));
-        dataDoan.add((Button) view1.findViewById(R.id.btnL));
-        dataDoan.add((Button) view1.findViewById(R.id.btnZ));
-        dataDoan.add((Button) view1.findViewById(R.id.btnX));
-        dataDoan.add((Button) view1.findViewById(R.id.btnC));
-        dataDoan.add((Button) view1.findViewById(R.id.btnV));
-        dataDoan.add((Button) view1.findViewById(R.id.btnB));
-        dataDoan.add((Button) view1.findViewById(R.id.btnN));
-        dataDoan.add((Button) view1.findViewById(R.id.btnM));
         txtTraLoi = (TextView) view1.findViewById(R.id.txtTraLoi);
-        btnBackSpace = (Button) view1.findViewById(R.id.btnBackSpace);
-        btnSpace = (Button) view1.findViewById(R.id.btnSpace);
+
 
         // khởi tạo trình quản lí câu hỏi SQL lite
         questionManagerDAO = new QuestionManagerDAO(getActivity());
         questionManagerDAO.open();
         dataCauHoi = questionManagerDAO.getData();
         questionManagerDAO.close();
-        for (int i = 0; i < dataCauHoi.size(); i++) {
-            ArrayNumber.add(i);
 
-        }
-        hopthoai1 = new Dialog(getActivity(), R.style.Theme_Dialog);
-        hopthoai2 = new Dialog(getActivity(), R.style.Theme_Dialog);
-        this.InitAlert(hopthoai2, view2);
-        hopthoai2.setCancelable(false);
-        hopthoai2.setCanceledOnTouchOutside(false);
-        this.InitAlert(hopthoai1, view1);
-
-        this.UpdateContext();
-        if (lifeManager.count() > 0 && (dem < len)) {
-        } else {
-            if (dem == len) {
-                Toast.makeText(getActivity(), "Nhấn button để Đoán Luôn", Toast.LENGTH_LONG);
-            }
-        }
-
+        keyboardManager = new KeyboardManager();
+        keyboardManager.onViewAllAnswerCreated((MainActivity) getActivity(),view1,txtTraLoi,height);
+        keyboardManager.onViewGuessCreated((MainActivity) getActivity(),view2,height);
+        this.UpdateContext(dataCauHoi.get(rd.nextInt(dataCauHoi.size())));
         btnDoan = (Button) view.findViewById(R.id.btnDoan);
         btnDoan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                hopthoai1.show();
+                keyboardManager.showDialogGiveAll();
                 txtTraLoi.setText("");
-                for (final Button btn : dataDoan) {
-                    btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            txtTraLoi.setText(txtTraLoi.getText().toString() + btn.getText().toString());
-                        }
-                    });
-                }
-                btnSpace.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        txtTraLoi.setText(txtTraLoi.getText().toString() + " ");
-                    }
-                });
-                btnBackSpace.setOnClickListener(new View.OnClickListener() {
-                    @Override
-
-                    public void onClick(View view) {
-                        if (txtTraLoi.getText().length() > 0) {
-                            txtTraLoi.setText(txtTraLoi.getText().subSequence(0, txtTraLoi.getText().length() - 1));
-                        }
-                    }
-                });
 
                 btnHuy.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        hopthoai1.dismiss();
+                        keyboardManager.getDialogGiveAll().getHopthoai().dismiss();
                     }
                 });
                 btnDoanX.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (txtTraLoi.getText().toString().equals(cauhoi.getCauTraLoi())) {
-                            MediaPlayer song1 = MediaPlayer.create(getActivity(), R.raw.tingting);
-                            song1.start();
-                            // stateManager.eventManager.queue(new NextQuestionEvent(cauhoi.getId()));
-                            UpdateContext();
+                            songManager.startTingTing();
+                           // stateManager.eventManager.queue(new NextQuestionEvent(cauhoi.getId()));
+                            UpdateContext(dataCauHoi.get(rd.nextInt(dataCauHoi.size())));
                         } else {
                             songManager.startFail();
                             scoreManager.decrease(1000);
@@ -307,7 +213,6 @@ public class PlayFragment extends Fragment {
                 scale.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-
                         txtNoiDungKim.setText(data.get(result[0]));
                     }
 
@@ -316,7 +221,6 @@ public class PlayFragment extends Fragment {
                         if (txtNoiDungKim.getText().toString().equals("Chia 2")) {
                             scoreManager.divideByHalf();
                             Toast.makeText(getActivity(),"bạn bị chia 2 số điểm",Toast.LENGTH_SHORT).show();
-
                             songManager.startFail();
                         }
                         else if (txtNoiDungKim.getText().toString().equals("Mất Lượt")) {
@@ -344,34 +248,10 @@ public class PlayFragment extends Fragment {
                             songManager.startTingTing();
                         }  else if(txtNoiDungKim.getText().toString().equals("May Mắn")){
                             Toast.makeText(getActivity(),"Bạn hãy mở 1 ô bạn thích",Toast.LENGTH_SHORT).show();
-
-                            for(int k =0;k<data_copy.length;k++){
-                                if(data_copy[k]!='0'&&isOpen[k]==false){
-                                    final int finalK = k;
-                                    dataCell.get(k).setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-
-                                            dataCell.get(finalK).setText(data_copy[finalK].toString());
-                                            isOpen[finalK] = true;
-                                            dem++;
-                                            for(int j=0;j<data_copy.length;j++){
-                                                dataCell.get(j).setClickable(false);
-
-
-                                            }
-                                            if(dem==len){
-                                                stateManager.eventManager.queue(new OverCellEvent());
-                                                Toast.makeText(getActivity(),"Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",
-                                                        Toast.LENGTH_LONG).show();
-                                            }
-                                        }
-                                    });
-                                }
+                            charCellManager.StartListener();
                             }
 
-                        }
-                        else if (txtNoiDungKim.getText().toString().equals("Mất điểm")) {
+                        else if (txtNoiDungKim.toString().equals("Mất điểm")) {
                             scoreManager.setScore(0);
                             Toast.makeText(getActivity(),"Mất điểm",Toast.LENGTH_SHORT).show();
 
@@ -383,11 +263,10 @@ public class PlayFragment extends Fragment {
                         } else {
                             final TextView txtDiem = (TextView) view2.findViewById(R.id.txtDiem);
                             txtDiem.setText(txtNoiDungKim.getText().toString());
-                            hopthoai2.show();
-                            for(int i=0;i<dataLetter.size();i++){
-                                final Button l = dataLetter.get(i);
-                                if (flag[i]) {
-
+                            keyboardManager.showDialogGuess();
+                            for(int i=0;i<keyboardManager.getKeyBoard_GuessCharacter().size();i++){
+                                final Button l =keyboardManager.getKeyBoard_GuessCharacter().get(i);
+                                if (keyboardManager.Active(i)) {
                                     final int finalI = i;
                                     l.setOnClickListener(
                                             new View.OnClickListener() {
@@ -402,18 +281,18 @@ public class PlayFragment extends Fragment {
                                                         @Override
                                                         public void onAnimationEnd(Animation animation) {
                                                             l.setBackgroundColor(Color.GRAY);
-                                                            flag[finalI]=false;
-                                                            hopthoai2.dismiss();
+                                                            keyboardManager.DisActive(finalI);
+                                                            keyboardManager.getDialogGuess().getHopthoai().dismiss();
                                                             int KT= 0;
-                                                            for(int k=0;k<data_copy.length;k++){
-                                                                if(data_copy[k]==l.getText().toString().charAt(0)&&isOpen[k]==false){
+                                                            Character []Answer = charCellManager.getData_copy();
+                                                            for(int k=0;k<Answer.length;k++){
+                                                                if(Answer[k]==l.getText().toString().charAt(0)&&charCellManager.IsOpen(k)==false){
                                                                     KT +=1;
-
                                                                     scoreManager.increase(Integer.parseInt(txtDiem.getText().toString()));
-                                                                    dataCell.get(k).setText(l.getText().toString());
-                                                                    isOpen[k] =true;
-                                                                    dem++;
-                                                                    if(dem==len){
+                                                                    charCellManager.OpenCells(k,l.getText().toString());
+                                                                    charCellManager.setIsOpen(k);
+
+                                                                    if(charCellManager.isOverCell()){
                                                                         stateManager.eventManager.queue(new OverCellEvent());
                                                                         Toast.makeText(getActivity(),
                                                                                 "Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",
@@ -449,7 +328,7 @@ public class PlayFragment extends Fragment {
                                                 }
 
                                             });
-                                            l.startAnimation(scale);
+
                                 }else {
                                     l.setBackgroundColor(Color.GRAY);
                                     l.setClickable(false);
@@ -469,86 +348,19 @@ public class PlayFragment extends Fragment {
 
     }
 
-    public  void InitAlert(Dialog hopthoai, View view){
-        hopthoai.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        hopthoai.setContentView(view);
-        WindowManager.LayoutParams w = hopthoai.getWindow().getAttributes();
-        w.gravity = Gravity.BOTTOM;
-        w.x = 0;
-        w.height = (int) (height * 0.53);
-        hopthoai.getWindow().setAttributes(w);
-    }
 
-    public void UpdateContext() {
-        for (int i = 0; i < dataLetter.size(); i++) {
-            dataLetter.get(i).setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.button_mini));
-        }
-        hopthoai1.dismiss();
-        //imgNon.setEnabled(true);
-        isOpen = new boolean[27];
-        data_copy = new Character[27];
 
+    public void UpdateContext(CauHoiModel cauhoi) {
+        keyboardManager.reSetGuessKeyBoard((MainActivity) getActivity());
+        keyboardManager.getDialogGiveAll().getHopthoai().dismiss();
         dem = 0;
-        for (int i = 0; i < 26; i++) {
-            flag[i] = true;
-        }
-        for (int i = 0; i < 27; i++) {
-            dataCell.get(i).setBackgroundResource(R.drawable.button_mini);
-            dataCell.get(i).setText("");
-            isOpen[i] = false;
-        }
-
-        Collections.shuffle(ArrayNumber);
-        cauhoi = dataCauHoi.get(ArrayNumber.get(0));
-        ArrayNumber.remove(0);
         txtCauHoi.setText(cauhoi.getCauhoi());
-        ArrayList<String> c = ToArray(cauhoi);
-
-        ArrayList<Integer> tmp = new ArrayList<>();
-            len = 0;
-            for (int i = 0; i < c.size(); i++) {
-                len += c.get(i).length();
-                for (int j = 0; j < c.get(i).length(); j++) {
-                    tmp.add(i * 9 + (9 - c.get(i).length()) / 2 + j);
-                    data_copy[i * 9 + (9 - c.get(i).length()) / 2 + j] = c.get(i).charAt(j);
-                }
-            }
-            for (int i = 0; i < 27; i++) {
-                if (!tmp.contains(i)) {
-                    dataCell.get(i).setBackgroundColor(Color.GRAY);
-                    data_copy[i] = '0';
-                }
-            }
+        charCellManager.entry(cauhoi);
     }
 
 
-    public ArrayList<String> ToArray (CauHoiModel cauhoi) {
-        String[] str = cauhoi.getCauTraLoi().split(" ");
-        int len = 0;
-        for (int i = 0; i < str.length; i++) len += str[i].length();
-        ArrayList<String> c = new ArrayList<>();
-        int start = 0;
-        int size = 0;
-        while (size != len) {
-            String buff = new String();
-            int dem = 0;
-            for (int i = start; i < str.length; i++) {
-                if (dem + str[i].length() <= 9) {
-                    buff += str[i];
-                    dem += str[i].length();
-                } else {
-                    start = i;
-                    break;
-                }
-            }
 
-            if (!buff.isEmpty()) {
-                c.add(buff);
-                size += buff.length();
-            }
-        }
-        return c;
-    }
+
 }
 
 
