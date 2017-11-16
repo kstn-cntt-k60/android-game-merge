@@ -6,7 +6,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -31,7 +30,6 @@ import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.model.CauHoiModel;
 import kstn.game.logic.playing_event.OverCellEvent;
-import kstn.game.logic.state.LogicStateManager;
 import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.state.singleplayer.CharCellManager;
 import kstn.game.view.state.singleplayer.LifeManager;
@@ -291,9 +289,7 @@ public class PlayFragment extends Fragment {
         stateManager.eventManager.addListener(ConeEventType.STOP, new EventListener() {
             @Override
             public void onEvent(EventData event) {
-                Log.i("Nhac", "Stop");
                 result[0] = ((ConeStopEventData) event).getResult();
-                songManager.endConeRotation();
                 final Animation scale = AnimationUtils.loadAnimation(getActivity(),R.anim.scale);
                 scale.setAnimationListener(new Animation.AnimationListener() {
                     @Override

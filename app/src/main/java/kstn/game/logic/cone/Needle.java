@@ -22,6 +22,8 @@ public class Needle {
     private ViewGroup rootviewGroup;
     public ImageView needleView;
 
+    private final float deltaAngle = 1.8f;
+
     private final ProcessManager processManager;
     private boolean isStartCollison = true;
     public Needle(final ProcessManager processManager,
@@ -34,7 +36,7 @@ public class Needle {
             image = assetManager.getBitmap("kim.png");
         } catch (IOException e) {
         }
-        needleView = new ImageView(0.0f, -0.95f, 0.1f, 0.2f, image);
+        needleView = new ImageView(0.0f, -0.75f, 0.1f, 0.2f, image);
         eventManager.addListener(NeedleEventType.COLLISION, new EventListener() {
             @Override
             public void onEvent(EventData event) {
@@ -59,7 +61,7 @@ public class Needle {
             isStartCollison = false;
             if (time < 1) {
                 time += 0.1;
-                angle += 0.9;
+                angle += deltaAngle;
                 needleView.rotate(-angle);
             } else {
                 angle -= 0.06;
