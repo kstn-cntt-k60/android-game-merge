@@ -39,6 +39,8 @@ public class ScoreManager {
                 }
                 else if (newScore < oldScore) {
                     songManager.startFail();
+                    Toast.makeText(stateManager.activity,
+                            "" + (newScore - oldScore) + " điểm", Toast.LENGTH_SHORT).show();
                 }
             }
         };

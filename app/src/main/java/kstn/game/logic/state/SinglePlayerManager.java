@@ -26,20 +26,19 @@ import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.ConeResultEvent;
 import kstn.game.logic.playing_event.cell.OpenCellEvent;
 import kstn.game.logic.playing_event.cell.OpenMultipleCellEvent;
+import kstn.game.logic.playing_event.guess.AcceptRequestGuessEvent;
+import kstn.game.logic.playing_event.guess.GuessResultEvent;
+import kstn.game.logic.state_event.TransiteToMenuState;
 
 public class SinglePlayerManager {
     private LogicStateManager stateManager;
 
+    private String answer;
     private String nonSpaceAnswer;
     private boolean[] isOpenedCells;
 
-    private int countOpenedCells() {
-        int count = 0;
-        for (int i = 0; i < isOpenedCells.length; i++)
-            if (isOpenedCells[i])
-                count++;
-        return count;
-    }
+    private boolean isGuessed = false;
+    private boolean rightGuess;
 
     private void openMultiCells(int ch) {
         for (int i = 0; i < isOpenedCells.length; i++) {
@@ -49,6 +48,9 @@ public class SinglePlayerManager {
     }
 
     private boolean allCellsAreOpened() {
+        if (isOpenedCells == null)
+            return false;
+
         for (int i = 0; i < isOpenedCells.length; i++)
             if (!isOpenedCells[i])
                 return false;
@@ -56,12 +58,15 @@ public class SinglePlayerManager {
     }
 
     private void setQuestion(String question, String answer) {
+        this.answer = answer;
         String tmp = answer.replaceAll("\\s+", "");
         nonSpaceAnswer = tmp.toUpperCase();
 
         isOpenedCells = new boolean[nonSpaceAnswer.length()];
         for (int i = 0; i < isOpenedCells.length; i++)
             isOpenedCells[i] = false;
+
+        isGuessed = false;
     }
 
     private Player player;
@@ -75,6 +80,9 @@ public class SinglePlayerManager {
     private EventListener coneStopListener;
     private EventListener answerListener;
     private EventListener cellChosenListener;
+    private EventListener requestGuessListener;
+    private EventListener guessResultListener;
+    private EventListener cancelGuessListener;
 
     private List<Integer> coneCells;
 
@@ -123,6 +131,15 @@ public class SinglePlayerManager {
         coneCells.add(ConeResult.LOST_SCORE);
     }
 
+    private void newQuestion() {
+        QuestionModel questionModel = questionManager.getRandomQuestion();
+        String question = questionModel.getQuestion();
+        String answer = questionModel.getAnswer();
+        stateManager.eventManager.trigger(
+                new NextQuestionEvent(question, answer));
+        setQuestion(question, answer);
+    }
+
     public SinglePlayerManager(
             Cone cone_,
             LogicStateManager stateManager_) {
@@ -143,12 +160,7 @@ public class SinglePlayerManager {
         playingReadyListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
-                QuestionModel questionModel = questionManager.getRandomQuestion();
-                String question = questionModel.getQuestion();
-                String answer = questionModel.getAnswer();
-                stateManager.eventManager.trigger(
-                        new NextQuestionEvent(question, answer));
-                setQuestion(question, answer);
+                newQuestion();
             }
         };
 
@@ -183,6 +195,64 @@ public class SinglePlayerManager {
                 currentState.answer(event1.getCharacter());
             }
         };
+
+        requestGuessListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                currentState.requestGuess();
+            }
+        };
+
+        guessResultListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                GuessResultEvent event1 = (GuessResultEvent)event;
+                currentState.guessResult(event1.getResult());
+            }
+        };
+
+        cancelGuessListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                currentState.cancelGuess();
+            }
+        };
+    }
+
+    public void entry() {
+        currentState = rotatableState;
+        currentState.entry();
+
+        player = new Player();
+        playerLife = 4;
+
+        stateManager.eventManager.addListener(PlayingEventType.PLAYING_READY, playingReadyListener);
+        stateManager.eventManager.addListener(ConeEventType.ACCELERATE, coneAccelListener);
+        stateManager.eventManager.addListener(ConeEventType.STOP, coneStopListener);
+        stateManager.eventManager.addListener(PlayingEventType.ANSWER, answerListener);
+        stateManager.eventManager.addListener(PlayingEventType.CELL_CHOSEN, cellChosenListener);
+
+        stateManager.eventManager.addListener(PlayingEventType.REQUEST_GUESS,
+                requestGuessListener);
+        stateManager.eventManager.addListener(PlayingEventType.GUESS_RESULT,
+                guessResultListener);
+        stateManager.eventManager.addListener(PlayingEventType.CANCEL_GUESS,
+                cancelGuessListener);
+    }
+
+    public void exit() {
+        stateManager.eventManager.removeListener(ConeEventType.ACCELERATE, coneAccelListener);
+        stateManager.eventManager.removeListener(ConeEventType.STOP, coneStopListener);
+        stateManager.eventManager.removeListener(PlayingEventType.ANSWER, answerListener);
+        stateManager.eventManager.removeListener(PlayingEventType.CELL_CHOSEN, cellChosenListener);
+        stateManager.eventManager.removeListener(PlayingEventType.PLAYING_READY, playingReadyListener);
+
+        stateManager.eventManager.removeListener(PlayingEventType.REQUEST_GUESS,
+                requestGuessListener);
+        stateManager.eventManager.removeListener(PlayingEventType.GUESS_RESULT,
+                guessResultListener);
+        stateManager.eventManager.removeListener(PlayingEventType.CANCEL_GUESS,
+                cancelGuessListener);
     }
 
     private abstract class State {
@@ -201,11 +271,30 @@ public class SinglePlayerManager {
         void requestGuess() {}
 
         void guessResult(String result) {}
+
+        void cancelGuess() {}
     }
 
     private class RotatableState extends State {
         @Override
         void entry() {
+            boolean allOpen = allCellsAreOpened();
+            if (playerLife != 0 && isGuessed) {
+                newQuestion();
+                cone.enable();
+                return;
+            }
+
+            if (!isGuessed && allOpen) {
+                requestGuess();
+                return;
+            }
+
+            if (playerLife == 0 && isGuessed) {
+                stateManager.eventManager.queue(new TransiteToMenuState());
+                return;
+            }
+
             cone.enable();
         }
 
@@ -221,7 +310,8 @@ public class SinglePlayerManager {
 
         @Override
         void requestGuess() {
-
+            stateManager.eventManager.trigger(new AcceptRequestGuessEvent());
+            makeTransitionTo(waitGuessResultState);
         }
     }
 
@@ -258,7 +348,8 @@ public class SinglePlayerManager {
                                 new PlayerStateChangeEvent(player.getScore(), playerLife));
                     }
                     else {
-                        // TODO
+                        playerLife = 0;
+                        makeTransitionTo(rotatableState);
                     }
                     break;
 
@@ -314,9 +405,7 @@ public class SinglePlayerManager {
                     playerLife--;
                 }
                 else {
-                    // TODO
-                    makeTransitionTo(waitGuessResultState);
-                    return;
+                    playerLife = 0;
                 }
             }
             else {
@@ -340,7 +429,26 @@ public class SinglePlayerManager {
     private class WaitGuessResultState extends State {
         @Override
         void guessResult(String result) {
+            isGuessed = true;
+            if (result.toUpperCase().equals(answer.toUpperCase())) {
+                rightGuess = true;
+                player.increaseScore(1000);
+                stateManager.eventManager.trigger(
+                        new PlayerStateChangeEvent(player.getScore(), playerLife));
+            }
+            else {
+                rightGuess = false;
+                playerLife--;
+                stateManager.eventManager.trigger(
+                        new PlayerStateChangeEvent(player.getScore(), playerLife));
+            }
+            makeTransitionTo(rotatableState);
+        }
 
+        @Override
+        void cancelGuess() {
+            isGuessed = false;
+            makeTransitionTo(rotatableState);
         }
     }
 
@@ -350,27 +458,5 @@ public class SinglePlayerManager {
             if (str.charAt(i) == ch)
                 count++;
         return count;
-    }
-
-    public void entry() {
-        currentState = rotatableState;
-        currentState.entry();
-
-        player = new Player();
-        playerLife = 4;
-
-        stateManager.eventManager.addListener(PlayingEventType.PLAYING_READY, playingReadyListener);
-        stateManager.eventManager.addListener(ConeEventType.ACCELERATE, coneAccelListener);
-        stateManager.eventManager.addListener(ConeEventType.STOP, coneStopListener);
-        stateManager.eventManager.addListener(PlayingEventType.ANSWER, answerListener);
-        stateManager.eventManager.addListener(PlayingEventType.CELL_CHOSEN, cellChosenListener);
-    }
-
-    public void exit() {
-        stateManager.eventManager.removeListener(ConeEventType.ACCELERATE, coneAccelListener);
-        stateManager.eventManager.removeListener(ConeEventType.STOP, coneStopListener);
-        stateManager.eventManager.removeListener(PlayingEventType.ANSWER, answerListener);
-        stateManager.eventManager.removeListener(PlayingEventType.CELL_CHOSEN, cellChosenListener);
-        stateManager.eventManager.removeListener(PlayingEventType.PLAYING_READY, playingReadyListener);
     }
 }

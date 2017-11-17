@@ -4,7 +4,6 @@ import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.sync.LogicPlayingReadyEvent;
-import kstn.game.logic.playing_event.sync.PlayingReadyEvent;
 import kstn.game.logic.playing_event.sync.ViewPlayingReadyEvent;
 import kstn.game.logic.state_event.TransiteToMenuState;
 import kstn.game.view.state.singleplayer.CharCellManager;
@@ -12,7 +11,7 @@ import kstn.game.view.state.singleplayer.KeyboardManager;
 import kstn.game.view.state.singleplayer.LifeManager;
 import kstn.game.view.state.singleplayer.ScoreManager;
 import kstn.game.view.state.singleplayer.SongManager;
-import kstn.game.view.thang.fragment.PlayFragment;
+import kstn.game.view.state.singleplayer.PlayFragment;
 
 public class ViewSinglePlayerState extends ViewGameState {
     private PlayFragment fragment;
@@ -45,7 +44,6 @@ public class ViewSinglePlayerState extends ViewGameState {
     @Override
     public void entry() {
         fragment = new PlayFragment();
-
         fragment.setStateManager(stateManager);
         fragment.setSongManager(songManager);
         fragment.setScoreManager(scoreManager);

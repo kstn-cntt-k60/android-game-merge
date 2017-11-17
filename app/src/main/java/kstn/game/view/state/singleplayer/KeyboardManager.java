@@ -72,7 +72,7 @@ public class KeyboardManager {
         acceptRequestGuessListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
-
+                showDialogGuess();
             }
         };
     }
@@ -84,9 +84,13 @@ public class KeyboardManager {
                 PlayingEventType.ROTATE_RESULT, coneResultListener);
         stateManager.eventManager.addListener(
                 PlayingEventType.GIVE_ANSWER, giveAnswerListener);
+        stateManager.eventManager.addListener(
+                PlayingEventType.ACCEPT_REQUEST_GUESS, acceptRequestGuessListener);
     }
 
     public void exit() {
+        stateManager.eventManager.removeListener(
+                PlayingEventType.ACCEPT_REQUEST_GUESS, acceptRequestGuessListener);
         stateManager.eventManager.removeListener(
                 PlayingEventType.GIVE_ANSWER, giveAnswerListener);
         stateManager.eventManager.removeListener(
@@ -207,11 +211,14 @@ public class KeyboardManager {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (view.getId() != R.id.btnBackSpace) {
+                    if (view.getId() == R.id.btnSpace) {
+                        txtGuessResult.setText(txtGuessResult.getText().toString() + " ");
+                    }
+                    else if (view.getId() != R.id.btnBackSpace) {
                         txtGuessResult.setText(txtGuessResult.getText().toString()
                                 + btn.getText().toString());
                     }
-                    else {
+                    else if (!txtGuessResult.getText().toString().equals("")){
                         txtGuessResult.setText(txtGuessResult.getText()
                                 .subSequence(0, txtGuessResult.getText().length() - 1));
                     }
@@ -236,6 +243,7 @@ public class KeyboardManager {
             @Override
             public void onClick(View view) {
                 stateManager.eventManager.queue(new CancelGuessEvent());
+                txtGuessResult.setText("");
                 hideDialogGuess();
             }
         });

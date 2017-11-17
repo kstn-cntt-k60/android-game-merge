@@ -1,4 +1,4 @@
-package kstn.game.view.thang.fragment;
+package kstn.game.view.state.singleplayer;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,11 +20,6 @@ import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.ConeResultEvent;
 import kstn.game.view.state.ViewStateManager;
-import kstn.game.view.state.singleplayer.CharCellManager;
-import kstn.game.view.state.singleplayer.KeyboardManager;
-import kstn.game.view.state.singleplayer.LifeManager;
-import kstn.game.view.state.singleplayer.ScoreManager;
-import kstn.game.view.state.singleplayer.SongManager;
 
 public class PlayFragment extends Fragment {
     private ViewStateManager stateManager;
@@ -77,6 +72,12 @@ public class PlayFragment extends Fragment {
 
     public void setStateManager(ViewStateManager stateManager) {
         this.stateManager = stateManager;
+
+        songManager = new SongManager(stateManager);
+        scoreManager = new ScoreManager(stateManager, songManager);
+        lifeManager = new LifeManager(stateManager, songManager);
+        charCellManager = new CharCellManager(stateManager);
+        keyboardManager = new KeyboardManager(stateManager);
     }
 
     public void setSongManager(SongManager songManager) {
