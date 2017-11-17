@@ -41,6 +41,7 @@ public class Cone {
     private boolean allowRotate = false;
     private boolean isRotating = false;
     private boolean isEnabled = true;
+    private boolean isMoveEvent = false;
 
     // Listeners
     EventListener moveEventListener;
@@ -64,7 +65,7 @@ public class Cone {
         Bitmap imageNeedle = null;
 
         try {
-            imageCone = assetManager.getBitmap("non.png");
+            imageCone = assetManager.getBitmap("non1.png");
             imageNeedle = assetManager.getBitmap("kim.png");
         } catch (IOException e) {
             Log.e("Cone", "Can't load non.png");
@@ -91,6 +92,7 @@ public class Cone {
                         allowRotate = false;
                 }
                 else if (allowRotate && event.getType() == View.TouchEvent.TOUCH_MOVE) {
+                    isMoveEvent = true;
                     endAngle = event_to_angle(event);
                     float touchCurrentX = event.getX();
                     if (touchCurrentX - xBias < touchStartX) {
@@ -102,6 +104,7 @@ public class Cone {
                     }
                 }
                 else if (allowRotate && event.getType() == View.TouchEvent.TOUCH_UP) {
+                    isMoveEvent = false;
                     long timeDelta = Cone.this.timeManager.getCurrentMillis() - timeToInitSpeed;
                     endAngle = event_to_angle(event);
                     float speedStart;
@@ -141,12 +144,26 @@ public class Cone {
     }
 
     private void rotate(float angle) {
-        coneView.rotate(angle);
-        this.angleCone = angle;
         if (isCollision()) {
-            angleNeedle = -5f;
+            angleNeedle = -15f;
             needleView.rotate(angleNeedle);
+            angleCone -= 0.5;
+        } else {
+            if (isMoveEvent) {
+                angleNeedle += 2f;
+                if (angleNeedle > 0.01) angleNeedle = 0;
+                needleView.rotate(angleNeedle);
+            }else {
+                angleNeedle += 15 * realSpeedCone / 18000;
+                needleView.rotate(angleNeedle);
+                if (angleNeedle > 0.01) {
+                    angleNeedle = 0;
+                    needleView.rotate(angleNeedle);
+                }
+            }
         }
+        this.angleCone = angle;
+        coneView.rotate(angleCone);
     }
 
 
@@ -160,11 +177,13 @@ public class Cone {
     }
 
     public void exit() {
+        coneProcess.onFail();
         rootViewGroup.removeView(coneView);
         rootViewGroup.removeView(needleView);
         eventManager.removeListener(ConeEventType.MOVE, moveEventListener);
         eventManager.removeListener(ConeEventType.ACCELERATE, accelEventListener);
     }
+
 
     public void disable() {
         isEnabled = false;
@@ -194,7 +213,6 @@ public class Cone {
         private float endTime;
         private long currentTime;
         private float startAngle;
-        private float realSpeed;
 
         public ConeProcess(float speedStart) {
             this.speed = speedStart;
@@ -206,23 +224,19 @@ public class Cone {
         @Override
         public void onUpdate(long deltaMs) {
             currentTime += deltaMs;
-            realSpeedCone = speed + decreaseAccel * currentTime;
+            realSpeedCone = speed + decreaseAccel * currentTime / (1000 * 1000);
             if (currentTime <= endTime) {
                 float angle = startAngle + speed * currentTime / 1000.0f
                         + decreaseAccel * currentTime * currentTime / (2 * 1000 * 1000);
-                if (isCollision()) {
-                    Log.i("Vacham", "" + count++);
-                    angleNeedle = -9f;
-                    needleView.rotate(-angleNeedle);
-                }
                 Cone.this.rotate(normalize(angle));
             }
             else {
                 float angle = startAngle + speed * endTime / 1000.0f
                         + decreaseAccel * endTime * endTime / (2 * 1000 * 1000);
-                Cone.this.rotate(angle);
-                if (isCollision()){
-                    Cone.this.rotate(angle);
+                Cone.this.rotate(normalize(angle));
+                if (isCollision()) {
+                        angleCone -= 2f;
+                        coneView.rotate(angleCone);
                 }
                 succeed();
             }
@@ -235,6 +249,7 @@ public class Cone {
             result = getResult(angleCone);
             eventManager.trigger(new ConeStopEventData(result));
             Cone.this.isRotating = false;
+
         }
 
         @Override
@@ -244,45 +259,6 @@ public class Cone {
 
         @Override
         public void onAbort() {
-        }
-    }
-
-    class NeedleProcess extends Process {
-        private long currentTime = 0;
-        public NeedleProcess() {
-
-        }
-
-        @Override
-        public void onUpdate(long deltaMs) {
-            currentTime += deltaMs;
-            Log.i("Collision", currentTime + " maxTime " + realSpeedCone );
-            if (currentTime < 18/realSpeedCone * 1000 && realSpeedCone > 20) {
-                angleNeedle -= 0.3;
-//                Log.i("Collison", "" + normalize(angle));
-                needleView.rotate(normalize(angleNeedle));
-            } else {
-                angleNeedle += 0.06;
-                if (angleNeedle > 0.01) {
-                    succeed();
-                }
-            }
-        }
-
-        @Override
-        public void onSuccess() {
-            needleView.rotate(0);
-            angleNeedle = 0;
-        }
-
-        @Override
-        public void onFail() {
-
-        }
-
-        @Override
-        public void onAbort() {
-
         }
     }
 
@@ -312,16 +288,9 @@ public class Cone {
     private boolean isCollision() {
         int result = getResult(angleCone);
         float angleCollison = -angleNeedle + ((result + 1)*18 - 9 - angleCone) ;
-
         if ( angleCollison < 1.0f) {
-            count ++;
             return true;
-
-        } else {
-            angleNeedle += 0.01;
-            needleView.rotate(angleNeedle);
         }
-
         return false;
     }
 
