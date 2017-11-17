@@ -6,6 +6,7 @@ import kstn.game.R;
 import kstn.game.logic.cone.ConeEventType;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
+import kstn.game.logic.state_event.StateEventType;
 import kstn.game.view.state.ViewStateManager;
 
 public class SongManager {
@@ -15,7 +16,7 @@ public class SongManager {
     private MediaPlayer tingTing;
     private EventListener coneAccelListener;
     private EventListener coneStopListener;
-
+    private EventListener transmitToMenuListener;
     public SongManager(ViewStateManager stateManager) {
         this.stateManager = stateManager;
         coneAccelListener = new EventListener() {
@@ -26,6 +27,12 @@ public class SongManager {
         };
 
         coneStopListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                endConeRotation();
+            }
+        };
+        transmitToMenuListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
                 endConeRotation();
@@ -60,11 +67,13 @@ public class SongManager {
     public void entry() {
         stateManager.eventManager.addListener(ConeEventType.ACCELERATE, coneAccelListener);
         stateManager.eventManager.addListener(ConeEventType.STOP, coneStopListener);
+        stateManager.eventManager.addListener(StateEventType.MENU, transmitToMenuListener);
     }
 
     public void exit() {
         stateManager.eventManager.removeListener(ConeEventType.STOP, coneStopListener);
         stateManager.eventManager.removeListener(ConeEventType.ACCELERATE, coneAccelListener);
+        stateManager.eventManager.removeListener(StateEventType.MENU, transmitToMenuListener);
     }
 
 }

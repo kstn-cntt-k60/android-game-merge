@@ -11,26 +11,27 @@ import kstn.game.logic.process.Process;
 import kstn.game.logic.process.ProcessManager;
 import kstn.game.view.asset.AssetManager;
 import kstn.game.view.screen.ImageView;
-import kstn.game.view.screen.ViewGroup;
 
 /**
  * Created by qi on 04/11/2017.
  */
+///sai mai sant sua
 
 public class Needle {
 
-    private ViewGroup rootviewGroup;
     public ImageView needleView;
+
+    private float speed;
+    public float angle = 0;
 
     private final float deltaAngle = 1.8f;
 
     private final ProcessManager processManager;
-    private boolean isStartCollison = true;
     public Needle(final ProcessManager processManager,
                   AssetManager assetManager,
                   final EventManager eventManager) {
-        this.rootviewGroup = rootviewGroup;
         this.processManager = processManager;
+        final NeedleProcess needleProcess = new NeedleProcess();
         Bitmap image = null;
         try {
             image = assetManager.getBitmap("kim.png");
@@ -40,42 +41,27 @@ public class Needle {
         eventManager.addListener(NeedleEventType.COLLISION, new EventListener() {
             @Override
             public void onEvent(EventData event) {
-                float angleStop = ((NeedleCollisonEventData) event).getAngle();
-                processManager.attachProcess(new NeedleProcess(angleStop));
+
             }
         });
-
-
     }
 
     class NeedleProcess extends Process {
-        private float time = 0;
-        private float angle = 0;
-        private float angleStop;
-        public NeedleProcess(float angelStop) {
-            this.angleStop = angelStop;
+        private long currentTime = 0;
+        public NeedleProcess() {
+
         }
 
         @Override
         public void onUpdate(long deltaMs) {
-            isStartCollison = false;
-            if (time < 1) {
-                time += 0.1;
-                angle += deltaAngle;
-                needleView.rotate(-angle);
-            } else {
-                angle -= 0.06;
-                if (angle < 0.01) {
-                    succeed();
-                }
-            }
+
 
         }
 
         @Override
         public void onSuccess() {
             needleView.rotate(0);
-            isStartCollison = true;
+            angle = 0;
         }
 
         @Override
@@ -87,9 +73,13 @@ public class Needle {
         }
 
     }
-
-    public boolean isStartCollison() {
-        return isStartCollison;
+    public static float normalize(float angle) {
+        double ratio = angle / 360f;
+        angle -= Math.floor(ratio) * 360;
+        return angle;
+    }
+    public float getAngle() {
+        return angle;
     }
 
 }

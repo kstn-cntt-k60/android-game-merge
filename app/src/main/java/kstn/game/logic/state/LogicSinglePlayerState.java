@@ -1,6 +1,7 @@
 package kstn.game.logic.state;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -39,7 +40,8 @@ public class LogicSinglePlayerState extends LogicGameState {
 
     @Override
     public void exit() {
-        playerManager.entry();
+        Log.i("Exit", this.toString());
+        playerManager.exit();
         cone.exit();
         stateManager.root.removeView(backgroundView);
     }

@@ -8,17 +8,19 @@ import kstn.game.logic.event.EventType;
  */
 
 public class NeedleCollisonEventData extends BaseEventData {
-    final private float angle;
+    final private float accerlator;
+    final private float speed;
 
-    public NeedleCollisonEventData(float angle) {
+    public NeedleCollisonEventData(float speed, float accerlator) {
         super(0);
-        this.angle = angle;
+        this.accerlator = accerlator;
+        this.speed = speed;
     }
 
-    public float getAngle() {
-        return angle;
+    public float getAccerlator() {
+        return accerlator;
     }
-
+    public float getSpeed() { return speed; }
     @Override
     public EventType getEventType() {
         return NeedleEventType.COLLISION;
