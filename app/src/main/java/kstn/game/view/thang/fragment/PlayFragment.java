@@ -61,7 +61,9 @@ public class PlayFragment extends Fragment {
 
     private String question;
     private String answer;
-    private String prevConeStringResult;
+
+    private boolean coneResultAnimationEnd;
+    private boolean requestedGiveAnswer;
 
     public PlayFragment() {
         rotateResultListener = new EventListener() {
@@ -75,7 +77,9 @@ public class PlayFragment extends Fragment {
         giveAnswerListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
-                handleGiveAnswerEvent();
+                requestedGiveAnswer = true;
+                if (coneResultAnimationEnd)
+                    handleGiveAnswerEvent();
             }
         };
 
@@ -198,7 +202,6 @@ public class PlayFragment extends Fragment {
     }
 
     public void handleNextQuestion(String question, String answer) {
-        Log.i("PlayFragment", "next question");
         this.question = question;
         this.answer = answer;
         keyboardManager.resetGiveAnswerKeyboard();
@@ -209,7 +212,11 @@ public class PlayFragment extends Fragment {
 
     private void handleRotateResult(int result) {
         final String text = ConeResult.getString(result);
-        prevConeStringResult = text;
+        TextView txtDiem = (TextView) giveAnswerView.findViewById(R.id.txtDiem);
+        txtDiem.setText(text);
+        coneResultAnimationEnd = false;
+        requestedGiveAnswer = false;
+
         scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -217,7 +224,11 @@ public class PlayFragment extends Fragment {
             }
 
             @Override
-            public void onAnimationEnd(Animation animation) {}
+            public void onAnimationEnd(Animation animation) {
+                if (requestedGiveAnswer)
+                    handleGiveAnswerEvent();
+                coneResultAnimationEnd = true;
+            }
 
             @Override
             public void onAnimationRepeat(Animation animation) {}
@@ -226,8 +237,6 @@ public class PlayFragment extends Fragment {
     }
 
     private void handleGiveAnswerEvent() {
-        TextView txtDiem = (TextView) giveAnswerView.findViewById(R.id.txtDiem);
-        txtDiem.setText(prevConeStringResult);
         keyboardManager.showDialogGiveAnswer();
         for(int i = 0; i < keyboardManager.getGiveAnswer().size(); i++){
             final Button button = keyboardManager.getGiveAnswer().get(i);
