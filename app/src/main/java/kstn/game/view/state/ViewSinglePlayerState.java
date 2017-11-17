@@ -1,6 +1,11 @@
 package kstn.game.view.state;
 
-import kstn.game.logic.playing_event.ViewSinglePlayerReadyEvent;
+import kstn.game.logic.event.EventData;
+import kstn.game.logic.event.EventListener;
+import kstn.game.logic.playing_event.PlayingEventType;
+import kstn.game.logic.playing_event.sync.LogicPlayingReadyEvent;
+import kstn.game.logic.playing_event.sync.PlayingReadyEvent;
+import kstn.game.logic.playing_event.sync.ViewPlayingReadyEvent;
 import kstn.game.logic.state_event.TransiteToMenuState;
 import kstn.game.view.state.singleplayer.CharCellManager;
 import kstn.game.view.state.singleplayer.KeyboardManager;
@@ -17,13 +22,24 @@ public class ViewSinglePlayerState extends ViewGameState {
     private CharCellManager charCellManager;
     private KeyboardManager keyboardManager;
 
-    public ViewSinglePlayerState(ViewStateManager stateManager) {
+    private EventListener logicReadyListener;
+
+    public ViewSinglePlayerState(final ViewStateManager stateManager) {
         super(stateManager);
         songManager = new SongManager(stateManager);
         scoreManager = new ScoreManager(stateManager, songManager);
         lifeManager = new LifeManager(stateManager, songManager);
         charCellManager = new CharCellManager(stateManager);
         keyboardManager = new KeyboardManager(stateManager);
+
+        logicReadyListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                LogicPlayingReadyEvent event1 = (LogicPlayingReadyEvent)event;
+                stateManager.eventManager.queue(
+                        new ViewPlayingReadyEvent(true));
+            }
+        };
     }
 
     @Override
@@ -46,7 +62,13 @@ public class ViewSinglePlayerState extends ViewGameState {
         lifeManager.entry();
         charCellManager.entry();
 
-        stateManager.eventManager.queue(new ViewSinglePlayerReadyEvent());
+        stateManager.eventManager.addListener(
+                PlayingEventType.LOGIC_SINGLE_PLAYER_READY,
+                logicReadyListener
+        );
+
+        stateManager.eventManager.queue(
+                new ViewPlayingReadyEvent(false));
     }
 
     @Override
@@ -63,5 +85,10 @@ public class ViewSinglePlayerState extends ViewGameState {
         scoreManager.exit();
         songManager.exit();
         charCellManager.exit();
+
+        stateManager.eventManager.removeListener(
+                PlayingEventType.LOGIC_SINGLE_PLAYER_READY,
+                logicReadyListener
+        );
     }
 }

@@ -1,6 +1,7 @@
 package kstn.game.view.state.singleplayer;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,10 +13,10 @@ import kstn.game.MainActivity;
 import kstn.game.R;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
-import kstn.game.logic.playing_event.CellChoosenEvent;
+import kstn.game.logic.playing_event.cell.CellChosenEvent;
 import kstn.game.logic.playing_event.NextQuestionEvent;
-import kstn.game.logic.playing_event.OpenCellEvent;
-import kstn.game.logic.playing_event.OpenMultipleCellEvent;
+import kstn.game.logic.playing_event.cell.OpenCellEvent;
+import kstn.game.logic.playing_event.cell.OpenMultipleCellEvent;
 import kstn.game.logic.playing_event.OutOfLifeEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.view.state.ViewStateManager;
@@ -23,8 +24,6 @@ import kstn.game.view.state.ViewStateManager;
 public class CharCellManager {
     private ViewStateManager stateManager;
     private ArrayList<TextView> charCells = new ArrayList<>();
-    private List<String> coneCells = new ArrayList<>();
-    private MainActivity activity;
     private boolean isOpen[]=new boolean[27];
     private boolean isActive[]=new boolean[27];
     private  int lenghtAnswer=0;
@@ -39,13 +38,12 @@ public class CharCellManager {
 
     public CharCellManager(ViewStateManager stateManager) {
         this.stateManager = stateManager;
-        this.activity = stateManager.activity;
 
         nextQuestionListener = new EventListener() {
             @Override
             public void onEvent(EventData event_) {
                 NextQuestionEvent event = (NextQuestionEvent)event_;
-                handleQuestion(event.getQuestion(), event.getAnswer());
+                handleNextQuestion(event.getAnswer());
             }
         };
 
@@ -78,6 +76,7 @@ public class CharCellManager {
     }
 
     public void onViewCreated(View view) {
+        charCells.clear();
         charCells.add((TextView) view.findViewById(R.id.txt0));
         charCells.add((TextView) view.findViewById(R.id.txt1));
         charCells.add((TextView) view.findViewById(R.id.txt2));
@@ -105,31 +104,6 @@ public class CharCellManager {
         charCells.add((TextView) view.findViewById(R.id.txt24));
         charCells.add((TextView) view.findViewById(R.id.txt25));
         charCells.add((TextView) view.findViewById(R.id.txt26));
-
-        initConeCells();
-    }
-
-    private void initConeCells() {
-        coneCells.add("800");
-        coneCells.add("900");
-        coneCells.add("Thêm Lượt");
-        coneCells.add("300");
-        coneCells.add("200");
-        coneCells.add("Thêm Lượt");
-        coneCells.add("100");
-        coneCells.add("500");
-        coneCells.add("Chia 2");
-        coneCells.add("600");
-        coneCells.add("Mất Lượt");
-        coneCells.add("700");
-        coneCells.add("300");
-        coneCells.add("May Mắn");
-        coneCells.add("400");
-        coneCells.add("300");
-        coneCells.add("Nhân 2");
-        coneCells.add("200");
-        coneCells.add("100");
-        coneCells.add("Mất điểm");
     }
 
     private int findFirstDataCopyCharIndex() {
@@ -139,7 +113,7 @@ public class CharCellManager {
         return -1;
     }
 
-    private void handleQuestion(String question, String answer) {
+    private void handleNextQuestion(String answer) {
         for (int i = 0; i < 27; i++) {
             charCells.get(i).setBackgroundResource(R.drawable.button_mini);
             charCells.get(i).setText("");
@@ -174,7 +148,6 @@ public class CharCellManager {
         stateManager.eventManager.addListener(PlayingEventType.OPEN_CELL, openCellListener);
         stateManager.eventManager.addListener(PlayingEventType.OPEN_MULTIPLE_CELL, openMultipleCellListener);
     }
-
 
     public void exit() {
         stateManager.eventManager.removeListener(PlayingEventType.OPEN_MULTIPLE_CELL, openMultipleCellListener);
@@ -214,6 +187,7 @@ public class CharCellManager {
     public void openCell(int index){
         int i = index + findFirstDataCopyCharIndex();
         isOpen[i] = true;
+        assert (data_copy[i] != null);
         String ch = data_copy[i].toString();
         dem++;
         charCells.get(i).setText(ch);
@@ -229,7 +203,7 @@ public class CharCellManager {
 
     public void openMultiCell(char ch) {
         for (int i = 0; i < charCells.size(); i++) {
-            if (data_copy[i] == ch)
+            if (data_copy[i] != null && data_copy[i] == ch)
                 openCellAbsoluteIndex(i);
         }
     }
@@ -242,7 +216,7 @@ public class CharCellManager {
         charCells.get(i).setText(ch);
     }
 
-    public  boolean IsOpen(int i){
+    private  boolean IsOpen(int i){
         return isOpen[i];
     }
 
@@ -254,26 +228,17 @@ public class CharCellManager {
                 charCells.get(i).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        stateManager.eventManager.queue(new CellChoosenEvent(finalI - findFirstDataCopyCharIndex()));
+                        stateManager.eventManager.queue(new CellChosenEvent(finalI - findFirstDataCopyCharIndex()));
                         StopListener();
-                        if(isOverCell()){
-                            stateManager.eventManager.queue(new OutOfLifeEvent());
-                            Toast.makeText(activity,"Bạn đã hãy Đoán Luôn để đến câu hỏi tiếp theo",
-                                    Toast.LENGTH_LONG).show();
-                        }
                     }
                 });
             }
-
         }
     }
 
-    public void StopListener(){
+    private void StopListener(){
         for(TextView txt : charCells ){
             txt.setClickable(false);
         }
-    }
-    public boolean isOverCell(){
-        return dem ==lenghtAnswer;
     }
 }

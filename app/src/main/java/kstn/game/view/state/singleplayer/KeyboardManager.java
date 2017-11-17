@@ -13,10 +13,6 @@ import kstn.game.logic.event.EventListener;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.view.state.ViewStateManager;
 
-/**
- * Created by tung on 15/11/2017.
- */
-
 public class KeyboardManager {
     private ViewStateManager stateManager;
     private ArrayList<Button> guessKeyboard;
@@ -94,30 +90,29 @@ public class KeyboardManager {
 
         dialogGiveAnswer.getHopthoai().setCancelable(false);
         dialogGiveAnswer.getHopthoai().setCanceledOnTouchOutside(false);
-
     }
 
     public void showDialogGiveAnswer(){
         dialogGiveAnswer.getHopthoai().show();
     }
 
+    public void hideDialogGiveAnswer(){
+        dialogGiveAnswer.getHopthoai().dismiss();
+    }
+
     public void showDialogGuess(){
         dialogGuess.getHopthoai().show();
     }
 
-    public DialogManager getDialogGuess() {
-        return dialogGuess;
+    public void hideDialogGuess(){
+        dialogGuess.getHopthoai().dismiss();
     }
 
-    public DialogManager getDialogGiveAnswer() {
-        return dialogGiveAnswer;
-    }
-
-    public void DisActive(int i){
+    public void deactivate(int i){
         isActive[i] = false;
     }
 
-    public boolean Active(int i){
+    public boolean isActive(int i){
         return isActive[i];
    }
 
@@ -163,20 +158,18 @@ public class KeyboardManager {
                         txt.setText(txt.getText().subSequence(0, txt.getText().length() - 1));
                     }
                 }
-
             });
-
         }
         dialogGuess.getHopthoai().show();
-
     }
 
-    public void resetGiveAnswerKeyboard(MainActivity activity) {
+    public void resetGiveAnswerKeyboard() {
         int i=0;
         for (Button btn : answerKeyboard) {
             isActive[i] = true;
             i++;
-            btn.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.button_mini));
+            btn.setBackgroundDrawable(stateManager.activity.getResources()
+                    .getDrawable(R.drawable.button_mini));
         }
     }
 }

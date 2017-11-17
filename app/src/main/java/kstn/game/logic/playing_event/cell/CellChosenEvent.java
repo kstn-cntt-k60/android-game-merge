@@ -1,16 +1,17 @@
-package kstn.game.logic.playing_event;
+package kstn.game.logic.playing_event.cell;
 
 import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;
+import kstn.game.logic.playing_event.PlayingEventType;
 
 /**
  * Created by qi on 16/11/2017.
  */
 
-public class CellChoosenEvent extends BaseEventData {
+public class CellChosenEvent extends BaseEventData {
     private final int index;
 
-    public CellChoosenEvent(int index) {
+    public CellChosenEvent(int index) {
         super(0);
         this.index = index;
     }

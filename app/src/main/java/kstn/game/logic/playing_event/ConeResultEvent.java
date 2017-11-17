@@ -3,19 +3,21 @@ package kstn.game.logic.playing_event;
 import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;
 
-/**
- * Created by qi on 16/11/2017.
- */
+public class ConeResultEvent extends BaseEventData {
+    private int result;
 
-public class ViewSinglePlayerReadyEvent extends BaseEventData {
-
-    public ViewSinglePlayerReadyEvent() {
+    public ConeResultEvent(int result) {
         super(0);
+        this.result = result;
     }
 
     @Override
     public EventType getEventType() {
-        return PlayingEventType.VIEW_SINGLE_PLAYER_READY;
+        return PlayingEventType.ROTATE_RESULT;
+    }
+
+    public int getResult() {
+        return result;
     }
 
     @Override

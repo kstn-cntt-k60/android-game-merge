@@ -13,19 +13,19 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import kstn.game.R;
+import kstn.game.logic.cone.ConeResult;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.model.QuestionModel;
 import kstn.game.logic.playing_event.AnswerEvent;
 import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
-import kstn.game.logic.playing_event.RotateResultEvent;
+import kstn.game.logic.playing_event.ConeResultEvent;
 import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.state.singleplayer.CharCellManager;
 import kstn.game.view.state.singleplayer.KeyboardManager;
@@ -42,14 +42,10 @@ public class PlayFragment extends Fragment {
     private LifeManager lifeManager;
     private CharCellManager charCellManager;
     private TextView txtLevel;
-    private QuestionModel cauhoi;
     private TextView txtCauHoi;
     private TextView txtNoiDungKim;
     private  KeyboardManager keyboardManager;
 
-    private ArrayList<QuestionModel> dataCauHoi;
-
-    Random rd = new Random();
     int height;
     View guessView, giveAnswerView;
     Button btnDoanX, btnHuy;
@@ -65,13 +61,13 @@ public class PlayFragment extends Fragment {
 
     private String question;
     private String answer;
-    private String prevResult;
+    private String prevConeStringResult;
 
     public PlayFragment() {
         rotateResultListener = new EventListener() {
             @Override
             public void onEvent(EventData event_) {
-                RotateResultEvent event = (RotateResultEvent)event_;
+                ConeResultEvent event = (ConeResultEvent)event_;
                 handleRotateResult(event.getResult());
             }
         };
@@ -132,7 +128,6 @@ public class PlayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View result = inflater.inflate(R.layout.fragment_play, container, false);
-        // result.setBackgroundColor(Color.parseColor("#00000000"));
         result.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -163,8 +158,6 @@ public class PlayFragment extends Fragment {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         guessView = inflater.inflate(R.layout.giaodien_alert_doan, null);
         giveAnswerView = inflater.inflate(R.layout.giaodien_alert_letter, null);
-        // anh xa o letter
-
 
         btnHuy = (Button) guessView.findViewById(R.id.btnHuy);
         btnDoanX = (Button) guessView.findViewById(R.id.btnDoanX);
@@ -183,11 +176,10 @@ public class PlayFragment extends Fragment {
                 btnHuy.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        keyboardManager.getDialogGuess().getHopthoai().dismiss();
+                        keyboardManager.hideDialogGuess();
                     }
                 });
 
-                // TODO
                 btnDoanX.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -202,50 +194,44 @@ public class PlayFragment extends Fragment {
         });
 
         scaleAnimation = AnimationUtils.loadAnimation(getActivity(),R.anim.scale);
+        keyboardManager.hideDialogGuess();
     }
 
-
     public void handleNextQuestion(String question, String answer) {
-        Log.i("Fragment", "handleNextQuestion");
+        Log.i("PlayFragment", "next question");
         this.question = question;
         this.answer = answer;
-        keyboardManager.resetGiveAnswerKeyboard(stateManager.activity);
-        keyboardManager.getDialogGuess().getHopthoai().dismiss();
+        keyboardManager.resetGiveAnswerKeyboard();
+        keyboardManager.hideDialogGuess();
         dem = 0;
         txtCauHoi.setText(question);
     }
 
-    private void handleRotateResult(final String result) {
-        prevResult = result;
+    private void handleRotateResult(int result) {
+        final String text = ConeResult.getString(result);
+        prevConeStringResult = text;
         scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                txtNoiDungKim.setText(result);
+                txtNoiDungKim.setText(text);
             }
 
             @Override
-            public void onAnimationEnd(Animation animation) {
-                String content = txtNoiDungKim.getText().toString();
-                if (content.equals("Mất điểm")) {
-                    Toast.makeText(getActivity(),"Mất điểm",Toast.LENGTH_SHORT).show();
-                }
-            }
+            public void onAnimationEnd(Animation animation) {}
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
+            public void onAnimationRepeat(Animation animation) {}
         });
         txtNoiDungKim.startAnimation(scaleAnimation);
     }
 
     private void handleGiveAnswerEvent() {
         TextView txtDiem = (TextView) giveAnswerView.findViewById(R.id.txtDiem);
-        txtDiem.setText(prevResult);
+        txtDiem.setText(prevConeStringResult);
         keyboardManager.showDialogGiveAnswer();
         for(int i = 0; i < keyboardManager.getGiveAnswer().size(); i++){
             final Button button = keyboardManager.getGiveAnswer().get(i);
-            if (keyboardManager.Active(i)) {
+            if (keyboardManager.isActive(i)) {
                 final int finalI = i;
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -270,11 +256,11 @@ public class PlayFragment extends Fragment {
             @Override
             public void onAnimationEnd(Animation animation) {
                 button.setBackgroundColor(Color.GRAY);
-                keyboardManager.DisActive(index);
-                keyboardManager.getDialogGuess().getHopthoai().dismiss();
+                keyboardManager.deactivate(index);
+                keyboardManager.hideDialogGuess();;
 
                 char character = button.getText().toString().charAt(0);
-                keyboardManager.getDialogGiveAnswer().getHopthoai().dismiss();
+                keyboardManager.hideDialogGiveAnswer();
 
                 stateManager.eventManager.queue(new AnswerEvent(character));
             }
