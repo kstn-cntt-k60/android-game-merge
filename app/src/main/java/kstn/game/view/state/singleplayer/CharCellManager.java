@@ -28,7 +28,7 @@ public class CharCellManager {
     private boolean isActive[]=new boolean[27];
     private  int lenghtAnswer=0;
     private Character data_copy[];
-    public  static  int dem;
+    private int dem;
 
     private EventListener nextQuestionListener;
     private EventListener giveChooseCellListener;

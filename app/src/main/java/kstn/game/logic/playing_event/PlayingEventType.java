@@ -15,6 +15,7 @@ public enum PlayingEventType implements EventType {
     GUESS_RESULT(2133),
     REQUEST_GUESS(2134),
     CANCEL_GUESS(2135),
+    ACCEPT_REQUEST_GUESS(2136),
 
     GIVE_ANSWER(2300),
     ANSWER(2301),

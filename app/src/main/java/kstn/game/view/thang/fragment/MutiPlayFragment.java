@@ -43,11 +43,5 @@ public class MutiPlayFragment extends Fragment {
         Player user = (Player) getArguments().getSerializable("user");
         ArrayList<Player> data = new ArrayList<>();
         data.add(user);
-        // Player user2= new Player("thang",R.drawable.index3);
-        // Player user3 = new Player("Quý",R.drawable.index4);
-        // data.add(user2);
-        // data.add(user3);
-        // UserAdapter adapter = new UserAdapter(data,getActivity());
-        // gv.setAdapter(adapter);
     }
 }
