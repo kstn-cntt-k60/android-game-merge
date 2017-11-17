@@ -1,11 +1,8 @@
-package kstn.game.logic.playing_event;
+package kstn.game.logic.playing_event.cell;
 
 import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;
-
-/**
- * Created by qi on 16/11/2017.
- */
+import kstn.game.logic.playing_event.PlayingEventType;
 
 public class OpenMultipleCellEvent extends BaseEventData {
     private final char character;

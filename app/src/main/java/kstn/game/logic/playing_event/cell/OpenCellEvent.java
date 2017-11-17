@@ -1,7 +1,8 @@
-package kstn.game.logic.playing_event;
+package kstn.game.logic.playing_event.cell;
 
 import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;
+import kstn.game.logic.playing_event.PlayingEventType;
 
 public class OpenCellEvent extends BaseEventData {
     private final int index;

@@ -17,10 +17,10 @@ public class ConeAccelerateEventData extends BaseEventData{
         this.speedStart = speedStart;
     }
 
-    float getAngle() {
+    public float getAngle() {
         return angle;
     }
-    float getSpeedStart() { return speedStart; }
+    public float getSpeedStart() { return speedStart; }
 
     @Override
     public EventType getEventType() {

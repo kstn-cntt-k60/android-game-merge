@@ -15,10 +15,6 @@ import kstn.game.view.screen.ImageView;
 import kstn.game.view.screen.View;
 import kstn.game.view.screen.ViewGroup;
 
-/**
- * Created by qi on 16/10/2017.
- */
-
 public class Cone {
     private final  ViewGroup rootViewGroup;
     private final ImageView coneView;
@@ -112,7 +108,9 @@ public class Cone {
                     speedStart = normalize(endAngle - startAngle) * 1000 / timeDelta;
 
                     if (speedStart >= minVelocity) {
-                        eventManager.trigger(new ConeAccelerateEventData(normalize(baseAngle + endAngle - startAngle), speedStart));
+                        eventManager.trigger(
+                                new ConeAccelerateEventData(
+                                        normalize(baseAngle + endAngle - startAngle), speedStart));
                     }
                 }
                 return true;
