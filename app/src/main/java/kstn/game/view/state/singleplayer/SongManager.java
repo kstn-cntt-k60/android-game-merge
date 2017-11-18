@@ -11,9 +11,9 @@ import kstn.game.view.state.ViewStateManager;
 
 public class SongManager {
     private ViewStateManager stateManager;
-    private MediaPlayer coneRotation;
-    private MediaPlayer fail;
-    private MediaPlayer tingTing;
+    private MediaPlayer coneRotation = null;
+    private MediaPlayer fail = null;
+    private MediaPlayer tingTing = null;
     private EventListener coneAccelListener;
     private EventListener coneStopListener;
     private EventListener transmitToMenuListener;
@@ -51,7 +51,8 @@ public class SongManager {
 
     public void endConeRotation()
     {
-        coneRotation.stop();
+        if (coneRotation != null)
+            coneRotation.stop();
     }
 
     public void startTingTing() {

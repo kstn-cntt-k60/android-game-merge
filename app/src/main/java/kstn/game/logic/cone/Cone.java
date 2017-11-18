@@ -23,12 +23,11 @@ public class Cone {
     private final EventManager eventManager;
     private final ProcessManager processManager;
     private final BaseTimeManager timeManager;
-    private ConeProcess coneProcess;
+    private ConeProcess coneProcess = null;
 
     private float angleCone = 0;
     private long timeToInitSpeed;
     private float realSpeedCone = 0;
-    int count = 0;
 
     private float angleNeedle = 0;
     // for handling touch events
@@ -44,8 +43,8 @@ public class Cone {
     private boolean isMoveEvent = false;
 
     // Listeners
-    EventListener moveEventListener;
-    EventListener accelEventListener;
+    private EventListener moveEventListener;
+    private EventListener accelEventListener;
 
     private final float xBias = 0.05f;
     private final float minRadius = 0.2f;
@@ -147,7 +146,7 @@ public class Cone {
         if (isCollision()) {
             angleNeedle = -15f;
             needleView.rotate(angleNeedle);
-            angleCone -= 0.5;
+            // angleCone -= 0.5;
         } else {
             if (isMoveEvent) {
                 angleNeedle += 2f;
@@ -177,7 +176,8 @@ public class Cone {
     }
 
     public void exit() {
-        coneProcess.onFail();
+        if (coneProcess != null && coneProcess.isAlive())
+            coneProcess.fail();
         rootViewGroup.removeView(coneView);
         rootViewGroup.removeView(needleView);
         eventManager.removeListener(ConeEventType.MOVE, moveEventListener);
@@ -234,10 +234,12 @@ public class Cone {
                 float angle = startAngle + speed * endTime / 1000.0f
                         + decreaseAccel * endTime * endTime / (2 * 1000 * 1000);
                 Cone.this.rotate(normalize(angle));
+                /*
                 if (isCollision()) {
                         angleCone -= 2f;
                         coneView.rotate(angleCone);
                 }
+                */
                 succeed();
             }
         }
@@ -249,7 +251,7 @@ public class Cone {
             result = getResult(angleCone);
             eventManager.trigger(new ConeStopEventData(result));
             Cone.this.isRotating = false;
-
+            coneProcess = null;
         }
 
         @Override
