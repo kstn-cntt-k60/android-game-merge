@@ -280,6 +280,17 @@ public class SinglePlayerManager {
         void entry() {
             boolean allOpen = allCellsAreOpened();
             if (playerLife != 0 && isGuessed) {
+                if (!rightGuess) {
+                    playerLife--;
+                    if (playerLife == 0) {
+                        stateManager.eventManager.queue(new TransiteToMenuState());
+                        return;
+                    }
+                    else {
+                        stateManager.eventManager.trigger(
+                                new PlayerStateChangeEvent(player.getScore(), playerLife));
+                    }
+                }
                 newQuestion();
                 cone.enable();
                 return;

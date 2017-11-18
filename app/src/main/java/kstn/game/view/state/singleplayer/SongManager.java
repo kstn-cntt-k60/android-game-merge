@@ -72,6 +72,8 @@ public class SongManager {
     }
 
     public void exit() {
+        if (coneRotation != null)
+            coneRotation.stop();
         stateManager.eventManager.removeListener(ConeEventType.STOP, coneStopListener);
         stateManager.eventManager.removeListener(ConeEventType.ACCELERATE, coneAccelListener);
         stateManager.eventManager.removeListener(StateEventType.MENU, transmitToMenuListener);
