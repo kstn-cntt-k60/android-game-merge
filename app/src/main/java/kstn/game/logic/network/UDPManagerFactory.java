@@ -1,4 +1,4 @@
-package kstn.game.view.network;
+package kstn.game.logic.network;
 
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventType;

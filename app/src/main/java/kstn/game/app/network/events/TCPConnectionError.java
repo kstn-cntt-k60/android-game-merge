@@ -1,7 +1,7 @@
 package kstn.game.app.network.events;
 
 import kstn.game.app.event.LLBaseEventType;
-import kstn.game.view.network.Connection;
+import kstn.game.logic.network.Connection;
 import kstn.game.app.event.LLBaseEventData;
 
 // Always connection != null: Can happen while server and client connected
