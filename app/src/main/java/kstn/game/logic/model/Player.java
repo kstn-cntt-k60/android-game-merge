@@ -6,6 +6,7 @@ public class Player {
     private int avatarId;
     private boolean isHost;
     private int score;
+    private int life;
 
     public Player(int playerId, String name, int avatarId, boolean isHost) {
         this.playerId = playerId;
@@ -13,6 +14,7 @@ public class Player {
         this.avatarId = avatarId;
         this.isHost = isHost;
         score = 0;
+        life = 4;
     }
 
     public Player(int playerId, String name, int avatarId) {
@@ -43,22 +45,19 @@ public class Player {
         return score;
     }
 
-    public void increaseScore(int value) {
-        assert (value > 0);
-        assert (value % 100 == 0);
-        score += value;
+    public void setScore(int value) {
+        if (value < 0)
+            score = 0;
+        score = value;
     }
 
-    public void divideScoreByHalf() {
-        score = (score + 1) / 2;
+    public int getLife() {
+        return life;
     }
 
-    public void lostScore() {
-        score = 0;
+    public void setLife(int value) {
+        if (value < 0)
+            life = 0;
+        life = value;
     }
-
-    public void x2Score() {
-        score *= 2;
-    }
-
 }

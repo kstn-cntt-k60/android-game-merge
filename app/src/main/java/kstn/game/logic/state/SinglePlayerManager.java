@@ -1,7 +1,5 @@
 package kstn.game.logic.state;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -32,6 +30,8 @@ import kstn.game.logic.state_event.TransiteToMenuState;
 
 public class SinglePlayerManager {
     private LogicStateManager stateManager;
+
+    private Player player;
 
     private String answer;
     private String nonSpaceAnswer;
@@ -68,9 +68,6 @@ public class SinglePlayerManager {
 
         isGuessed = false;
     }
-
-    private Player player;
-    private int playerLife;
 
     private QuestionManagerDAO questionManager;
 
@@ -220,11 +217,10 @@ public class SinglePlayerManager {
     }
 
     public void entry() {
+        player = new Player();
+
         currentState = rotatableState;
         currentState.entry();
-
-        player = new Player();
-        playerLife = 4;
 
         stateManager.eventManager.addListener(PlayingEventType.PLAYING_READY, playingReadyListener);
         stateManager.eventManager.addListener(ConeEventType.ACCELERATE, coneAccelListener);
@@ -255,6 +251,11 @@ public class SinglePlayerManager {
                 cancelGuessListener);
     }
 
+    private void notifyState() {
+        stateManager.eventManager.trigger(
+                new PlayerStateChangeEvent(player.getScore(), player.getLife()));
+    }
+
     private abstract class State {
         void entry() {}
 
@@ -279,16 +280,17 @@ public class SinglePlayerManager {
         @Override
         void entry() {
             boolean allOpen = allCellsAreOpened();
-            if (playerLife != 0 && isGuessed) {
-                if (!rightGuess) {
-                    playerLife--;
-                    if (playerLife == 0) {
+            if (player.getLife() != 0 && isGuessed) {
+                if (rightGuess) {
+                    player.setScore(player.getScore() + 1000);
+                    notifyState();
+                }
+                else {
+                    player.setLife(player.getLife() - 1);
+                    notifyState();
+                    if (player.getLife() == 0) {
                         stateManager.eventManager.queue(new TransiteToMenuState());
                         return;
-                    }
-                    else {
-                        stateManager.eventManager.trigger(
-                                new PlayerStateChangeEvent(player.getScore(), playerLife));
                     }
                 }
                 newQuestion();
@@ -301,8 +303,12 @@ public class SinglePlayerManager {
                 return;
             }
 
-            if (playerLife == 0 && isGuessed) {
-                stateManager.eventManager.queue(new TransiteToMenuState());
+            if (player.getLife() == 0) {
+                if (isGuessed) {
+                    stateManager.eventManager.queue(new TransiteToMenuState());
+                } else {
+                    requestGuess();
+                }
                 return;
             }
 
@@ -333,7 +339,6 @@ public class SinglePlayerManager {
         @Override
         void coneStop(int index) {
             result = coneCells.get(index);
-            // result = ConeResult.LUCKY;
             stateManager.eventManager.trigger(new ConeResultEvent(result));
 
             if (ConeResult.isScore(result)) {
@@ -345,23 +350,15 @@ public class SinglePlayerManager {
 
             switch (result) {
                 case ConeResult.LOST_SCORE:
-                    player.lostScore();
-                    stateManager.eventManager.trigger(
-                            new PlayerStateChangeEvent(player.getScore(), playerLife));
+                    player.setScore(0);
+                    notifyState();
                     makeTransitionTo(rotatableState);
                     break;
 
                 case ConeResult.LOST_LIFE:
-                    if (playerLife > 1) {
-                        playerLife--;
-                        makeTransitionTo(rotatableState);
-                        stateManager.eventManager.trigger(
-                                new PlayerStateChangeEvent(player.getScore(), playerLife));
-                    }
-                    else {
-                        playerLife = 0;
-                        makeTransitionTo(rotatableState);
-                    }
+                    player.setLife(player.getLife() - 1);
+                    notifyState();
+                    makeTransitionTo(rotatableState);
                     break;
 
                 case ConeResult.DIV_2:
@@ -372,26 +369,21 @@ public class SinglePlayerManager {
 
                 case ConeResult.BONUS:
                     int rand = random.nextInt(9);
-                    player.increaseScore((rand + 1) * 100);
-                    stateManager.eventManager.trigger(
-                            new PlayerStateChangeEvent(player.getScore(), playerLife));
+                    player.setScore(player.getScore() + (rand + 1) * 100);
+                    notifyState();
                     makeTransitionTo(rotatableState);
                     break;
 
                 case ConeResult.BONUS_LIFE:
-                    playerLife++;
+                    player.setLife(player.getLife() + 1);
                     makeTransitionTo(rotatableState);
-                    stateManager.eventManager.trigger(
-                            new PlayerStateChangeEvent(player.getScore(), playerLife));
+                    notifyState();
                     break;
 
                 case ConeResult.LUCKY:
                     stateManager.eventManager.trigger(new GiveChooseCellEvent());
                     makeTransitionTo(waitChooseCellState);
                     break;
-
-                default:
-                    assert (false);
             }
         }
     }
@@ -412,28 +404,23 @@ public class SinglePlayerManager {
             openMultiCells(ch);
             int count = countCharOccurrences(nonSpaceAnswer, ch);
             if (count == 0) {
-                if (playerLife > 1) {
-                    playerLife--;
-                }
-                else {
-                    playerLife = 0;
-                }
+                player.setLife(player.getLife() - 1);
+                notifyState();
             }
             else {
                 int preResult =  rotatingState.result;
                 if (ConeResult.isScore(preResult)) {
-                    player.increaseScore(count * rotatingState.rotatedScore);
+                    player.setScore(player.getScore() + count * rotatingState.rotatedScore);
                 }
                 else if (preResult == ConeResult.MUL_2) {
-                    player.x2Score();
+                    player.setScore(player.getScore() * 2);
                 }
                 else if (preResult == ConeResult.DIV_2) {
-                    player.divideScoreByHalf();
+                    player.setScore((player.getScore() + 1)/ 2);
                 }
             }
             makeTransitionTo(rotatableState);
-            stateManager.eventManager.trigger(
-                    new PlayerStateChangeEvent(player.getScore(), playerLife));
+            notifyState();
         }
     }
 
@@ -443,15 +430,9 @@ public class SinglePlayerManager {
             isGuessed = true;
             if (result.toUpperCase().equals(answer.toUpperCase())) {
                 rightGuess = true;
-                player.increaseScore(1000);
-                stateManager.eventManager.trigger(
-                        new PlayerStateChangeEvent(player.getScore(), playerLife));
             }
             else {
                 rightGuess = false;
-                playerLife--;
-                stateManager.eventManager.trigger(
-                        new PlayerStateChangeEvent(player.getScore(), playerLife));
             }
             makeTransitionTo(rotatableState);
         }
