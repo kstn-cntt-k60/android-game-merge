@@ -10,6 +10,7 @@ import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.process.Process;
 import kstn.game.logic.process.ProcessManager;
+import kstn.game.logic.state_event.StateEventType;
 import kstn.game.view.asset.AssetManager;
 import kstn.game.view.screen.ImageView;
 import kstn.game.view.screen.View;
@@ -46,6 +47,7 @@ public class Cone {
     // Listeners
     EventListener moveEventListener;
     EventListener accelEventListener;
+    EventListener transmitToMenuListener;
 
     private final float xBias = 0.05f;
     private final float minRadius = 0.2f;
@@ -140,6 +142,13 @@ public class Cone {
             }
         };
 
+        transmitToMenuListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                coneProcess.onFail();
+                Log.i("Call", "");
+            }
+        };
 
     }
 
@@ -177,7 +186,7 @@ public class Cone {
     }
 
     public void exit() {
-        coneProcess.onFail();
+        coneProcess.fail();
         rootViewGroup.removeView(coneView);
         rootViewGroup.removeView(needleView);
         eventManager.removeListener(ConeEventType.MOVE, moveEventListener);
@@ -229,6 +238,7 @@ public class Cone {
                 float angle = startAngle + speed * currentTime / 1000.0f
                         + decreaseAccel * currentTime * currentTime / (2 * 1000 * 1000);
                 Cone.this.rotate(normalize(angle));
+                eventManager.addListener(StateEventType.MENU, transmitToMenuListener);
             }
             else {
                 float angle = startAngle + speed * endTime / 1000.0f
