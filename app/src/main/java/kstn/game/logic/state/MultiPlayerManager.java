@@ -2,7 +2,7 @@ package kstn.game.logic.state;
 
 import java.util.List;
 
-import kstn.game.logic.model.Player;
+import kstn.game.logic.state.singleplayer.Player;
 
 public class MultiPlayerManager {
 

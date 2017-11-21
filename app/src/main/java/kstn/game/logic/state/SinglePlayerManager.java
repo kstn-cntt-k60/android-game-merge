@@ -12,7 +12,7 @@ import kstn.game.logic.cone.ConeStopEventData;
 import kstn.game.logic.data.QuestionManagerDAO;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
-import kstn.game.logic.model.Player;
+import kstn.game.logic.state.singleplayer.Player;
 import kstn.game.logic.model.QuestionModel;
 import kstn.game.logic.playing_event.AnswerEvent;
 import kstn.game.logic.playing_event.cell.CellChosenEvent;

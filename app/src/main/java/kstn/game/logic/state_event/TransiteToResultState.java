@@ -4,7 +4,7 @@ import java.util.List;
 
 import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;
-import kstn.game.logic.model.Player;
+import kstn.game.logic.state.singleplayer.Player;
 
 /**
  * Created by qi on 13/11/2017.

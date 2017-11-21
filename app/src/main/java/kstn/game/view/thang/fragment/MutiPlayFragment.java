@@ -12,7 +12,7 @@ import android.widget.GridView;
 import java.util.ArrayList;
 
 import kstn.game.R;
-import kstn.game.logic.model.Player;
+import kstn.game.logic.state.singleplayer.Player;
 
 public class MutiPlayFragment extends Fragment {
 
