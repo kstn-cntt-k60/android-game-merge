@@ -7,19 +7,15 @@ import kstn.game.logic.event.EventType;
  * Created by qi on 13/11/2017.
  */
 
-public class TransiteToWaitRoom extends BaseEventData {
-    public final String roomName;
-    public final boolean isHost;
+public class TransitToRoomCreator extends BaseEventData {
 
-    public TransiteToWaitRoom(String roomName, boolean isHost) {
+    public TransitToRoomCreator() {
         super(0);
-        this.roomName = roomName;
-        this.isHost = isHost;
     }
 
     @Override
     public EventType getEventType() {
-        return null;
+        return StateEventType.ROOM_CREATOR;
     }
 
     @Override

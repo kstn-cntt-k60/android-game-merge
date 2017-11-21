@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import kstn.game.R;
-import kstn.game.logic.state_event.TransiteToLoginState;
-import kstn.game.logic.state_event.TransiteToSinglePlayerState;
+import kstn.game.logic.state_event.TransitToLoginState;
+import kstn.game.logic.state_event.TransitToSinglePlayerState;
 import kstn.game.view.state.ViewStateManager;
 
 public class MenuFragment extends Fragment {
@@ -49,14 +49,14 @@ public class MenuFragment extends Fragment {
         btnChoiThoi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stateManager.eventManager.queue(new TransiteToSinglePlayerState());
+                stateManager.eventManager.queue(new TransitToSinglePlayerState());
             }
         });
 
         btnTranhDau.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stateManager.eventManager.queue(new TransiteToLoginState());
+                stateManager.eventManager.queue(new TransitToLoginState());
             }
         });
 

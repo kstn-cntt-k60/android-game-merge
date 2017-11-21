@@ -2,14 +2,10 @@ package kstn.game.logic.cone;
 
 import kstn.game.logic.event.EventType;
 
-/**
- * Created by qi on 16/10/2017.
- */
-
 public enum ConeEventType implements EventType {
-    MOVE(25000),
-    ACCELERATE(25001),
-    STOP(25002);
+    MOVE(27000),
+    ACCELERATE(27001),
+    STOP(27002);
 
     private int value;
 

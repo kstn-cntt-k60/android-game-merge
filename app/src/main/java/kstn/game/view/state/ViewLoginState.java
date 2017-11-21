@@ -1,6 +1,6 @@
 package kstn.game.view.state;
 
-import kstn.game.logic.state_event.TransiteToMenuState;
+import kstn.game.logic.state_event.TransitToMenuState;
 import kstn.game.view.thang.fragment.LoginFragment;
 
 public class ViewLoginState extends ViewGameState {
@@ -15,7 +15,7 @@ public class ViewLoginState extends ViewGameState {
 
     @Override
     public boolean onBack() {
-        stateManager.eventManager.queue(new TransiteToMenuState());
+        stateManager.eventManager.queue(new TransitToMenuState());
         return true;
     }
 

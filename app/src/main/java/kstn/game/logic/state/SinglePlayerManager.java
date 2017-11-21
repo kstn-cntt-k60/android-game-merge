@@ -26,7 +26,7 @@ import kstn.game.logic.playing_event.cell.OpenCellEvent;
 import kstn.game.logic.playing_event.cell.OpenMultipleCellEvent;
 import kstn.game.logic.playing_event.guess.AcceptRequestGuessEvent;
 import kstn.game.logic.playing_event.guess.GuessResultEvent;
-import kstn.game.logic.state_event.TransiteToMenuState;
+import kstn.game.logic.state_event.TransitToMenuState;
 
 public class SinglePlayerManager {
     private LogicStateManager stateManager;
@@ -289,7 +289,7 @@ public class SinglePlayerManager {
                     player.setLife(player.getLife() - 1);
                     notifyState();
                     if (player.getLife() == 0) {
-                        stateManager.eventManager.queue(new TransiteToMenuState());
+                        stateManager.eventManager.queue(new TransitToMenuState());
                         return;
                     }
                 }
@@ -305,7 +305,7 @@ public class SinglePlayerManager {
 
             if (player.getLife() == 0) {
                 if (isGuessed) {
-                    stateManager.eventManager.queue(new TransiteToMenuState());
+                    stateManager.eventManager.queue(new TransitToMenuState());
                 } else {
                     requestGuess();
                 }

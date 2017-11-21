@@ -5,7 +5,7 @@ import kstn.game.logic.event.EventListener;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.sync.LogicPlayingReadyEvent;
 import kstn.game.logic.playing_event.sync.ViewPlayingReadyEvent;
-import kstn.game.logic.state_event.TransiteToMenuState;
+import kstn.game.logic.state_event.TransitToMenuState;
 import kstn.game.view.state.singleplayer.CharCellManager;
 import kstn.game.view.state.singleplayer.KeyboardManager;
 import kstn.game.view.state.singleplayer.LifeManager;
@@ -71,7 +71,7 @@ public class ViewSinglePlayerState extends ViewGameState {
 
     @Override
     public boolean onBack() {
-        stateManager.eventManager.queue(new TransiteToMenuState());
+        stateManager.eventManager.queue(new TransitToMenuState());
         return false;
     }
 

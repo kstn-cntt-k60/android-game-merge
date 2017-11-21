@@ -10,10 +10,10 @@ import kstn.game.logic.state.singleplayer.Player;
  * Created by qi on 13/11/2017.
  */
 
-public class TransiteToResultState extends BaseEventData {
+public class TransitToResultState extends BaseEventData {
     public final List<Player> playerList;
 
-    public TransiteToResultState(List<Player> playerList) {
+    public TransitToResultState(List<Player> playerList) {
         super(0);
         this.playerList = playerList;
     }

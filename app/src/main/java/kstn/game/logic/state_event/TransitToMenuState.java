@@ -7,19 +7,18 @@ import kstn.game.logic.event.EventType;
  * Created by qi on 13/11/2017.
  */
 
-public class TransiteToLoginState extends BaseEventData {
-
-    public TransiteToLoginState() {
+public class TransitToMenuState extends BaseEventData {
+    public TransitToMenuState() {
         super(0);
     }
 
     @Override
     public EventType getEventType() {
-        return StateEventType.LOGIN;
+        return StateEventType.MENU;
     }
 
     @Override
     public String getName() {
-        return "Login State";
+        return null;
     }
 }

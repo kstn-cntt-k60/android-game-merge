@@ -7,19 +7,19 @@ import kstn.game.logic.event.EventType;
  * Created by qi on 13/11/2017.
  */
 
-public class TransiteToRoomCreator extends BaseEventData {
+public class TransitToLoginState extends BaseEventData {
 
-    public TransiteToRoomCreator() {
+    public TransitToLoginState() {
         super(0);
     }
 
     @Override
     public EventType getEventType() {
-        return StateEventType.ROOM_CREATOR;
+        return StateEventType.LOGIN;
     }
 
     @Override
     public String getName() {
-        return null;
+        return "Login State";
     }
 }

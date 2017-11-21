@@ -7,14 +7,15 @@ import kstn.game.logic.event.EventType;
  * Created by qi on 13/11/2017.
  */
 
-public class TransiteToSinglePlayerState extends BaseEventData {
-    public TransiteToSinglePlayerState() {
+public class TransitToSingleResultState extends BaseEventData {
+
+    public TransitToSingleResultState() {
         super(0);
     }
 
     @Override
     public EventType getEventType() {
-        return StateEventType.SINGLE_PLAYER;
+        return StateEventType.SINGLE_RESULT;
     }
 
     @Override
