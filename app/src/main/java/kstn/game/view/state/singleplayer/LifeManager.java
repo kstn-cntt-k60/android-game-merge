@@ -7,8 +7,7 @@ import android.widget.Toast;
 import kstn.game.R;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
-import kstn.game.logic.playing_event.OutOfLifeEvent;
-import kstn.game.logic.playing_event.PlayerStateChangeEvent;
+import kstn.game.logic.playing_event.player.SinglePlayerStateChangeEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.view.state.ViewStateManager;
 
@@ -27,13 +26,12 @@ public class LifeManager {
         playerStateListener = new EventListener() {
             @Override
             public void onEvent(EventData event_) {
-                PlayerStateChangeEvent event = (PlayerStateChangeEvent)event_;
+                SinglePlayerStateChangeEvent event = (SinglePlayerStateChangeEvent)event_;
                 int oldLife = lifeCount;
                 setLife(event.getLife());
                 int newLife = lifeCount;
 
-                if (newLife == 0) {
-                    stateManager.eventManager.queue(new OutOfLifeEvent());
+                if (newLife == 0 && oldLife != 0) {
                     Toast.makeText(stateManager.activity,
                             "Bạn đã hết lượt chơi, bạn chỉ có thể đoán luôn ",
                             Toast.LENGTH_SHORT).show();

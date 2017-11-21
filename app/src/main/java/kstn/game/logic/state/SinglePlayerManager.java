@@ -14,12 +14,12 @@ import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.state.singleplayer.Player;
 import kstn.game.logic.model.QuestionModel;
-import kstn.game.logic.playing_event.AnswerEvent;
+import kstn.game.logic.playing_event.answer.AnswerEvent;
 import kstn.game.logic.playing_event.cell.CellChosenEvent;
-import kstn.game.logic.playing_event.GiveAnswerEvent;
+import kstn.game.logic.playing_event.answer.GiveAnswerEvent;
 import kstn.game.logic.playing_event.cell.GiveChooseCellEvent;
 import kstn.game.logic.playing_event.NextQuestionEvent;
-import kstn.game.logic.playing_event.PlayerStateChangeEvent;
+import kstn.game.logic.playing_event.player.SinglePlayerStateChangeEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.ConeResultEvent;
 import kstn.game.logic.playing_event.cell.OpenCellEvent;
@@ -253,7 +253,7 @@ public class SinglePlayerManager {
 
     private void notifyState() {
         stateManager.eventManager.trigger(
-                new PlayerStateChangeEvent(player.getScore(), player.getLife()));
+                new SinglePlayerStateChangeEvent(player.getScore(), player.getLife()));
     }
 
     private abstract class State {

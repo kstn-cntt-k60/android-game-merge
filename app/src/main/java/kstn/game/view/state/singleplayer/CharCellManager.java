@@ -17,7 +17,6 @@ import kstn.game.logic.playing_event.cell.CellChosenEvent;
 import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.cell.OpenCellEvent;
 import kstn.game.logic.playing_event.cell.OpenMultipleCellEvent;
-import kstn.game.logic.playing_event.OutOfLifeEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.view.state.ViewStateManager;
 

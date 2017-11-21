@@ -1,7 +1,8 @@
-package kstn.game.logic.playing_event;
+package kstn.game.logic.playing_event.answer;
 
 import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;
+import kstn.game.logic.playing_event.PlayingEventType;
 
 public class AnswerEvent extends BaseEventData {
     private char character;

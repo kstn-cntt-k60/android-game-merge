@@ -1,18 +1,13 @@
 package kstn.game.logic.cone;
 
-import kstn.game.logic.event.BaseEventData;
-import kstn.game.logic.event.EventType;
+import kstn.game.logic.event.GameEventData;
 
-/**
- * Created by qi on 08/11/2017.
- */
-
-public class ConeAccelerateEventData extends BaseEventData{
+public class ConeAccelerateEventData extends GameEventData {
     final private float angle;
     final private float speedStart ;
 
     public ConeAccelerateEventData(float angle, float speedStart) {
-        super(0);
+        super(ConeEventType.ACCELERATE);
         this.angle = angle;
         this.speedStart = speedStart;
     }
@@ -20,15 +15,6 @@ public class ConeAccelerateEventData extends BaseEventData{
     public float getAngle() {
         return angle;
     }
+
     public float getSpeedStart() { return speedStart; }
-
-    @Override
-    public EventType getEventType() {
-        return ConeEventType.ACCELERATE;
-    }
-
-    @Override
-    public String getName() {
-        return "";
-    }
 }

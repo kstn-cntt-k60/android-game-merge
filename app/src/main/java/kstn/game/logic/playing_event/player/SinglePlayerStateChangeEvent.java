@@ -1,13 +1,14 @@
-package kstn.game.logic.playing_event;
+package kstn.game.logic.playing_event.player;
 
 import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;
+import kstn.game.logic.playing_event.PlayingEventType;
 
-public class PlayerStateChangeEvent extends BaseEventData {
+public class SinglePlayerStateChangeEvent extends BaseEventData {
     private int score;
     private int life;
 
-    public PlayerStateChangeEvent(int score, int life) {
+    public SinglePlayerStateChangeEvent(int score, int life) {
         super(0);
         this.score = score;
         this.life = life;

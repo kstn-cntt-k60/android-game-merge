@@ -8,7 +8,7 @@ import kstn.game.R;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.playing_event.BonusEvent;
-import kstn.game.logic.playing_event.PlayerStateChangeEvent;
+import kstn.game.logic.playing_event.player.SinglePlayerStateChangeEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.view.state.ViewStateManager;
 
@@ -27,7 +27,7 @@ public class ScoreManager {
         playerStateListener = new EventListener() {
             @Override
             public void onEvent(EventData event_) {
-                PlayerStateChangeEvent event = (PlayerStateChangeEvent)event_;
+                SinglePlayerStateChangeEvent event = (SinglePlayerStateChangeEvent)event_;
                 int oldScore = score;
                 setScore(event.getScore());
                 int newScore = score;
