@@ -12,7 +12,7 @@ import android.widget.GridView;
 import java.util.ArrayList;
 
 import kstn.game.R;
-import kstn.game.logic.model.Player;
+import kstn.game.logic.state.singleplayer.Player;
 
 public class MutiPlayFragment extends Fragment {
 
@@ -20,6 +20,14 @@ public class MutiPlayFragment extends Fragment {
     public MutiPlayFragment() {
         // Required empty public constructor
     }
+    public static MutiPlayFragment newObj (Player user){
+        MutiPlayFragment fragment = new MutiPlayFragment();
+        Bundle bd = new Bundle();
+//        bd.putSerializable("user",user);
+        fragment.setArguments(bd); // luu gia tri
+        return fragment;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,11 +43,5 @@ public class MutiPlayFragment extends Fragment {
         Player user = (Player) getArguments().getSerializable("user");
         ArrayList<Player> data = new ArrayList<>();
         data.add(user);
-        // Player user2= new Player("thang",R.drawable.index3);
-        // Player user3 = new Player("Quý",R.drawable.index4);
-        // data.add(user2);
-        // data.add(user3);
-        // UserAdapter adapter = new UserAdapter(data,getActivity());
-        // gv.setAdapter(adapter);
     }
 }

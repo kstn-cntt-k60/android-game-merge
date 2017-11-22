@@ -15,6 +15,7 @@ import kstn.game.R;
 
 public class DialogManager {
     private Dialog hopthoai;
+
     public DialogManager(MainActivity activity, View v, int height){
         this.hopthoai = new Dialog(activity, R.style.Theme_Dialog);
         hopthoai.getWindow().requestFeature(Window.FEATURE_NO_TITLE);

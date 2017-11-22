@@ -3,8 +3,8 @@ package kstn.game.app.network;
 import kstn.game.app.event.LLBaseEventManager;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventType;
-import kstn.game.view.network.ClientFactory;
-import kstn.game.view.network.Endpoint;
+import kstn.game.logic.network.ClientFactory;
+import kstn.game.logic.network.Endpoint;
 
 import java.io.IOException;
 import java.net.InetAddress;

@@ -4,11 +4,11 @@ import kstn.game.app.event.LLBaseEventManager;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventType;
 import kstn.game.logic.event.TestEventType;
-import kstn.game.view.network.ClientFactory;
-import kstn.game.view.network.Connection;
-import kstn.game.view.network.Endpoint;
-import kstn.game.view.network.Server;
-import kstn.game.view.network.ServerFactory;
+import kstn.game.logic.network.ClientFactory;
+import kstn.game.logic.network.Connection;
+import kstn.game.logic.network.Endpoint;
+import kstn.game.logic.network.Server;
+import kstn.game.logic.network.ServerFactory;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 

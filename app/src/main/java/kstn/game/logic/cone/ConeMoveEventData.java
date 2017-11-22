@@ -1,17 +1,12 @@
 package kstn.game.logic.cone;
 
-import kstn.game.logic.event.BaseEventData;
-import kstn.game.logic.event.EventType;
+import kstn.game.logic.event.GameEventData;
 
-/**
- * Created by qi on 16/10/2017.
- */
-
-public class ConeMoveEventData extends BaseEventData {
+public class ConeMoveEventData extends GameEventData {
     final private float angle;
 
     public ConeMoveEventData(float angle) {
-        super(0);
+        super(ConeEventType.MOVE);
         this.angle = angle;
     }
 
@@ -19,13 +14,4 @@ public class ConeMoveEventData extends BaseEventData {
         return angle;
     }
 
-    @Override
-    public EventType getEventType() {
-        return ConeEventType.MOVE;
-    }
-
-    @Override
-    public String getName() {
-        return "";
-    }
 }

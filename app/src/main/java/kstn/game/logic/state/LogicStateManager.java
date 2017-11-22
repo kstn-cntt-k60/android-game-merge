@@ -1,9 +1,13 @@
 package kstn.game.logic.state;
 
+import android.util.Log;
+
+import kstn.game.MainActivity;
 import kstn.game.app.root.BaseTimeManager;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
+import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.process.ProcessManager;
 import kstn.game.logic.state_event.StateEventType;
 import kstn.game.view.asset.AssetManager;
@@ -41,6 +45,8 @@ public class LogicStateManager {
     public final BaseTimeManager timeManager;
     public final EventManager eventManager;
     public final AssetManager assetManager;
+    public final WifiInfo wifiInfo;
+    public final MainActivity mainActivity;
 
     private void listenToAllStateEvents() {
         eventManager.addListener(StateEventType.MENU, new EventListener() {
@@ -76,12 +82,16 @@ public class LogicStateManager {
                              ProcessManager processManager,
                              BaseTimeManager timeManager,
                              EventManager eventManager,
-                             AssetManager assetManager) {
+                             AssetManager assetManager,
+                             WifiInfo wifiInfo,
+                             MainActivity mainActivity) {
         this.root = root;
         this.processManager = processManager;
         this.timeManager = timeManager;
         this.eventManager = eventManager;
         this.assetManager = assetManager;
+        this.wifiInfo = wifiInfo;
+        this.mainActivity = mainActivity;
 
         // States
         menuState = new LogicMenuState(this);
@@ -103,5 +113,6 @@ public class LogicStateManager {
         currentState.exit();
         currentState = other;
         currentState.entry();
+        Log.i("CurrentState", currentState.toString());
     }
 }
