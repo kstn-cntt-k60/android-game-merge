@@ -1,25 +1,10 @@
 package kstn.game.logic.state_event;
 
-import kstn.game.logic.event.BaseEventData;
-import kstn.game.logic.event.EventType;
+import kstn.game.logic.event.GameEventData;
 
-/**
- * Created by qi on 13/11/2017.
- */
-
-public class TransitToLoginState extends BaseEventData {
+public class TransitToLoginState extends GameEventData {
 
     public TransitToLoginState() {
-        super(0);
-    }
-
-    @Override
-    public EventType getEventType() {
-        return StateEventType.LOGIN;
-    }
-
-    @Override
-    public String getName() {
-        return "Login State";
+        super(StateEventType.LOGIN);
     }
 }

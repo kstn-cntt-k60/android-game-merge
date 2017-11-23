@@ -2,6 +2,7 @@ package kstn.game.logic.cone;
 
 import android.graphics.Bitmap;
 import android.util.Log;
+
 import java.io.IOException;
 
 import kstn.game.app.root.BaseTimeManager;
@@ -25,16 +26,18 @@ public class Cone {
     private final BaseTimeManager timeManager;
     private ConeProcess coneProcess = null;
 
-    private float angleCone = 0;
+    private double angleCone = 0;
     private long timeToInitSpeed;
-    private float realSpeedCone = 0;
+    private double realSpeedCone = 0;
+    private double speed;
 
-    private float angleNeedle = 0;
+
+    private double angleNeedle = 0;
     // for handling touch events
-    private float baseAngle = 0;
-    private float startAngle = 0;
-    private float endAngle = 0;
-    private float touchStartX = 0;
+    private double baseAngle = 0;
+    private double startAngle = 0;
+    private double endAngle = 0;
+    private double touchStartX = 0;
 
 
     private boolean allowRotate = false;
@@ -42,14 +45,14 @@ public class Cone {
     private boolean isEnabled = true;
     private boolean isMoveEvent = false;
 
-    // Listeners
+
     private EventListener moveEventListener;
     private EventListener accelEventListener;
 
-    private final float xBias = 0.05f;
-    private final float minRadius = 0.2f;
-    private final float minVelocity = 180f; // degree / seconds
-    private final float decreaseAccel = -50f;
+    private final double xBias = 0.05f;
+    private final double minRadius = 0.2f;
+    private final double minVelocity = 180f; // degree / seconds
+    private final double decreaseAccel = -50f;
 
     public Cone(ProcessManager processManager_,
                 AssetManager assetManager,
@@ -93,9 +96,9 @@ public class Cone {
                 else if (allowRotate && event.getType() == View.TouchEvent.TOUCH_MOVE) {
                     isMoveEvent = true;
                     endAngle = event_to_angle(event);
-                    float touchCurrentX = event.getX();
+                    double touchCurrentX = event.getX();
                     if (touchCurrentX - xBias < touchStartX) {
-                        eventManager.trigger(new ConeMoveEventData(normalize(baseAngle + endAngle - startAngle)));
+                        eventManager.trigger(new ConeMoveEventData((float) normalize(baseAngle + endAngle - startAngle)));
                         touchStartX = touchCurrentX;
                     }
                     else {
@@ -106,13 +109,13 @@ public class Cone {
                     isMoveEvent = false;
                     long timeDelta = Cone.this.timeManager.getCurrentMillis() - timeToInitSpeed;
                     endAngle = event_to_angle(event);
-                    float speedStart;
+                    double speedStart;
                     speedStart = normalize(endAngle - startAngle) * 1000 / timeDelta;
 
                     if (speedStart >= minVelocity) {
                         eventManager.trigger(
                                 new ConeAccelerateEventData(
-                                        normalize(baseAngle + endAngle - startAngle), speedStart));
+                                        (float) normalize(baseAngle + endAngle - startAngle), (float) speedStart));
                     }
                 }
                 return true;
@@ -122,7 +125,7 @@ public class Cone {
         moveEventListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
-                float angle = ((ConeMoveEventData) event).getAngle();
+                double angle = ((ConeMoveEventData) event).getAngle();
                 Cone.this.rotate(angle);
             }
         };
@@ -131,44 +134,40 @@ public class Cone {
             @Override
             public void onEvent(EventData event) {
                 isRotating = true;
-                float angle = ((ConeAccelerateEventData) event).getAngle();
+                double angle = ((ConeAccelerateEventData) event).getAngle();
                 Cone.this.rotate(angle);
-                float speedStart = ((ConeAccelerateEventData) event).getSpeedStart();
+                double speedStart = ((ConeAccelerateEventData) event).getSpeedStart();
                 coneProcess = new ConeProcess(speedStart);
                 processManager.attachProcess(coneProcess);
             }
         };
 
-
     }
 
-    private void rotate(float angle) {
+    private void rotate(double angle) {
         if (isCollision()) {
-            angleNeedle = -15f;
-            needleView.rotate(angleNeedle);
-            // angleCone -= 0.5;
+            angleNeedle = -20;
         } else {
             if (isMoveEvent) {
-                angleNeedle += 2f;
+                angleNeedle += 2;
                 if (angleNeedle > 0.01) angleNeedle = 0;
-                needleView.rotate(angleNeedle);
             }else {
-                angleNeedle += 15 * realSpeedCone / 18000;
-                needleView.rotate(angleNeedle);
+                angleNeedle += 3;
                 if (angleNeedle > 0.01) {
                     angleNeedle = 0;
-                    needleView.rotate(angleNeedle);
                 }
             }
         }
+        needleView.rotate((float) angleNeedle);
+
         this.angleCone = angle;
-        coneView.rotate(angleCone);
+        coneView.rotate((float) angleCone);
     }
 
 
     public void entry() {
         angleCone = 0f;
-        coneView.rotate(angleCone);
+        coneView.rotate((float) angleCone);
         rootViewGroup.addView(coneView);
         rootViewGroup.addView(needleView);
         eventManager.addListener(ConeEventType.MOVE, moveEventListener);
@@ -178,6 +177,7 @@ public class Cone {
     public void exit() {
         if (coneProcess != null && coneProcess.isAlive())
             coneProcess.fail();
+
         rootViewGroup.removeView(coneView);
         rootViewGroup.removeView(needleView);
         eventManager.removeListener(ConeEventType.MOVE, moveEventListener);
@@ -208,14 +208,13 @@ public class Cone {
     }
 
     class ConeProcess extends Process {
-        private float speed;
         private int result;
-        private float endTime;
+        private double endTime;
         private long currentTime;
-        private float startAngle;
+        private double startAngle;
 
-        public ConeProcess(float speedStart) {
-            this.speed = speedStart;
+        public ConeProcess(double speedStart) {
+            speed = speedStart;
             this.endTime = - speed * 1000 / decreaseAccel;
             currentTime = 0;
             startAngle = Cone.this.angleCone;
@@ -224,22 +223,16 @@ public class Cone {
         @Override
         public void onUpdate(long deltaMs) {
             currentTime += deltaMs;
-            realSpeedCone = speed + decreaseAccel * currentTime / (1000 * 1000);
+            realSpeedCone = speed + decreaseAccel * currentTime / ( 1000);
             if (currentTime <= endTime) {
-                float angle = startAngle + speed * currentTime / 1000.0f
+                double angle = startAngle + speed * currentTime / 1000.0f
                         + decreaseAccel * currentTime * currentTime / (2 * 1000 * 1000);
                 Cone.this.rotate(normalize(angle));
             }
             else {
-                float angle = startAngle + speed * endTime / 1000.0f
+                double angle = startAngle + speed * endTime / 1000.0f
                         + decreaseAccel * endTime * endTime / (2 * 1000 * 1000);
                 Cone.this.rotate(normalize(angle));
-                /*
-                if (isCollision()) {
-                        angleCone -= 2f;
-                        coneView.rotate(angleCone);
-                }
-                */
                 succeed();
             }
         }
@@ -247,7 +240,7 @@ public class Cone {
         @Override
         public void onSuccess() {
             angleNeedle = 0;
-            needleView.rotate(angleNeedle);
+            needleView.rotate((float) angleNeedle);
             result = getResult(angleCone);
             eventManager.trigger(new ConeStopEventData(result));
             Cone.this.isRotating = false;
@@ -264,39 +257,39 @@ public class Cone {
         }
     }
 
-    public static float normalize(float angle) {
+    public static double normalize(double angle) {
         double ratio = angle / 360f;
         angle -= Math.floor(ratio) * 360;
         return angle;
     }
 
-    private float event_to_angle(View.TouchEvent event) {
-        float len = distance_from_event(event);
-        float cosP = event.getY() / len;
-        float phi = (float) Math.acos(cosP);
+    private double event_to_angle(View.TouchEvent event) {
+        double len = distance_from_event(event);
+        double cosP = event.getY() / len;
+        double phi = (double) Math.acos(cosP);
         if (event.getX() > 0) {
             phi = -phi;
         }
-        return normalize((float)Math.toDegrees(phi));
+        return normalize((double)Math.toDegrees(phi));
     }
 
-    private float distance_from_event(View.TouchEvent event) {
-        float x = event.getX();
-        float y = event.getY();
-        float d2 = x*x + y*y;
-        return (float)Math.sqrt(d2);
+    private double distance_from_event(View.TouchEvent event) {
+        double x = event.getX();
+        double y = event.getY();
+        double d2 = x*x + y*y;
+        return (double)Math.sqrt(d2);
     }
 
     private boolean isCollision() {
         int result = getResult(angleCone);
-        float angleCollison = -angleNeedle + ((result + 1)*18 - 9 - angleCone) ;
+        double angleCollison = -angleNeedle + ((result + 1)*18 - 9 - angleCone) ;
         if ( angleCollison < 1.0f) {
             return true;
         }
         return false;
     }
 
-    private int getResult(float angle) {
+    private int getResult(double angle) {
         return (int)(((int)angle - 9)/18f + 1)%20;
     }
 }

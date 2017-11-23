@@ -1,4 +1,4 @@
-package kstn.game.view.state.multiplayer;
+package kstn.game.logic.state;
 
 public interface IEntryExit {
 

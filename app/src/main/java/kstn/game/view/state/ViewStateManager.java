@@ -1,15 +1,10 @@
 package kstn.game.view.state;
-import android.util.Log;
 
 import kstn.game.MainActivity;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.state_event.StateEventType;
-
-/**
- * Created by qi on 09/11/2017.
- */
 
 public class ViewStateManager {
     private ViewGameState prevState = null;
@@ -21,7 +16,7 @@ public class ViewStateManager {
     public final ViewGameState createdRoomsState = null;
     public final ViewGameState roomCreatorState = null;
     public final ViewGameState waitRoomState = null;
-    public final ViewGameState playingState = null;
+    public final ViewPlayingState playingState = null;
     public final ViewGameState resultState = null;
 
     // Single Player
@@ -86,12 +81,11 @@ public class ViewStateManager {
         return prevState;
     }
 
-    public void makeTransitionTo(ViewGameState other) {
+    private void makeTransitionTo(ViewGameState other) {
         prevState = currentState;
         currentState.exit();
         currentState = other;
         currentState.entry();
-        Log.i("CurrentState", currentState.toString());
     }
 
     public boolean onBack() {

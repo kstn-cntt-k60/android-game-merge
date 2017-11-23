@@ -1,40 +1,32 @@
 package kstn.game.logic.state;
 
-import android.graphics.Bitmap;
-
-import java.io.IOException;
-
+import kstn.game.logic.state.multiplayer.ThisPlayer;
 import kstn.game.view.screen.ImageView;
+import kstn.game.view.screen.ViewManager;
 
 public class LogicLoginState extends LogicGameState {
-    private ImageView backgroundView;
+    private final ImageView backgroundView;
+    private final ViewManager root;
+    private final ThisPlayer thisPlayer;
 
-    public LogicLoginState(LogicStateManager stateManager) {
-        super(stateManager);
-
-        Bitmap background = null;
-        try {
-            background = stateManager.assetManager.getBitmap("bg.jpg");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        backgroundView = new ImageView(0, 0, 2, 1.8f * 2, background);
+    public LogicLoginState(ViewManager root,
+                           ImageView backgroundView,
+                           ThisPlayer thisPlayer) {
+        super(null);
+        this.root = root;
+        this.thisPlayer = thisPlayer;
+        this.backgroundView = backgroundView;
     }
 
     @Override
     public void entry() {
-        Bitmap background = null;
-        try {
-            background = stateManager.assetManager.getBitmap("cute.png");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ImageView backgroundView = new ImageView(0, 0, 2, 1.8f * 2, background);
-        stateManager.root.addView(backgroundView);
+        thisPlayer.entry();
+        root.addView(backgroundView);
     }
 
     @Override
     public void exit() {
-        stateManager.root.removeView(backgroundView);
+        root.removeView(backgroundView);
+        thisPlayer.exit();
     }
 }

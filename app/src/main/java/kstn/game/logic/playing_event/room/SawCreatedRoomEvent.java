@@ -1,5 +1,9 @@
 package kstn.game.logic.playing_event.room;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.GameEventData;
 import kstn.game.logic.playing_event.PlayingEventType;
 
@@ -25,5 +29,13 @@ public class SawCreatedRoomEvent extends GameEventData {
 
     public int getPlayerCount() {
         return playerCount;
+    }
+
+    public static class Parser implements EventData.Parser {
+
+        @Override
+        public EventData parseFrom(InputStream in) throws IOException {
+            return null;
+        }
     }
 }

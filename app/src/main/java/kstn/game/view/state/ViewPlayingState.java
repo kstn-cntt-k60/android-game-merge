@@ -5,8 +5,8 @@ import java.util.List;
 
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.state_event.TransitToCreatedRoomsState;
-import kstn.game.view.state.multiplayer.IEntryExit;
-import kstn.game.view.state.multiplayer.IThisPlayer;
+import kstn.game.logic.state.IEntryExit;
+import kstn.game.logic.state.multiplayer.IThisPlayer;
 
 public class ViewPlayingState extends ViewGameState {
     private final EventManager eventManager;
