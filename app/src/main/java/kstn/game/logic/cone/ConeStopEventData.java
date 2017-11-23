@@ -1,16 +1,11 @@
 package kstn.game.logic.cone;
 
-import kstn.game.logic.event.BaseEventData;
-import kstn.game.logic.event.EventType;
+import kstn.game.logic.event.GameEventData;
 
-/**
- * Created by qi on 08/11/2017.
- */
-
-public class ConeStopEventData extends BaseEventData {
+public class ConeStopEventData extends GameEventData {
     protected int result;
     public ConeStopEventData(int result) {
-        super(0);
+        super(ConeEventType.STOP);
         this.result = result;
     }
 
@@ -18,13 +13,4 @@ public class ConeStopEventData extends BaseEventData {
         return result;
     }
 
-    @Override
-    public EventType getEventType() {
-        return ConeEventType.STOP;
-    }
-
-    @Override
-    public String getName() {
-        return "";
-    }
 }

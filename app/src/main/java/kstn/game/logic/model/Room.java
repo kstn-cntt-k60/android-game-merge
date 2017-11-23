@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kstn.game.logic.state.LogicStateManager;
+import kstn.game.logic.state.singleplayer.Player;
 
 public class Room {
     private LogicStateManager stateManager;

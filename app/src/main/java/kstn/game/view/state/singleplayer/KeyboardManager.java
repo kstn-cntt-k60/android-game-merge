@@ -1,7 +1,6 @@
 package kstn.game.view.state.singleplayer;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -10,13 +9,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import kstn.game.MainActivity;
 import kstn.game.R;
-import kstn.game.logic.cone.Cone;
 import kstn.game.logic.cone.ConeResult;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
-import kstn.game.logic.playing_event.AnswerEvent;
+import kstn.game.logic.playing_event.answer.AnswerEvent;
 import kstn.game.logic.playing_event.ConeResultEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.guess.CancelGuessEvent;
