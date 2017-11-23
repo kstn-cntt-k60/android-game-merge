@@ -6,6 +6,7 @@ import kstn.game.logic.event.EventManager;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.room.RemoveCreatedRoomEvent;
 import kstn.game.logic.playing_event.room.SawCreatedRoomEvent;
+import kstn.game.logic.state.IEntryExit;
 
 public class CreatedRoomsProxy implements IEntryExit {
     private final EventManager eventManager;

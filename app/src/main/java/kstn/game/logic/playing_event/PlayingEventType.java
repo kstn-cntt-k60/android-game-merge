@@ -38,6 +38,7 @@ public enum PlayingEventType implements EventType {
     PLAYER_SET_NAME(17303),
     PLAYER_DEACTIVATE(17304),
     NEXT_PLAYER(17305),
+    SET_THIS_PLAYER(17306),
 
     SAW_CREATED_ROOM(17400),
     REMOVE_CREATED_ROOM(17401),

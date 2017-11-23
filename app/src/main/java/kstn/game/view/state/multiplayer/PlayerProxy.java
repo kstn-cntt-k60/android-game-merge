@@ -10,6 +10,7 @@ import kstn.game.logic.playing_event.player.PlayerSetAvatarEvent;
 import kstn.game.logic.playing_event.player.PlayerSetNameEvent;
 import kstn.game.logic.playing_event.player.PlayerSetScoreEvent;
 import kstn.game.logic.playing_event.player.SetNumberPlayerEvent;
+import kstn.game.logic.state.IEntryExit;
 
 public class PlayerProxy implements IEntryExit {
     private final IPlayerManager playerManager;

@@ -1,4 +1,4 @@
-package kstn.game.logic.state;
+package kstn.game.logic.state.singleplayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,7 @@ import kstn.game.logic.cone.ConeStopEventData;
 import kstn.game.logic.data.QuestionManagerDAO;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
+import kstn.game.logic.state.LogicStateManager;
 import kstn.game.logic.state.singleplayer.Player;
 import kstn.game.logic.model.QuestionModel;
 import kstn.game.logic.playing_event.answer.AnswerEvent;
@@ -67,6 +68,7 @@ public class SinglePlayerManager {
             isOpenedCells[i] = false;
 
         isGuessed = false;
+        rightGuess = false;
     }
 
     private QuestionManagerDAO questionManager;
@@ -300,6 +302,7 @@ public class SinglePlayerManager {
 
             if (!isGuessed && allOpen) {
                 requestGuess();
+                cone.enable();
                 return;
             }
 
@@ -309,6 +312,7 @@ public class SinglePlayerManager {
                 } else {
                     requestGuess();
                 }
+                cone.enable();
                 return;
             }
 

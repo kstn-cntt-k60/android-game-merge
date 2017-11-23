@@ -1,6 +1,9 @@
 package kstn.game.logic.state;
 
+import android.graphics.Bitmap;
 import android.util.Log;
+
+import java.io.IOException;
 
 import kstn.game.MainActivity;
 import kstn.game.app.root.BaseTimeManager;
@@ -9,13 +12,12 @@ import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.process.ProcessManager;
+import kstn.game.logic.state.multiplayer.ThisPlayer;
+import kstn.game.logic.state.singleplayer.LogicSinglePlayerState;
 import kstn.game.logic.state_event.StateEventType;
 import kstn.game.view.asset.AssetManager;
+import kstn.game.view.screen.ImageView;
 import kstn.game.view.screen.ViewGroup;
-
-/**
- * Created by qi on 09/11/2017.
- */
 
 public class LogicStateManager {
     private LogicGameState prevState;
@@ -97,8 +99,21 @@ public class LogicStateManager {
         menuState = new LogicMenuState(this);
         singlePlayerState = new LogicSinglePlayerState(this);
         singleResultState = new LogicSingleResultState(this);
-        loginState = new LogicLoginState(this);
 
+        Bitmap background = null;
+        try {
+            background = assetManager.getBitmap("bg.jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ImageView backgroundView =
+                new ImageView(0, 0, 2, 1.8f * 2, background);
+
+        loginState = new LogicLoginState(
+                root, backgroundView, new ThisPlayer(eventManager));
+
+
+        // ----------------------------------
         listenToAllStateEvents();
         currentState = menuState;
         currentState.entry();
@@ -113,6 +128,5 @@ public class LogicStateManager {
         currentState.exit();
         currentState = other;
         currentState.entry();
-        Log.i("CurrentState", currentState.toString());
     }
 }

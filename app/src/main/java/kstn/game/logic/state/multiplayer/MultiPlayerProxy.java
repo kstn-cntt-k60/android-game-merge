@@ -1,4 +1,4 @@
-package kstn.game.logic.state;
+package kstn.game.logic.state.multiplayer;
 
 public class MultiPlayerProxy {
 

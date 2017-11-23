@@ -1,4 +1,4 @@
-package kstn.game.logic.state;
+package kstn.game.logic.state.singleplayer;
 
 import android.graphics.Bitmap;
 
@@ -11,6 +11,9 @@ import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.sync.LogicPlayingReadyEvent;
 import kstn.game.logic.playing_event.sync.PlayingReadyEvent;
 import kstn.game.logic.playing_event.sync.ViewPlayingReadyEvent;
+import kstn.game.logic.state.LogicGameState;
+import kstn.game.logic.state.LogicStateManager;
+import kstn.game.logic.state.singleplayer.SinglePlayerManager;
 import kstn.game.view.screen.ImageView;
 
 public class LogicSinglePlayerState extends LogicGameState {

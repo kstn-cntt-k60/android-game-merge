@@ -8,8 +8,8 @@ import org.mockito.ArgumentCaptor;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.state_event.TransitToCreatedRoomsState;
-import kstn.game.view.state.multiplayer.IEntryExit;
-import kstn.game.view.state.multiplayer.IThisPlayer;
+import kstn.game.logic.state.IEntryExit;
+import kstn.game.logic.state.multiplayer.IThisPlayer;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
