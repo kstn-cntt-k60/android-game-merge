@@ -1,7 +1,6 @@
 package kstn.game.logic.state;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import java.io.IOException;
 
@@ -10,6 +9,9 @@ import kstn.game.app.root.BaseTimeManager;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
+import kstn.game.logic.network.ClientFactory;
+import kstn.game.logic.network.ServerFactory;
+import kstn.game.logic.network.UDPManagerFactory;
 import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.process.ProcessManager;
 import kstn.game.logic.state.multiplayer.ThisPlayer;
@@ -28,7 +30,7 @@ public class LogicStateManager {
     // Multiplayer
 
     public final LogicLoginState loginState;
-    public final LogicGameState createdRoomsState = null;
+    public final LogicCreatedRoomsState createdRoomsState;
     public final LogicGameState roomCreatorState = null;
     public final LogicGameState waitRoomState = null;
     public final LogicGameState playingState = null;
@@ -49,6 +51,9 @@ public class LogicStateManager {
     public final AssetManager assetManager;
     public final WifiInfo wifiInfo;
     public final MainActivity mainActivity;
+    private final UDPManagerFactory udpFactory;
+    private final ServerFactory serverFactory;
+    private final ClientFactory clientFactory;
 
     private void listenToAllStateEvents() {
         eventManager.addListener(StateEventType.MENU, new EventListener() {
@@ -77,7 +82,12 @@ public class LogicStateManager {
                 makeTransitionTo(loginState);
             }
         });
-
+        eventManager.addListener(StateEventType.CREATED_ROOMS, new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                makeTransitionTo(createdRoomsState);
+            }
+        });
     }
 
     public LogicStateManager(ViewGroup root,
@@ -86,7 +96,10 @@ public class LogicStateManager {
                              EventManager eventManager,
                              AssetManager assetManager,
                              WifiInfo wifiInfo,
-                             MainActivity mainActivity) {
+                             MainActivity mainActivity,
+                             UDPManagerFactory udpFactory,
+                             ServerFactory serverFactory,
+                             ClientFactory clientFactory) {
         this.root = root;
         this.processManager = processManager;
         this.timeManager = timeManager;
@@ -94,6 +107,9 @@ public class LogicStateManager {
         this.assetManager = assetManager;
         this.wifiInfo = wifiInfo;
         this.mainActivity = mainActivity;
+        this.udpFactory = udpFactory;
+        this.serverFactory = serverFactory;
+        this.clientFactory = clientFactory;
 
         // States
         menuState = new LogicMenuState(this);
@@ -112,6 +128,8 @@ public class LogicStateManager {
         loginState = new LogicLoginState(
                 root, backgroundView, new ThisPlayer(eventManager));
 
+        createdRoomsState = new LogicCreatedRoomsState(eventManager, root,
+                backgroundView, wifiInfo, udpFactory, processManager);
 
         // ----------------------------------
         listenToAllStateEvents();

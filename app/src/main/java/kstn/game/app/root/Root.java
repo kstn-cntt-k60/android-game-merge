@@ -12,17 +12,18 @@ import kstn.game.app.event.UIEventManager;
 import kstn.game.app.network.BaseClientFactory;
 import kstn.game.app.network.BaseServerFactory;
 import kstn.game.app.network.BaseWifiInfo;
+import kstn.game.app.network.UDPBaseManagerFactory;
 import kstn.game.app.process.BaseProcessManager;
 import kstn.game.app.screen.GameAnimationView;
 import kstn.game.app.screen.GameViewClient;
 import kstn.game.app.screen.ShaderProgram;
-import kstn.game.logic.cone.Cone;
 import kstn.game.logic.event.EventManager;
+import kstn.game.logic.network.ClientFactory;
+import kstn.game.logic.network.ServerFactory;
+import kstn.game.logic.network.UDPManagerFactory;
 import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.state.LogicStateManager;
 import kstn.game.view.asset.AssetManager;
-import kstn.game.logic.network.ClientFactory;
-import kstn.game.logic.network.ServerFactory;
 import kstn.game.view.screen.ViewGroup;
 import kstn.game.view.state.ViewStateManager;
 
@@ -37,12 +38,12 @@ public class Root implements GameViewClient {
     private BaseProcessManager processManager;
     private LLBaseEventManager llEventManager;
     private AssetManager assetManager;
+    private UDPManagerFactory udpManagerFactory;
+    private ServerFactory serverFactory;
+    private ClientFactory clientFactory;
 
     private BaseTimeManager timeManager;
     private long previousTimeStamp = 0;
-
-    /*private Cone gameCone;
-    private Needle gameNeedle;*/
 
     private ViewStateManager viewStateManager = null;
     private LogicStateManager logicStateManager = null;
@@ -74,9 +75,10 @@ public class Root implements GameViewClient {
         eventManager = new BaseEventManager();
         processManager = new BaseProcessManager();
 
-        ClientFactory clientFactory = new BaseClientFactory(llEventManager);
-        ServerFactory serverFactory = new BaseServerFactory(llEventManager);
         WifiInfo wifiInfo = new BaseWifiInfo(activity);
+        udpManagerFactory = new UDPBaseManagerFactory(llEventManager);
+        clientFactory = new BaseClientFactory(llEventManager);
+        serverFactory = new BaseServerFactory(llEventManager);
 
         timeManager = new BaseTimeManager(llEventManager);
         uiEventManager = new UIEventManager(activity, llEventManager, eventManager);
@@ -87,7 +89,8 @@ public class Root implements GameViewClient {
         viewStateManager = new ViewStateManager(this.activity, uiEventManager);
         logicStateManager = new LogicStateManager(
                 viewGroup, processManager, timeManager,
-                eventManager, assetManager, wifiInfo, activity);
+                eventManager, assetManager, wifiInfo, activity,
+                udpManagerFactory, serverFactory, clientFactory);
     }
 
     @Override
