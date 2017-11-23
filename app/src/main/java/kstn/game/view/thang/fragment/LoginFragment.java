@@ -13,7 +13,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import kstn.game.R;
-import kstn.game.view.thang.activity.MyAdapter;
+import kstn.game.view.thang.adapter.MyAdapter;
 
 public class LoginFragment extends Fragment {
 
