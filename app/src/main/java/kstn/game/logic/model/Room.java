@@ -7,6 +7,7 @@ import kstn.game.logic.state.LogicStateManager;
 import kstn.game.logic.state.singleplayer.Player;
 
 public class Room {
+
     private LogicStateManager stateManager;
     private String roomName;
     private List<Player> playerList;
@@ -18,6 +19,26 @@ public class Room {
         this.roomName = roomName;
         playerList = new ArrayList<>();
         currentLevel = 0;
+    }
+
+    public LogicStateManager getStateManager() {
+        return stateManager;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public List<Player> getPlayerList() {
+        return playerList;
+    }
+
+    public Player getFinalPlayer() {
+        return finalPlayer;
+    }
+
+    public int getCurrentLevel() {
+        return currentLevel;
     }
 
     public void exit() {
