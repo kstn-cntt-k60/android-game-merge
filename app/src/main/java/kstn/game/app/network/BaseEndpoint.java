@@ -8,8 +8,8 @@ import kstn.game.app.network.events.TCPConnectionError;
 import kstn.game.app.network.events.TCPReceiveData;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventType;
-import kstn.game.view.network.Connection;
-import kstn.game.view.network.Endpoint;
+import kstn.game.logic.network.Connection;
+import kstn.game.logic.network.Endpoint;
 
 import java.io.*;
 import java.net.Socket;

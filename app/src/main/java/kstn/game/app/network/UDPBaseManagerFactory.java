@@ -3,8 +3,8 @@ package kstn.game.app.network;
 import kstn.game.app.event.LLBaseEventManager;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventType;
-import kstn.game.view.network.UDPManager;
-import kstn.game.view.network.UDPManagerFactory;
+import kstn.game.logic.network.UDPManager;
+import kstn.game.logic.network.UDPManagerFactory;
 
 import java.io.IOException;
 import java.util.Map;

@@ -7,7 +7,7 @@ import kstn.game.app.event.LLListener;
 import kstn.game.app.network.events.UDPReceiveData;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventType;
-import kstn.game.view.network.UDPManager;
+import kstn.game.logic.network.UDPManager;
 
 import java.io.*;
 import java.net.DatagramPacket;

@@ -7,8 +7,8 @@ import kstn.game.app.event.LLListener;
 import kstn.game.app.network.events.TCPServerAcceptError;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventType;
-import kstn.game.view.network.Endpoint;
-import kstn.game.view.network.Server;
+import kstn.game.logic.network.Endpoint;
+import kstn.game.logic.network.Server;
 
 import java.io.IOException;
 import java.net.ServerSocket;

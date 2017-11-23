@@ -1,4 +1,4 @@
-package kstn.game.view.network;
+package kstn.game.logic.network;
 
 public interface Server {
     Endpoint getEndpoint();

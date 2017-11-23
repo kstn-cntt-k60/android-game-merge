@@ -6,10 +6,6 @@ import java.io.IOException;
 
 import kstn.game.view.screen.ImageView;
 
-/**
- * Created by qi on 14/11/2017.
- */
-
 public class LogicLoginState extends LogicGameState {
     private ImageView backgroundView;
 
