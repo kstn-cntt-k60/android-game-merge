@@ -54,6 +54,8 @@ public class TestLLBaseEventManager {
         InOrder order2 = inOrder(listener3, listener1);
 
         manager.update();
+        manager.update();
+        manager.update();
 
         order.verify(listener1, times(1)).onEvent(event1);
         order.verify(listener2, times(1)).onEvent(event1);

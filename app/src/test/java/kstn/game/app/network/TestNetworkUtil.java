@@ -66,4 +66,15 @@ public class TestNetworkUtil {
         assertArrayEquals(result, array);
         assertEquals(result.length, 3);
     }
+
+    @Test
+    public void bytesToInt() {
+        byte[] data = new byte[4];
+        data[0] = 0x12;
+        data[1] = 0x34;
+        data[2] = (byte)0xab;
+        data[3] = (byte)0x98;
+
+        assertEquals(0x1234ab98, NetworkUtil.bytesToInt(data));
+    }
 }

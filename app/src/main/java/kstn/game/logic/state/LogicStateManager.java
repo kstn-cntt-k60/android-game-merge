@@ -1,7 +1,6 @@
 package kstn.game.logic.state;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import java.io.IOException;
 
@@ -11,7 +10,6 @@ import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.network.ClientFactory;
-import kstn.game.logic.network.IUDPForwarder;
 import kstn.game.logic.network.ServerFactory;
 import kstn.game.logic.network.UDPForwarder;
 import kstn.game.logic.network.UDPManagerFactory;
@@ -34,7 +32,7 @@ public class LogicStateManager {
     // Multiplayer
 
     public final LogicLoginState loginState;
-    public final LogicGameState createdRoomsState = null;
+    public final LogicCreatedRoomsState createdRoomsState = null;
     public final LogicGameState roomCreatorState = null;
     public final LogicGameState waitRoomState = null;
     public final LogicGameState playingState = null;
@@ -83,7 +81,12 @@ public class LogicStateManager {
                 makeTransitionTo(loginState);
             }
         });
-
+        eventManager.addListener(StateEventType.CREATED_ROOMS, new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                makeTransitionTo(createdRoomsState);
+            }
+        });
     }
 
     public LogicStateManager(ViewGroup root,
@@ -118,7 +121,7 @@ public class LogicStateManager {
         ImageView backgroundView =
                 new ImageView(0, 0, 2, 1.8f * 2, background);
 
-        IUDPForwarder udpForwarder = new UDPForwarder(
+        UDPForwarder udpForwarder = new UDPForwarder(
                 eventManager, udpManagerFactory, wifiInfo);
 
         ThisPlayer thisPlayer = new ThisPlayer(eventManager);

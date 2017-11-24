@@ -13,8 +13,8 @@ public class ViewStateManager {
 
     // Multiplayer
     public final ViewLoginState loginState;
-    public final ViewGameState createdRoomsState = null;
-    public final ViewGameState roomCreatorState = null;
+    public final ViewGameState createdRoomsState ;
+    public final ViewGameState roomCreatorState;
     public final ViewGameState waitRoomState = null;
     public final ViewPlayingState playingState = null;
     public final ViewGameState resultState = null;
@@ -59,6 +59,18 @@ public class ViewStateManager {
                 makeTransitionTo(loginState);
             }
         });
+        eventManager.addListener(StateEventType.CREATED_ROOMS, new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                makeTransitionTo(createdRoomsState);
+            }
+        });
+        eventManager.addListener(StateEventType.ROOM_CREATOR, new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                makeTransitionTo(roomCreatorState);
+            }
+        });
     }
 
     public ViewStateManager(MainActivity activity,
@@ -71,7 +83,8 @@ public class ViewStateManager {
         singlePlayerState = new ViewSinglePlayerState(this);
         singleResultState = new ViewSingleResultState(this);
         loginState = new ViewLoginState(this);
-
+        createdRoomsState = new ViewCreatedRoomsState(this);
+        roomCreatorState = new ViewRoomCreatorState(this);
         listenToAllStateEvents();
         currentState = menuState;
         currentState.entry();

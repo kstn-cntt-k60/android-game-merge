@@ -18,15 +18,13 @@ import kstn.game.app.process.BaseProcessManager;
 import kstn.game.app.screen.GameAnimationView;
 import kstn.game.app.screen.GameViewClient;
 import kstn.game.app.screen.ShaderProgram;
-import kstn.game.logic.cone.Cone;
 import kstn.game.logic.event.EventManager;
-import kstn.game.logic.network.UDPManager;
-import kstn.game.logic.network.UDPManagerFactory;
 import kstn.game.logic.network.WifiInfo;
-import kstn.game.logic.state.LogicStateManager;
-import kstn.game.view.asset.AssetManager;
 import kstn.game.logic.network.ClientFactory;
 import kstn.game.logic.network.ServerFactory;
+import kstn.game.logic.network.UDPManagerFactory;
+import kstn.game.logic.state.LogicStateManager;
+import kstn.game.view.asset.AssetManager;
 import kstn.game.view.screen.ViewGroup;
 import kstn.game.view.state.ViewStateManager;
 
@@ -44,9 +42,6 @@ public class Root implements GameViewClient {
 
     private BaseTimeManager timeManager;
     private long previousTimeStamp = 0;
-
-    /*private Cone gameCone;
-    private Needle gameNeedle;*/
 
     private ViewStateManager viewStateManager = null;
     private LogicStateManager logicStateManager = null;

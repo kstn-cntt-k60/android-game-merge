@@ -1,8 +1,10 @@
 package kstn.game.app.network;
 
-import kstn.game.app.event.LLBaseEventManager;
+import android.util.Log;
+
 import kstn.game.app.event.LLBaseEventType;
 import kstn.game.app.event.LLEventData;
+import kstn.game.app.event.LLEventManager;
 import kstn.game.app.event.LLListener;
 import kstn.game.app.network.events.UDPReceiveData;
 import kstn.game.logic.event.EventData;
@@ -23,6 +25,7 @@ import static kstn.game.app.network.NetworkUtil.bigEndianToByte;
 public class UDPBaseManager implements UDPManager, Runnable {
 	private int port;
 	int sendPort; // normal is equal to port, but may be different when test
+    private int hostIpAddress;
 	private int broadcastAddr;
 	private byte[] tmpAddr = new byte[4];
 
@@ -34,15 +37,16 @@ public class UDPBaseManager implements UDPManager, Runnable {
 
 	// Only use in game thread
 	private ByteArrayOutputStream broadcastByteArray = new ByteArrayOutputStream();
-	private final LLBaseEventManager llEventManager;
+	private final LLEventManager llEventManager;
 
     private OnReceiveDataListener receiveDataListener = null;
 
 	UDPBaseManager(int hostIP, int port, int mask,
                    Map<EventType, EventData.Parser> parserMap,
-                   LLBaseEventManager llEventManager) throws SocketException {
+                   LLEventManager llEventManager) throws SocketException {
 		this.port = port;
 		this.sendPort = port;
+		this.hostIpAddress = hostIP;
 		this.llEventManager = llEventManager;
 
         this.llEventManager.addListener(LLBaseEventType.UDP_RECEIVE_DATA,
@@ -63,6 +67,7 @@ public class UDPBaseManager implements UDPManager, Runnable {
 
 		this.broadcastAddr = (hostIP & mask) | ~mask;
 		socket = new DatagramSocket(port);
+		socket.setBroadcast(true);
 		thread = new Thread(this);
 		this.running = true;
 		thread.start();
@@ -95,15 +100,23 @@ public class UDPBaseManager implements UDPManager, Runnable {
 	public void run() {
 		while (this.running) {
 			byte[] data = new byte[1024];
-			DatagramPacket receive = new DatagramPacket(data, data.length);
+			DatagramPacket packet = new DatagramPacket(data, data.length);
 			try {
-				socket.receive(receive);
+				socket.receive(packet);
 			} catch (IOException e) {
-			// Simply ignore
-				continue;
+				continue; // Simply ignore
 			}
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
+
+			byte[] bytesIp = packet.getAddress().getAddress();
+			int ipAddress = NetworkUtil.bytesToInt(bytesIp);
+			if (hostIpAddress == ipAddress && port == packet.getPort())
+			    continue;
+
+            ByteArrayInputStream inputStream =
+                    new ByteArrayInputStream(packet.getData(),
+                            packet.getOffset(), packet.getLength());
             DataInputStream eventIdReader = new DataInputStream(inputStream);
+
             int eventId;
             try {
                 eventId = eventIdReader.readInt();
@@ -111,7 +124,8 @@ public class UDPBaseManager implements UDPManager, Runnable {
                 continue;
             }
             EventData.Parser parser = parserMap.get(eventId);
-            assert (parser != null);
+            if (parser == null)
+                throw new RuntimeException("Can't find parser");
 
             EventData event;
             try {

@@ -11,7 +11,7 @@ import kstn.game.logic.event.EventType;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.room.SawCreatedRoomEvent;
 
-public class UDPForwarder implements IUDPForwarder {
+public class UDPForwarder implements UDPManager.OnReceiveDataListener {
     private final EventManager eventManager;
     private final UDPManagerFactory factory;
     private final WifiInfo wifiInfo;
@@ -39,21 +39,25 @@ public class UDPForwarder implements IUDPForwarder {
         };
     }
 
-    private void sendEvent(EventData event) {
+    public void sendEvent(EventData event) {
         if (manager != null)
             manager.broadcast(event);
     }
 
     @Override
+    public void onReceiveData(EventData event) {
+        eventManager.trigger(event);
+    }
+
     public void listen() throws IOException {
         manager = factory.create(
                 wifiInfo.getIP(), port, wifiInfo.getMask(), parserMap);
         if (manager != null) {
+            manager.setReceiveDataListener(this);
             eventManager.addListener(PlayingEventType.SAW_CREATED_ROOM, listener);
         }
     }
 
-    @Override
     public void shutdown() {
         if (manager != null) {
             eventManager.removeListener(PlayingEventType.SAW_CREATED_ROOM, listener);

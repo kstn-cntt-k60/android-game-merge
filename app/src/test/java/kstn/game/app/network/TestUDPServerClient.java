@@ -56,6 +56,8 @@ public class TestUDPServerClient {
 		Thread.currentThread().sleep(50);
 
 		llBaseEventManager.update();
+		llBaseEventManager.update();
+		llBaseEventManager.update();
 
 		ArgumentCaptor<EventData> captor = ArgumentCaptor.forClass(EventData.class);
 

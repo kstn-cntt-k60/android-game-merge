@@ -3,7 +3,6 @@ package kstn.game.view.state.multiplayer;
 import org.junit.Test;
 
 import kstn.game.app.event.BaseEventManager;
-import kstn.game.logic.event.EventManager;
 import kstn.game.logic.playing_event.room.RemoveCreatedRoomEvent;
 import kstn.game.logic.playing_event.room.SawCreatedRoomEvent;
 
@@ -19,11 +18,11 @@ public class CreatedRoomsProxyTest {
     public CreatedRoomsProxyTest() {
         eventManager = new BaseEventManager();
         proxy = new CreatedRoomsProxy(eventManager, createdRooms);
-        proxy.entry();
     }
 
     @Test
     public void shouldCallAddRoomBeforeExit() {
+        proxy.entry();
         eventManager.queue(new SawCreatedRoomEvent(1233, "abc", 3));
         eventManager.update();
         verify(createdRooms, times(1))
@@ -32,6 +31,7 @@ public class CreatedRoomsProxyTest {
 
     @Test
     public void shouldNotCallAddRoomAfterExit() {
+        proxy.entry();
         proxy.exit();
         eventManager.queue(new SawCreatedRoomEvent(1233, "abc", 3));
         eventManager.update();
@@ -41,6 +41,7 @@ public class CreatedRoomsProxyTest {
 
     @Test
     public void shouldCallRemoveRoomBeforeExit() {
+        proxy.entry();
         eventManager.trigger(new RemoveCreatedRoomEvent(1555));
         verify(createdRooms, times(1))
                 .remoteRoom(1555);
@@ -48,6 +49,7 @@ public class CreatedRoomsProxyTest {
 
     @Test
     public void shouldNotCallRemoveRoomAfterExit() {
+        proxy.entry();
         proxy.exit();
         eventManager.trigger(new RemoveCreatedRoomEvent(1555));
         verify(createdRooms, times(0))

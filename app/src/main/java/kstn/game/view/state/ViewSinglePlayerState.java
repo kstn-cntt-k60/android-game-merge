@@ -9,9 +9,9 @@ import kstn.game.logic.state_event.TransitToMenuState;
 import kstn.game.view.state.singleplayer.CharCellManager;
 import kstn.game.view.state.singleplayer.KeyboardManager;
 import kstn.game.view.state.singleplayer.LifeManager;
+import kstn.game.view.state.singleplayer.PlayFragment;
 import kstn.game.view.state.singleplayer.ScoreManager;
 import kstn.game.view.state.singleplayer.SongManager;
-import kstn.game.view.state.singleplayer.PlayFragment;
 
 public class ViewSinglePlayerState extends ViewGameState {
     private PlayFragment fragment;
@@ -50,7 +50,6 @@ public class ViewSinglePlayerState extends ViewGameState {
         fragment.setLifeManager(lifeManager);
         fragment.setCharCellManager(charCellManager);
         fragment.setKeyboardManager(keyboardManager);
-
         stateManager.activity.addFragment(fragment);
         fragment.entry();
 

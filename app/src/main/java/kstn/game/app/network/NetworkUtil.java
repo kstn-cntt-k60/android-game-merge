@@ -35,4 +35,17 @@ public class NetworkUtil {
         return result;
     }
 
+    public static int bytesToInt(byte[] data) {
+        int result = 0;
+        result |= (data[0] & 0xff);
+        result <<= 8;
+        result |= (data[1] & 0xff);
+        result <<= 8;
+        result |= (data[2] & 0xff);
+        result <<= 8;
+        result |= (data[3] & 0xff);
+
+        return result;
+    }
+
 }

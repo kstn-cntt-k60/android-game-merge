@@ -10,7 +10,9 @@ public class ViewLoginState extends ViewGameState {
     }
     @Override
     public void entry() {
-        stateManager.activity.addFragment(new LoginFragment());
+        LoginFragment fragment= new LoginFragment();
+        fragment.setStateManager(stateManager);
+        stateManager.activity.addFragment(fragment);
     }
 
     @Override

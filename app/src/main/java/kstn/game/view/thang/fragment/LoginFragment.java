@@ -13,11 +13,19 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import kstn.game.R;
-import kstn.game.view.thang.activity.MyAdapter;
+import kstn.game.logic.state_event.TransitToCreatedRoomsState;
+import kstn.game.view.state.ViewStateManager;
+import kstn.game.view.thang.adapter.MyAdapter;
 
 public class LoginFragment extends Fragment {
+    private ViewStateManager stateManager;
+
+    public void setStateManager(ViewStateManager stateManager) {
+        this.stateManager = stateManager;
+    }
 
     public LoginFragment() {}
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,12 +56,13 @@ public class LoginFragment extends Fragment {
                 int avatarId = data.get(vpPager.getCurrentItem());
                 String playerName;
                 if (nameEditText.getText().toString().isEmpty()) {
-                    playerName = "GUEST" + (System.currentTimeMillis()/1000);
+                    playerName = "GUEST" + (int)((System.currentTimeMillis()/10000));
                 }
                 else {
                     playerName = nameEditText.getText().toString();
                 }
                 Toast.makeText(getActivity(), playerName,Toast.LENGTH_SHORT).show();
+                stateManager.eventManager.queue(new TransitToCreatedRoomsState(playerName,avatarId ));
             }
         });
     }
