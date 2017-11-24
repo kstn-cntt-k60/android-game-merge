@@ -1,5 +1,10 @@
 package kstn.game.logic.playing_event.room;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.GameEventData;
 import kstn.game.logic.playing_event.PlayingEventType;
 
@@ -25,5 +30,24 @@ public class SawCreatedRoomEvent extends GameEventData {
 
     public int getPlayerCount() {
         return playerCount;
+    }
+
+    @Override
+    public void serialize(OutputStream out) throws IOException {
+        RoomMessage.SawCreatedRoom msg = RoomMessage.SawCreatedRoom.newBuilder()
+                .setIpAddress(ipAddress)
+                .setRoomName(roomName)
+                .setPlayerCount(playerCount)
+                .build();
+        msg.writeDelimitedTo(out);
+    }
+
+    public static class Parser implements EventData.Parser {
+        @Override
+        public EventData parseFrom(InputStream in) throws IOException {
+            RoomMessage.SawCreatedRoom msg = RoomMessage.SawCreatedRoom.parseDelimitedFrom(in);
+            return new SawCreatedRoomEvent(
+                    msg.getIpAddress(), msg.getRoomName(), msg.getPlayerCount());
+        }
     }
 }

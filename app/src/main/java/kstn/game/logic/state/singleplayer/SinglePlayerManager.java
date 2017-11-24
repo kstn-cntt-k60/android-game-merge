@@ -13,7 +13,6 @@ import kstn.game.logic.data.QuestionManagerDAO;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.state.LogicStateManager;
-import kstn.game.logic.state.singleplayer.Player;
 import kstn.game.logic.model.QuestionModel;
 import kstn.game.logic.playing_event.answer.AnswerEvent;
 import kstn.game.logic.playing_event.cell.CellChosenEvent;
@@ -32,7 +31,7 @@ import kstn.game.logic.state_event.TransitToMenuState;
 public class SinglePlayerManager {
     private LogicStateManager stateManager;
 
-    private Player player;
+    private SinglePlayerModel player;
 
     private String answer;
     private String nonSpaceAnswer;
@@ -219,7 +218,7 @@ public class SinglePlayerManager {
     }
 
     public void entry() {
-        player = new Player();
+        player = new SinglePlayerModel();
 
         currentState = rotatableState;
         currentState.entry();

@@ -4,16 +4,16 @@ import java.util.List;
 
 import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventType;
-import kstn.game.logic.state.singleplayer.Player;
+import kstn.game.logic.state.singleplayer.SinglePlayerModel;
 
 /**
  * Created by qi on 13/11/2017.
  */
 
 public class TransitToPlayingState extends BaseEventData {
-    public final List<Player> playerList;
+    public final List<SinglePlayerModel> playerList;
 
-    public TransitToPlayingState(List<Player> playerList) {
+    public TransitToPlayingState(List<SinglePlayerModel> playerList) {
         super(0);
         this.playerList = playerList;
     }

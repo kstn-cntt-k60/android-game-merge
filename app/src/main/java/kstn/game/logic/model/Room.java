@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kstn.game.logic.state.LogicStateManager;
-import kstn.game.logic.state.singleplayer.Player;
+import kstn.game.logic.state.singleplayer.SinglePlayerModel;
 
 public class Room {
     private LogicStateManager stateManager;
     private String roomName;
-    private List<Player> playerList;
-    private Player finalPlayer;
+    private List<SinglePlayerModel> playerList;
+    private SinglePlayerModel finalPlayer;
     private int currentLevel;
 
     public Room(LogicStateManager stateManager, String roomName) {

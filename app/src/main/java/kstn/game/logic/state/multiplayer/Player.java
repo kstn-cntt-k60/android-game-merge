@@ -1,25 +1,25 @@
 package kstn.game.logic.state.multiplayer;
 
 public class Player {
-    private int score = 0;
-    private boolean isActive = true;
+    private int ipAddress;
+    private String name;
+    private int avatarId;
 
-    public Player() {
+    public Player(int ipAddress, String name, int avatarId) {
+        this.ipAddress = ipAddress;
+        this.name = name;
+        this.avatarId = avatarId;
     }
 
-    int getScore() {
-        return score;
+    public int getIpAddress() {
+        return ipAddress;
     }
 
-    void setScore(int value) {
-        score = value;
+    public String getName() {
+        return name;
     }
 
-    boolean isActive() {
-        return this.isActive;
-    }
-
-    void deactivate() {
-        isActive = false;
+    public int getAvatarId() {
+        return avatarId;
     }
 }

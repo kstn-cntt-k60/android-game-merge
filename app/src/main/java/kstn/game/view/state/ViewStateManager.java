@@ -19,7 +19,7 @@ public class ViewStateManager {
     public final ViewPlayingState playingState = null;
     public final ViewGameState resultState = null;
 
-    // Single Player
+    // Single SinglePlayerModel
     public final ViewSinglePlayerState singlePlayerState;
     public final ViewSingleResultState singleResultState;
 

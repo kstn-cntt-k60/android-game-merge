@@ -153,7 +153,7 @@ public class Cone {
                 if (angleNeedle > 0.01) angleNeedle = 0;
                 needleView.rotate(angleNeedle);
             }else {
-                angleNeedle += 15 * realSpeedCone / 18000;
+                angleNeedle += 20 * realSpeedCone / 18000;
                 needleView.rotate(angleNeedle);
                 if (angleNeedle > 0.01) {
                     angleNeedle = 0;

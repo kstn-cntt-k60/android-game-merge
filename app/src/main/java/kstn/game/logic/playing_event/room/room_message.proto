@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option java_package = "kstn.game.logic.playing_event.room";
+
+message SawCreatedRoom {
+    int32 ipAddress = 1;
+    string roomName = 2;
+    int32 playerCount = 3;
+}

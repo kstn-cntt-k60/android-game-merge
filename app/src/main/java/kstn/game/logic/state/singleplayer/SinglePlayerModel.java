@@ -1,10 +1,10 @@
 package kstn.game.logic.state.singleplayer;
 
-public class Player {
+public class SinglePlayerModel {
     private int score;
     private int life;
 
-    public Player() {
+    public SinglePlayerModel() {
         score = 0;
         life = 4;
     }

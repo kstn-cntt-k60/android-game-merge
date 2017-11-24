@@ -40,7 +40,7 @@ public class LoginFragment extends Fragment {
         data.add(R.drawable.index3);
         data.add(R.drawable.index4);
 
-       // final Player user =new Player("thang",R.drawable.index2);
+       // final SinglePlayerModel user =new SinglePlayerModel("thang",R.drawable.index2);
         Button btnDau = (Button) view.findViewById(R.id.btnDau);
         btnDau.setOnClickListener(new View.OnClickListener() {
             @Override

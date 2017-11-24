@@ -1,6 +1,7 @@
 package kstn.game.app.root;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -12,12 +13,15 @@ import kstn.game.app.event.UIEventManager;
 import kstn.game.app.network.BaseClientFactory;
 import kstn.game.app.network.BaseServerFactory;
 import kstn.game.app.network.BaseWifiInfo;
+import kstn.game.app.network.UDPBaseManagerFactory;
 import kstn.game.app.process.BaseProcessManager;
 import kstn.game.app.screen.GameAnimationView;
 import kstn.game.app.screen.GameViewClient;
 import kstn.game.app.screen.ShaderProgram;
 import kstn.game.logic.cone.Cone;
 import kstn.game.logic.event.EventManager;
+import kstn.game.logic.network.UDPManager;
+import kstn.game.logic.network.UDPManagerFactory;
 import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.state.LogicStateManager;
 import kstn.game.view.asset.AssetManager;
@@ -67,13 +71,13 @@ public class Root implements GameViewClient {
             ));
         } catch (IOException e) {
             e.printStackTrace();
-            assert (false);
         }
 
         llEventManager = new LLBaseEventManager();
         eventManager = new BaseEventManager();
         processManager = new BaseProcessManager();
 
+        UDPManagerFactory udpManagerFactory = new UDPBaseManagerFactory(llEventManager);
         ClientFactory clientFactory = new BaseClientFactory(llEventManager);
         ServerFactory serverFactory = new BaseServerFactory(llEventManager);
         WifiInfo wifiInfo = new BaseWifiInfo(activity);
@@ -87,11 +91,14 @@ public class Root implements GameViewClient {
         viewStateManager = new ViewStateManager(this.activity, uiEventManager);
         logicStateManager = new LogicStateManager(
                 viewGroup, processManager, timeManager,
-                eventManager, assetManager, wifiInfo, activity);
+                eventManager, assetManager, wifiInfo,
+                udpManagerFactory, serverFactory, clientFactory,
+                activity);
     }
 
     @Override
 	public void onDrawFrame() {
+        Log.i("Draw", "draw" + Thread.currentThread().getId());
         llEventManager.update();
         eventManager.update();
 
@@ -112,18 +119,21 @@ public class Root implements GameViewClient {
     }
 	
 	public void shutdown() {
+        Log.i("shutdown", " shutdown");
         processManager.abortAllProcesses(true);
         eventManager.abortAllEvents();
 	}
 
 	@Override
     public void onResume() {
+        Log.i("resume", "resume" + Thread.currentThread().getId());
         long timeStamp = System.currentTimeMillis();
         llEventManager.queue(new RootResumeEvent(timeStamp));
     }
 
     @Override
 	public void onPause() {
+        Log.i("Pause", "pause" + Thread.currentThread().getId());
         long timeStamp = System.currentTimeMillis();
         llEventManager.queue(new RootPauseEvent(timeStamp));
     }
