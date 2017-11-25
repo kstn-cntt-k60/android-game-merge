@@ -5,11 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kstn.game.logic.event.EventData;
+import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.event.EventType;
-import kstn.game.logic.network.UDPManager;
-import kstn.game.logic.network.UDPManagerFactory;
-import kstn.game.logic.network.WifiInfo;
+import kstn.game.logic.network.UDPForwarder;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.room.RemoveCreatedRoomEvent;
 import kstn.game.logic.playing_event.room.SawCreatedRoomEvent;
@@ -23,17 +22,11 @@ public class LogicCreatedRoomsState extends LogicGameState {
     private final EventManager eventManager;
     private final ViewManager root;
     private final View backgroundView;
-    private final ProcessManager processManager;
 
-    private final WifiInfo wifiInfo;
-    private final UDPManagerFactory udpFactory;
-    private UDPManager udpManager;
+    private final UDPForwarder forwarder;
+    private final EventListener roomListener;
 
     Map<Integer, ExpireProcess> expireProcessMap = new HashMap<>();
-
-    final Map<EventType, EventData.Parser> parserMap = new HashMap<>();
-
-    final UDPManager.OnReceiveDataListener onReceiveDataListener;
 
     private class ExpireProcess extends Process {
         private int ipAddress;
@@ -80,61 +73,49 @@ public class LogicCreatedRoomsState extends LogicGameState {
     public LogicCreatedRoomsState(EventManager eventManager,
                                   ViewManager root,
                                   View backgroundView,
-                                  WifiInfo wifiInfo,
-                                  UDPManagerFactory udpFactory,
-                                  ProcessManager processManager) {
+                                  UDPForwarder forwarder,
+                                  final ProcessManager processManager) {
         super(null);
         this.eventManager = eventManager;
         this.root = root;
         this.backgroundView = backgroundView;
 
-        this.wifiInfo = wifiInfo;
-        this.udpFactory = udpFactory;
-        this.processManager = processManager;
+        this.forwarder = forwarder;
 
-        onReceiveDataListener = new UDPManager.OnReceiveDataListener() {
+        roomListener = new EventListener() {
             @Override
-            public void onReceiveData(EventData event) {
-                onUDPEvent(event);
+            public void onEvent(EventData event) {
+                SawCreatedRoomEvent event1 = (SawCreatedRoomEvent) event;
+                ExpireProcess process = expireProcessMap.get(event1.getIpAddress());
+                if (process == null) {
+                    process = new ExpireProcess(event1.getIpAddress());
+                    expireProcessMap.put(event1.getIpAddress(), process);
+                    processManager.attachProcess(process);
+                }
+                else {
+                    process.reset();
+                }
             }
         };
-
-        parserMap.put(PlayingEventType.SAW_CREATED_ROOM, new SawCreatedRoomEvent.Parser());
     }
-
-    void onUDPEvent(EventData event) {
-        eventManager.trigger(event);
-        SawCreatedRoomEvent event1 = (SawCreatedRoomEvent) event;
-        ExpireProcess process = expireProcessMap.get(event1.getIpAddress());
-        if (process == null) {
-            process = new ExpireProcess(event1.getIpAddress());
-            expireProcessMap.put(event1.getIpAddress(), process);
-            processManager.attachProcess(process);
-        }
-        else {
-            process.reset();
-        }
-    }
-
 
     @Override
     public void entry() {
         expireProcessMap.clear();
         root.addView(backgroundView);
-        udpManager = null;
         try {
-            udpManager = udpFactory.create(wifiInfo.getIP(), 2017, wifiInfo.getMask(), parserMap);
-            udpManager.setReceiveDataListener(onReceiveDataListener);
+            forwarder.listen();
         } catch (IOException e) {
             eventManager.queue(new TransitToLoginState());
             return;
         }
+        eventManager.addListener(PlayingEventType.SAW_CREATED_ROOM, roomListener);
     }
 
     @Override
     public void exit() {
-        if (udpManager != null)
-            udpManager.shutdown();
+        eventManager.removeListener(PlayingEventType.SAW_CREATED_ROOM, roomListener);
+        forwarder.shutdown();
         root.removeView(backgroundView);
     }
 }

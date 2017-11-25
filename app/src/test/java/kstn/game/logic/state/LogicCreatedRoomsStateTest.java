@@ -10,6 +10,7 @@ import kstn.game.app.event.BaseEventManager;
 import kstn.game.app.process.BaseProcessManager;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
+import kstn.game.logic.network.UDPForwarder;
 import kstn.game.logic.network.UDPManager;
 import kstn.game.logic.network.UDPManagerFactory;
 import kstn.game.logic.network.WifiInfo;
@@ -20,6 +21,7 @@ import kstn.game.view.screen.View;
 import kstn.game.view.screen.ViewManager;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -31,10 +33,8 @@ public class LogicCreatedRoomsStateTest {
     private ViewManager root = mock(ViewManager.class);
     private View view = mock(View.class);
 
-    private final WifiInfo wifiInfo = mock(WifiInfo.class);
-    private final UDPManagerFactory factory = mock(UDPManagerFactory.class);
+    private final UDPForwarder forwarder = mock(UDPForwarder.class);
     private final ProcessManager processManager;
-    private final UDPManager udpManager = mock(UDPManager.class);
 
     private final int hostIP = 3344;
     private final int port = 2017;
@@ -43,15 +43,11 @@ public class LogicCreatedRoomsStateTest {
     public LogicCreatedRoomsStateTest() {
         processManager = new BaseProcessManager();
         state = new LogicCreatedRoomsState(eventManager,
-                root, view, wifiInfo, factory, processManager);
-
-        when(wifiInfo.getIP()).thenReturn(hostIP);
-        when(wifiInfo.getMask()).thenReturn(mask);
+                root, view, forwarder, processManager);
     }
 
     @Test
     public void shouldAddViewOnEntryAndRemoveOnExit() throws IOException {
-        when(factory.create(hostIP, port, mask, state.parserMap)).thenReturn(udpManager);
         verify(root, times(0)).addView(view);
         state.entry();
         verify(root, times(1)).addView(view);
@@ -62,38 +58,23 @@ public class LogicCreatedRoomsStateTest {
     }
 
     @Test
-    public void shouldCallCreateUDPManagerOnEntry() throws IOException {
-        when(factory.create(hostIP, port, mask, state.parserMap)).thenReturn(udpManager);
+    public void shouldCallForwarderListenOnEntry() throws IOException {
         state.entry();
-        verify(factory, times(1)).create(hostIP, port, mask, state.parserMap);
+        verify(forwarder, times(1)).listen();
     }
 
     @Test
-    public void shouldCallShutdownUDPManagerOnEntry() throws IOException {
-        when(factory.create(hostIP, port, mask, state.parserMap)).thenReturn(udpManager);
+    public void shouldCallShutdownForwarderOnExit() {
         state.entry();
+        verify(forwarder, times(0)).shutdown();
         state.exit();
-        verify(udpManager, times(1)).shutdown();
-    }
-
-    @Test
-    public void shouldListenToBroadcastedEventsOnEntry() throws IOException {
-        when(factory.create(hostIP, port, mask, state.parserMap)).thenReturn(udpManager);
-        state.entry();
-        verify(udpManager, times(1))
-                .setReceiveDataListener(state.onReceiveDataListener);
-        state.exit();
-    }
-
-    @Test
-    public void parserMapShouldHaveSawCreatedRoomEvent() {
-        EventData.Parser parser = state.parserMap.get(PlayingEventType.SAW_CREATED_ROOM);
-        Assert.assertNotNull(parser);
+        verify(forwarder, times(1)).shutdown();
     }
 
     @Test
     public void shouldGoBackLoginStateWhenUDPFactoryThrow() throws IOException {
-        when(factory.create(hostIP, port, mask, state.parserMap)).thenThrow(new IOException());
+        doThrow(new IOException()).when(forwarder).listen();
+
         EventListener toLoginListener = mock(EventListener.class);
         eventManager.addListener(StateEventType.LOGIN, toLoginListener);
         state.entry();
