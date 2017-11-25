@@ -1,7 +1,5 @@
 package kstn.game.app.network;
 
-import android.util.Log;
-
 import kstn.game.app.event.LLBaseEventType;
 import kstn.game.app.event.LLEventData;
 import kstn.game.app.event.LLEventManager;
@@ -40,6 +38,7 @@ public class UDPBaseManager implements UDPManager, Runnable {
 	private final LLEventManager llEventManager;
 
     private OnReceiveDataListener receiveDataListener = null;
+    private final LLListener receiveDataLLListener;
 
 	UDPBaseManager(int hostIP, int port, int mask,
                    Map<EventType, EventData.Parser> parserMap,
@@ -49,16 +48,17 @@ public class UDPBaseManager implements UDPManager, Runnable {
 		this.hostIpAddress = hostIP;
 		this.llEventManager = llEventManager;
 
-        this.llEventManager.addListener(LLBaseEventType.UDP_RECEIVE_DATA,
-                new LLListener() {
-                    @Override
-                    public void onEvent(LLEventData event) {
-                        EventData eventData = ((UDPReceiveData) event).getEvent();
-                        if (receiveDataListener != null) {
-                            receiveDataListener.onReceiveData(eventData);
-                        }
-                    }
-                });
+
+        receiveDataLLListener = new LLListener() {
+            @Override
+            public void onEvent(LLEventData event) {
+                EventData eventData = ((UDPReceiveData) event).getEvent();
+                if (receiveDataListener != null) {
+                    receiveDataListener.onReceiveData(eventData);
+                }
+            }
+        };
+        this.llEventManager.addListener(LLBaseEventType.UDP_RECEIVE_DATA, receiveDataLLListener);
 
 		// Copy parser maps
 		for (Map.Entry<EventType, EventData.Parser> entry: parserMap.entrySet()) {
@@ -75,6 +75,7 @@ public class UDPBaseManager implements UDPManager, Runnable {
 
 	@Override
 	public void shutdown() {
+        this.llEventManager.removeListener(LLBaseEventType.UDP_RECEIVE_DATA, receiveDataLLListener);
         try {
             broadcastByteArray.close();
         } catch (IOException e) {

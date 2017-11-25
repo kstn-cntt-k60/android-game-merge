@@ -63,16 +63,16 @@ public class TestTCPServerClient {
         } catch (InterruptedException e) {
         }
 
+        serverLLManager.update();
+        clientLLManager.update();
+
         server.shutdown();
         endpoint1.shutdown();
         endpoint2.shutdown();
 
-        serverLLManager.update();
-        clientLLManager.update();
-
         ArgumentCaptor<EventData> captor1 = ArgumentCaptor.forClass(EventData.class);
 
-        verify(connectionErrorListener, atLeast(2)).onConnectionError((Connection) any());
+        verify(connectionErrorListener, times(0)).onConnectionError((Connection) any());
         verify(receiveDataListener, times(1)).onReceiveData(captor1.capture());
         TestEventData1 receiveEvent = (TestEventData1) captor1.getValue();
         assertEquals(receiveEvent.id(), event.id());

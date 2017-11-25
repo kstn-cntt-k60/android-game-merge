@@ -1,8 +1,8 @@
 package kstn.game.app.network;
 
-import kstn.game.app.event.LLBaseEventManager;
 import kstn.game.app.event.LLBaseEventType;
 import kstn.game.app.event.LLEventData;
+import kstn.game.app.event.LLEventManager;
 import kstn.game.app.event.LLListener;
 import kstn.game.app.network.events.TCPConnectionError;
 import kstn.game.app.network.events.TCPReceiveData;
@@ -20,31 +20,38 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BaseEndpoint implements Endpoint {
     private final List<BaseConnection> connections = new CopyOnWriteArrayList<>();
-    private final LLBaseEventManager llEventManager;
+    private final LLEventManager llEventManager;
     private final Map<Integer, EventData.Parser> parserMap = new HashMap<>();
 
     private OnConnectionErrorListener connectionErrorListener = null;
     private OnReceiveDataListener receiveDataListener = null;
 
+    private final LLListener connectionErrorLLListener;
+    private final LLListener receiveDataLLListener;
 
-    public BaseEndpoint(LLBaseEventManager llEventManager,
+
+    public BaseEndpoint(LLEventManager llEventManager,
                         Map<EventType, EventData.Parser> parserMap) {
         this.llEventManager = llEventManager;
         for (Map.Entry<EventType, EventData.Parser> entry: parserMap.entrySet()) {
             this.parserMap.put(entry.getKey().getValue(), entry.getValue());
         }
 
-        this.llEventManager.addListener(LLBaseEventType.TCP_CONNECTION_ERROR, new LLListener() {
+        connectionErrorLLListener = new LLListener() {
             @Override
             public void onEvent(LLEventData event) {
                 Connection connection = ((TCPConnectionError) event).getConnection();
+                BaseConnection baseConnection = (BaseConnection)connection;
+                baseConnection.shutdown();
+                removeConnection(baseConnection);
+
                 if (connectionErrorListener != null) {
                     connectionErrorListener.onConnectionError(connection);
                 }
             }
-        });
+        };
 
-        this.llEventManager.addListener(LLBaseEventType.TCP_RECEIVE_DATA, new LLListener() {
+        receiveDataLLListener = new LLListener() {
             @Override
             public void onEvent(LLEventData event) {
                 EventData eventData = ((TCPReceiveData) event).getEvent();
@@ -52,7 +59,10 @@ public class BaseEndpoint implements Endpoint {
                     receiveDataListener.onReceiveData(eventData);
                 }
             }
-        });
+        };
+
+        llEventManager.addListener(LLBaseEventType.TCP_CONNECTION_ERROR, connectionErrorLLListener);
+        llEventManager.addListener(LLBaseEventType.TCP_RECEIVE_DATA, receiveDataLLListener);
     }
 
     class BaseConnection implements Connection, Runnable {
@@ -169,14 +179,22 @@ public class BaseEndpoint implements Endpoint {
 
     @Override
     public void shutdown() {
+        llEventManager.removeListener(LLBaseEventType.TCP_CONNECTION_ERROR, connectionErrorLLListener);
+        llEventManager.removeListener(LLBaseEventType.TCP_RECEIVE_DATA, receiveDataLLListener);
+
         for (BaseConnection conn: connections) {
             conn.shutdown();
         }
+        connections.clear();
     }
 
     void addConnection(Socket socket) {
         BaseConnection connection = new BaseConnection(socket);
         connections.add(connection);
         connection.start();
+    }
+
+    void removeConnection(BaseConnection connection) {
+        connections.remove(connection);
     }
 }

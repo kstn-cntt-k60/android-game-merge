@@ -21,6 +21,14 @@ public class LLBaseEventManager implements LLEventManager {
         list.add(listener);
     }
 
+    @Override
+    public void removeListener(LLEventType eventType, LLListener listener) {
+        List<LLListener> list = listenerMap.get(eventType);
+        if (list != null) {
+            list.remove(listener);
+        }
+    }
+
     // Thread Safe
     @Override
     public void queue(LLEventData event) {

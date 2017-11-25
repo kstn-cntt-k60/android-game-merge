@@ -93,16 +93,23 @@ public class TestTCPServerMultipleClient {
         clientEndpoint2.send(testEvent2);
         Thread.currentThread().sleep(50);
 
+        serverEventManager.update();
+        clientEventManager1.update();
+        clientEventManager2.update();
+        clientEventManager3.update();
+
         server.shutdown();
         serverEndpoint.shutdown();
-        clientEndpoint1.shutdown();
-        clientEndpoint2.shutdown();
-        clientEndpoint3.shutdown();
+        Thread.currentThread().sleep(20);
 
         serverEventManager.update();
         clientEventManager1.update();
         clientEventManager2.update();
         clientEventManager3.update();
+
+        clientEndpoint1.shutdown();
+        clientEndpoint2.shutdown();
+        clientEndpoint3.shutdown();
 
         ArgumentCaptor<EventData> serverCaptor = ArgumentCaptor.forClass(EventData.class);
         ArgumentCaptor<EventData> clientCaptor1 = ArgumentCaptor.forClass(EventData.class);
@@ -126,8 +133,8 @@ public class TestTCPServerMultipleClient {
         assertEventEquals(clientEventList3.get(0), testEvent1);
         assertEventEquals(clientEventList3.get(1), testEvent2);
 
-        verify(serverAcceptError, times(1)).onAcceptError();
-        verify(connectionErrorServer, times(3)).onConnectionError((Connection) any());
+        verify(serverAcceptError, times(0)).onAcceptError();
+        verify(connectionErrorServer, times(0)).onConnectionError((Connection) any());
         verify(connectionErrorClient1, times(1)).onConnectionError((Connection) any());
         verify(connectionErrorClient2, times(1)).onConnectionError((Connection) any());
         verify(connectionErrorClient3, times(1)).onConnectionError((Connection) any());

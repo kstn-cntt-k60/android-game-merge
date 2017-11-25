@@ -1,8 +1,8 @@
 package kstn.game.app.network;
 
-import kstn.game.app.event.LLBaseEventManager;
 import kstn.game.app.event.LLBaseEventType;
 import kstn.game.app.event.LLEventData;
+import kstn.game.app.event.LLEventManager;
 import kstn.game.app.event.LLListener;
 import kstn.game.app.network.events.TCPServerAcceptError;
 import kstn.game.logic.event.EventData;
@@ -19,27 +19,30 @@ public class BaseServer implements Server, Runnable {
     private final int backlog = 4;
 
     private final BaseEndpoint endpoint;
-    private final LLBaseEventManager llEventManager;
+    private final LLEventManager llEventManager;
     private ServerSocket serverSocket = null;
     private Thread thread = null;
     private volatile boolean running = false;
 
     private OnAcceptErrorListener acceptErrorListener = null;
 
-    BaseServer(int port, LLBaseEventManager llEventManager,
+    private final LLListener acceptErrorLLListener;
+
+    BaseServer(int port, LLEventManager llEventManager,
                Map<EventType, EventData.Parser> parserMap)
             throws IOException {
         this.llEventManager = llEventManager;
 
-        llEventManager.addListener(LLBaseEventType.TCP_SERVER_ACCEPT_ERROR,
-                new LLListener() {
-                    @Override
-                    public void onEvent(LLEventData event) {
-                        if (acceptErrorListener != null) {
-                            acceptErrorListener.onAcceptError();
-                        }
-                    }
-                });
+        acceptErrorLLListener = new LLListener() {
+            @Override
+            public void onEvent(LLEventData event) {
+                if (acceptErrorListener != null) {
+                    acceptErrorListener.onAcceptError();
+                }
+            }
+        };
+
+        llEventManager.addListener(LLBaseEventType.TCP_SERVER_ACCEPT_ERROR, acceptErrorLLListener);
 
         this.endpoint = new BaseEndpoint(llEventManager, parserMap);
         serverSocket = new ServerSocket(port, backlog);
@@ -59,6 +62,7 @@ public class BaseServer implements Server, Runnable {
 
     @Override
     public void shutdown() {
+        llEventManager.removeListener(LLBaseEventType.TCP_SERVER_ACCEPT_ERROR, acceptErrorLLListener);
         this.running = false;
         if (serverSocket == null)
             return;

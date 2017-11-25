@@ -16,11 +16,12 @@ public class UDPForwarder implements UDPManager.OnReceiveDataListener {
     private final UDPManagerFactory factory;
     private final WifiInfo wifiInfo;
     private final int port = 2017;
-    private UDPManager manager;
-    private Map<EventType, EventData.Parser> parserMap = new HashMap<>();
+    UDPManager manager;
+    Map<EventType, EventData.Parser> parserMap = new HashMap<>();
     private EventListener listener;
+    private boolean isReceiving = false;
 
-    public UDPForwarder(final EventManager eventManager,
+    public UDPForwarder(EventManager eventManager,
                         UDPManagerFactory factory,
                         WifiInfo wifiInfo) {
         this.eventManager = eventManager;
@@ -34,7 +35,8 @@ public class UDPForwarder implements UDPManager.OnReceiveDataListener {
         listener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
-                sendEvent(event);
+                if (!isReceiving)
+                    sendEvent(event);
             }
         };
     }
@@ -46,13 +48,16 @@ public class UDPForwarder implements UDPManager.OnReceiveDataListener {
 
     @Override
     public void onReceiveData(EventData event) {
+        isReceiving = true;
         eventManager.trigger(event);
+        isReceiving = false;
     }
 
     public void listen() throws IOException {
         manager = factory.create(
                 wifiInfo.getIP(), port, wifiInfo.getMask(), parserMap);
         if (manager != null) {
+            isReceiving = false;
             manager.setReceiveDataListener(this);
             eventManager.addListener(PlayingEventType.SAW_CREATED_ROOM, listener);
         }

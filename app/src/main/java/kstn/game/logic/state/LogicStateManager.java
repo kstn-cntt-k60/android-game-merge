@@ -10,6 +10,7 @@ import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.network.ClientFactory;
+import kstn.game.logic.network.NetworkForwarder;
 import kstn.game.logic.network.ServerFactory;
 import kstn.game.logic.network.UDPForwarder;
 import kstn.game.logic.network.UDPManagerFactory;
@@ -124,10 +125,13 @@ public class LogicStateManager {
         UDPForwarder udpForwarder = new UDPForwarder(
                 eventManager, udpManagerFactory, wifiInfo);
 
+        NetworkForwarder networkForwarder = new NetworkForwarder(
+                eventManager, serverFactory, clientFactory);
+
         ThisPlayer thisPlayer = new ThisPlayer(eventManager);
         loginState = new LogicLoginState(
                 root, backgroundView, thisPlayer,
-                eventManager, udpForwarder
+                eventManager, networkForwarder
         );
 
         // ----------------------------------

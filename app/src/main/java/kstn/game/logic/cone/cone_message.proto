@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "kstn.game.logic.cone";
+
+message ConeMove {
+    float angle = 1;
+}
+
+message ConeAccelerate {
+    float angle = 1;
+    float speedStart = 2;
+}

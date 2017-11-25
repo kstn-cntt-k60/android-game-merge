@@ -1,6 +1,7 @@
 package kstn.game.app.network;
 
 import kstn.game.app.event.LLBaseEventManager;
+import kstn.game.app.event.LLEventManager;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventType;
 import kstn.game.logic.network.ClientFactory;
@@ -12,9 +13,9 @@ import java.net.Socket;
 import java.util.Map;
 
 public class BaseClientFactory implements ClientFactory {
-    private final LLBaseEventManager llEventManager;
+    private final LLEventManager llEventManager;
 
-    public BaseClientFactory(LLBaseEventManager llEventManager) {
+    public BaseClientFactory(LLEventManager llEventManager) {
         this.llEventManager = llEventManager;
     }
 

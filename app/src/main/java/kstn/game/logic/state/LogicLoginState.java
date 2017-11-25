@@ -4,12 +4,12 @@ import android.util.Log;
 
 import java.io.IOException;
 
+import kstn.game.logic.cone.ConeEventType;
+import kstn.game.logic.cone.ConeMoveEventData;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
-import kstn.game.logic.network.UDPForwarder;
-import kstn.game.logic.playing_event.PlayingEventType;
-import kstn.game.logic.playing_event.room.SawCreatedRoomEvent;
+import kstn.game.logic.network.NetworkForwarder;
 import kstn.game.logic.state.multiplayer.ThisPlayer;
 import kstn.game.view.screen.ImageView;
 import kstn.game.view.screen.ViewManager;
@@ -20,7 +20,7 @@ public class LogicLoginState extends LogicGameState {
     private final ThisPlayer thisPlayer;
 
     private EventManager eventManager;
-    private UDPForwarder forwarder;
+    private NetworkForwarder forwarder;
     private boolean isListened = false;
     private EventListener listener;
 
@@ -28,7 +28,7 @@ public class LogicLoginState extends LogicGameState {
                            ImageView backgroundView,
                            ThisPlayer thisPlayer,
                            EventManager eventManager,
-                           UDPForwarder forwarder) {
+                           NetworkForwarder forwarder) {
         super(null);
         this.root = root;
         this.thisPlayer = thisPlayer;
@@ -39,10 +39,8 @@ public class LogicLoginState extends LogicGameState {
         listener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
-                SawCreatedRoomEvent event1 = (SawCreatedRoomEvent) event;
-                Log.i("Login", "Ip: " + event1.getIpAddress());
-                Log.i("Login", "name: " + event1.getRoomName());
-                Log.i("Login", "count: " + event1.getPlayerCount());
+                ConeMoveEventData eventData = (ConeMoveEventData) event;
+                Log.i("Login", "Angle: " + eventData.getAngle());
             }
         };
     }
@@ -51,24 +49,20 @@ public class LogicLoginState extends LogicGameState {
     public void entry() {
         thisPlayer.entry();
         root.addView(backgroundView);
-
-        isListened = false;
         try {
             forwarder.listen();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
+            isListened = false;
             Log.i("Login", "Not okay");
         }
-        isListened = true;
-        Log.i("Login", "okay");
-
-        eventManager.addListener(PlayingEventType.SAW_CREATED_ROOM, listener);
+        eventManager.addListener(ConeEventType.MOVE, listener);
     }
 
     @Override
     public void exit() {
-        eventManager.removeListener(PlayingEventType.SAW_CREATED_ROOM, listener);
-        if (isListened)
-            forwarder.shutdown();
+        eventManager.removeListener(ConeEventType.MOVE, listener);
+        forwarder.shutdown();
 
         root.removeView(backgroundView);
         thisPlayer.exit();
