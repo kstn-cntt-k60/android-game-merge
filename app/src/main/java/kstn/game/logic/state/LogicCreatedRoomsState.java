@@ -15,6 +15,7 @@ import kstn.game.logic.playing_event.room.ClickRoomEvent;
 import kstn.game.logic.playing_event.room.RemoveCreatedRoomEvent;
 import kstn.game.logic.playing_event.room.RequestJoinRoomEvent;
 import kstn.game.logic.playing_event.room.SawCreatedRoomEvent;
+import kstn.game.logic.playing_event.room.SetThisRoomEvent;
 import kstn.game.logic.process.Process;
 import kstn.game.logic.process.ProcessManager;
 import kstn.game.logic.state.multiplayer.ThisPlayer;
@@ -37,6 +38,9 @@ public class LogicCreatedRoomsState extends LogicGameState {
     private final EventListener roomListener;
     private final EventListener clickRoomListener;
     private final EventListener acceptRoomListener;
+
+    private int roomIpAddress;
+    private String roomName;
 
     Map<Integer, ExpireProcess> expireProcessMap = new HashMap<>();
 
@@ -169,10 +173,14 @@ public class LogicCreatedRoomsState extends LogicGameState {
             return;
         }
         eventManager.trigger(new RequestJoinRoomEvent(udpForwarder.getIpAddress()));
+        roomIpAddress = event.getIpAddress();
+        roomName = event.getRoomName();
     }
 
     private void onAcceptRoomEvent(AcceptJoinRoomEvent event) {
-        if (event.getNewPlayer().getIpAddress() == udpForwarder.getIpAddress())
+        if (event.getNewPlayer().getIpAddress() == udpForwarder.getIpAddress()) {
+            eventManager.trigger(new SetThisRoomEvent(roomName, roomIpAddress));
             eventManager.queue(new TransitToWaitRoom());
+        }
     }
 }

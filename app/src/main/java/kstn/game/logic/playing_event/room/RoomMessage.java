@@ -14,6 +14,646 @@ public final class RoomMessage {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
+  public interface PlayerOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:Player)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int32 ipAddress = 1;</code>
+     */
+    int getIpAddress();
+
+    /**
+     * <code>string name = 2;</code>
+     */
+    java.lang.String getName();
+    /**
+     * <code>string name = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getNameBytes();
+
+    /**
+     * <code>int32 avatarId = 3;</code>
+     */
+    int getAvatarId();
+  }
+  /**
+   * Protobuf type {@code Player}
+   */
+  public  static final class Player extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:Player)
+      PlayerOrBuilder {
+    // Use Player.newBuilder() to construct.
+    private Player(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private Player() {
+      ipAddress_ = 0;
+      name_ = "";
+      avatarId_ = 0;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private Player(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+
+              ipAddress_ = input.readInt32();
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              name_ = s;
+              break;
+            }
+            case 24: {
+
+              avatarId_ = input.readInt32();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return kstn.game.logic.playing_event.room.RoomMessage.internal_static_Player_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return kstn.game.logic.playing_event.room.RoomMessage.internal_static_Player_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              kstn.game.logic.playing_event.room.RoomMessage.Player.class, kstn.game.logic.playing_event.room.RoomMessage.Player.Builder.class);
+    }
+
+    public static final int IPADDRESS_FIELD_NUMBER = 1;
+    private int ipAddress_;
+    /**
+     * <code>int32 ipAddress = 1;</code>
+     */
+    public int getIpAddress() {
+      return ipAddress_;
+    }
+
+    public static final int NAME_FIELD_NUMBER = 2;
+    private volatile java.lang.Object name_;
+    /**
+     * <code>string name = 2;</code>
+     */
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        name_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string name = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int AVATARID_FIELD_NUMBER = 3;
+    private int avatarId_;
+    /**
+     * <code>int32 avatarId = 3;</code>
+     */
+    public int getAvatarId() {
+      return avatarId_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (ipAddress_ != 0) {
+        output.writeInt32(1, ipAddress_);
+      }
+      if (!getNameBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, name_);
+      }
+      if (avatarId_ != 0) {
+        output.writeInt32(3, avatarId_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (ipAddress_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, ipAddress_);
+      }
+      if (!getNameBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, name_);
+      }
+      if (avatarId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, avatarId_);
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof kstn.game.logic.playing_event.room.RoomMessage.Player)) {
+        return super.equals(obj);
+      }
+      kstn.game.logic.playing_event.room.RoomMessage.Player other = (kstn.game.logic.playing_event.room.RoomMessage.Player) obj;
+
+      boolean result = true;
+      result = result && (getIpAddress()
+          == other.getIpAddress());
+      result = result && getName()
+          .equals(other.getName());
+      result = result && (getAvatarId()
+          == other.getAvatarId());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + IPADDRESS_FIELD_NUMBER;
+      hash = (53 * hash) + getIpAddress();
+      hash = (37 * hash) + NAME_FIELD_NUMBER;
+      hash = (53 * hash) + getName().hashCode();
+      hash = (37 * hash) + AVATARID_FIELD_NUMBER;
+      hash = (53 * hash) + getAvatarId();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static kstn.game.logic.playing_event.room.RoomMessage.Player parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.Player parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.Player parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.Player parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.Player parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.Player parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.Player parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.Player parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.Player parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.Player parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.Player parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.Player parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(kstn.game.logic.playing_event.room.RoomMessage.Player prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code Player}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:Player)
+        kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return kstn.game.logic.playing_event.room.RoomMessage.internal_static_Player_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return kstn.game.logic.playing_event.room.RoomMessage.internal_static_Player_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                kstn.game.logic.playing_event.room.RoomMessage.Player.class, kstn.game.logic.playing_event.room.RoomMessage.Player.Builder.class);
+      }
+
+      // Construct using kstn.game.logic.playing_event.room.RoomMessage.Player.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        ipAddress_ = 0;
+
+        name_ = "";
+
+        avatarId_ = 0;
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return kstn.game.logic.playing_event.room.RoomMessage.internal_static_Player_descriptor;
+      }
+
+      public kstn.game.logic.playing_event.room.RoomMessage.Player getDefaultInstanceForType() {
+        return kstn.game.logic.playing_event.room.RoomMessage.Player.getDefaultInstance();
+      }
+
+      public kstn.game.logic.playing_event.room.RoomMessage.Player build() {
+        kstn.game.logic.playing_event.room.RoomMessage.Player result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public kstn.game.logic.playing_event.room.RoomMessage.Player buildPartial() {
+        kstn.game.logic.playing_event.room.RoomMessage.Player result = new kstn.game.logic.playing_event.room.RoomMessage.Player(this);
+        result.ipAddress_ = ipAddress_;
+        result.name_ = name_;
+        result.avatarId_ = avatarId_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof kstn.game.logic.playing_event.room.RoomMessage.Player) {
+          return mergeFrom((kstn.game.logic.playing_event.room.RoomMessage.Player)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(kstn.game.logic.playing_event.room.RoomMessage.Player other) {
+        if (other == kstn.game.logic.playing_event.room.RoomMessage.Player.getDefaultInstance()) return this;
+        if (other.getIpAddress() != 0) {
+          setIpAddress(other.getIpAddress());
+        }
+        if (!other.getName().isEmpty()) {
+          name_ = other.name_;
+          onChanged();
+        }
+        if (other.getAvatarId() != 0) {
+          setAvatarId(other.getAvatarId());
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        kstn.game.logic.playing_event.room.RoomMessage.Player parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (kstn.game.logic.playing_event.room.RoomMessage.Player) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private int ipAddress_ ;
+      /**
+       * <code>int32 ipAddress = 1;</code>
+       */
+      public int getIpAddress() {
+        return ipAddress_;
+      }
+      /**
+       * <code>int32 ipAddress = 1;</code>
+       */
+      public Builder setIpAddress(int value) {
+        
+        ipAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 ipAddress = 1;</code>
+       */
+      public Builder clearIpAddress() {
+        
+        ipAddress_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object name_ = "";
+      /**
+       * <code>string name = 2;</code>
+       */
+      public java.lang.String getName() {
+        java.lang.Object ref = name_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          name_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string name = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNameBytes() {
+        java.lang.Object ref = name_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          name_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string name = 2;</code>
+       */
+      public Builder setName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        name_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string name = 2;</code>
+       */
+      public Builder clearName() {
+        
+        name_ = getDefaultInstance().getName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string name = 2;</code>
+       */
+      public Builder setNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        name_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int avatarId_ ;
+      /**
+       * <code>int32 avatarId = 3;</code>
+       */
+      public int getAvatarId() {
+        return avatarId_;
+      }
+      /**
+       * <code>int32 avatarId = 3;</code>
+       */
+      public Builder setAvatarId(int value) {
+        
+        avatarId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 avatarId = 3;</code>
+       */
+      public Builder clearAvatarId() {
+        
+        avatarId_ = 0;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:Player)
+    }
+
+    // @@protoc_insertion_point(class_scope:Player)
+    private static final kstn.game.logic.playing_event.room.RoomMessage.Player DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new kstn.game.logic.playing_event.room.RoomMessage.Player();
+    }
+
+    public static kstn.game.logic.playing_event.room.RoomMessage.Player getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<Player>
+        PARSER = new com.google.protobuf.AbstractParser<Player>() {
+      public Player parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Player(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<Player> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Player> getParserForType() {
+      return PARSER;
+    }
+
+    public kstn.game.logic.playing_event.room.RoomMessage.Player getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface SawCreatedRoomOrBuilder extends
       // @@protoc_insertion_point(interface_extends:SawCreatedRoom)
       com.google.protobuf.MessageOrBuilder {
@@ -654,11 +1294,1409 @@ public final class RoomMessage {
 
   }
 
+  public interface RequestJoinRoomOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:RequestJoinRoom)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int32 clientIpAddress = 1;</code>
+     */
+    int getClientIpAddress();
+  }
+  /**
+   * Protobuf type {@code RequestJoinRoom}
+   */
+  public  static final class RequestJoinRoom extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:RequestJoinRoom)
+      RequestJoinRoomOrBuilder {
+    // Use RequestJoinRoom.newBuilder() to construct.
+    private RequestJoinRoom(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private RequestJoinRoom() {
+      clientIpAddress_ = 0;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private RequestJoinRoom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+
+              clientIpAddress_ = input.readInt32();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return kstn.game.logic.playing_event.room.RoomMessage.internal_static_RequestJoinRoom_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return kstn.game.logic.playing_event.room.RoomMessage.internal_static_RequestJoinRoom_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom.class, kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom.Builder.class);
+    }
+
+    public static final int CLIENTIPADDRESS_FIELD_NUMBER = 1;
+    private int clientIpAddress_;
+    /**
+     * <code>int32 clientIpAddress = 1;</code>
+     */
+    public int getClientIpAddress() {
+      return clientIpAddress_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (clientIpAddress_ != 0) {
+        output.writeInt32(1, clientIpAddress_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (clientIpAddress_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, clientIpAddress_);
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom)) {
+        return super.equals(obj);
+      }
+      kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom other = (kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom) obj;
+
+      boolean result = true;
+      result = result && (getClientIpAddress()
+          == other.getClientIpAddress());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + CLIENTIPADDRESS_FIELD_NUMBER;
+      hash = (53 * hash) + getClientIpAddress();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code RequestJoinRoom}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:RequestJoinRoom)
+        kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoomOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return kstn.game.logic.playing_event.room.RoomMessage.internal_static_RequestJoinRoom_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return kstn.game.logic.playing_event.room.RoomMessage.internal_static_RequestJoinRoom_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom.class, kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom.Builder.class);
+      }
+
+      // Construct using kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        clientIpAddress_ = 0;
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return kstn.game.logic.playing_event.room.RoomMessage.internal_static_RequestJoinRoom_descriptor;
+      }
+
+      public kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom getDefaultInstanceForType() {
+        return kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom.getDefaultInstance();
+      }
+
+      public kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom build() {
+        kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom buildPartial() {
+        kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom result = new kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom(this);
+        result.clientIpAddress_ = clientIpAddress_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom) {
+          return mergeFrom((kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom other) {
+        if (other == kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom.getDefaultInstance()) return this;
+        if (other.getClientIpAddress() != 0) {
+          setClientIpAddress(other.getClientIpAddress());
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private int clientIpAddress_ ;
+      /**
+       * <code>int32 clientIpAddress = 1;</code>
+       */
+      public int getClientIpAddress() {
+        return clientIpAddress_;
+      }
+      /**
+       * <code>int32 clientIpAddress = 1;</code>
+       */
+      public Builder setClientIpAddress(int value) {
+        
+        clientIpAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 clientIpAddress = 1;</code>
+       */
+      public Builder clearClientIpAddress() {
+        
+        clientIpAddress_ = 0;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:RequestJoinRoom)
+    }
+
+    // @@protoc_insertion_point(class_scope:RequestJoinRoom)
+    private static final kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom();
+    }
+
+    public static kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<RequestJoinRoom>
+        PARSER = new com.google.protobuf.AbstractParser<RequestJoinRoom>() {
+      public RequestJoinRoom parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new RequestJoinRoom(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<RequestJoinRoom> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<RequestJoinRoom> getParserForType() {
+      return PARSER;
+    }
+
+    public kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface AcceptJoinRoomOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:AcceptJoinRoom)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>.Player newPlayer = 1;</code>
+     */
+    boolean hasNewPlayer();
+    /**
+     * <code>.Player newPlayer = 1;</code>
+     */
+    kstn.game.logic.playing_event.room.RoomMessage.Player getNewPlayer();
+    /**
+     * <code>.Player newPlayer = 1;</code>
+     */
+    kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder getNewPlayerOrBuilder();
+
+    /**
+     * <code>repeated .Player oldPlayers = 2;</code>
+     */
+    java.util.List<kstn.game.logic.playing_event.room.RoomMessage.Player> 
+        getOldPlayersList();
+    /**
+     * <code>repeated .Player oldPlayers = 2;</code>
+     */
+    kstn.game.logic.playing_event.room.RoomMessage.Player getOldPlayers(int index);
+    /**
+     * <code>repeated .Player oldPlayers = 2;</code>
+     */
+    int getOldPlayersCount();
+    /**
+     * <code>repeated .Player oldPlayers = 2;</code>
+     */
+    java.util.List<? extends kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder> 
+        getOldPlayersOrBuilderList();
+    /**
+     * <code>repeated .Player oldPlayers = 2;</code>
+     */
+    kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder getOldPlayersOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code AcceptJoinRoom}
+   */
+  public  static final class AcceptJoinRoom extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:AcceptJoinRoom)
+      AcceptJoinRoomOrBuilder {
+    // Use AcceptJoinRoom.newBuilder() to construct.
+    private AcceptJoinRoom(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private AcceptJoinRoom() {
+      oldPlayers_ = java.util.Collections.emptyList();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private AcceptJoinRoom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              kstn.game.logic.playing_event.room.RoomMessage.Player.Builder subBuilder = null;
+              if (newPlayer_ != null) {
+                subBuilder = newPlayer_.toBuilder();
+              }
+              newPlayer_ = input.readMessage(kstn.game.logic.playing_event.room.RoomMessage.Player.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(newPlayer_);
+                newPlayer_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                oldPlayers_ = new java.util.ArrayList<kstn.game.logic.playing_event.room.RoomMessage.Player>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              oldPlayers_.add(
+                  input.readMessage(kstn.game.logic.playing_event.room.RoomMessage.Player.parser(), extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          oldPlayers_ = java.util.Collections.unmodifiableList(oldPlayers_);
+        }
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return kstn.game.logic.playing_event.room.RoomMessage.internal_static_AcceptJoinRoom_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return kstn.game.logic.playing_event.room.RoomMessage.internal_static_AcceptJoinRoom_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom.class, kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom.Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int NEWPLAYER_FIELD_NUMBER = 1;
+    private kstn.game.logic.playing_event.room.RoomMessage.Player newPlayer_;
+    /**
+     * <code>.Player newPlayer = 1;</code>
+     */
+    public boolean hasNewPlayer() {
+      return newPlayer_ != null;
+    }
+    /**
+     * <code>.Player newPlayer = 1;</code>
+     */
+    public kstn.game.logic.playing_event.room.RoomMessage.Player getNewPlayer() {
+      return newPlayer_ == null ? kstn.game.logic.playing_event.room.RoomMessage.Player.getDefaultInstance() : newPlayer_;
+    }
+    /**
+     * <code>.Player newPlayer = 1;</code>
+     */
+    public kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder getNewPlayerOrBuilder() {
+      return getNewPlayer();
+    }
+
+    public static final int OLDPLAYERS_FIELD_NUMBER = 2;
+    private java.util.List<kstn.game.logic.playing_event.room.RoomMessage.Player> oldPlayers_;
+    /**
+     * <code>repeated .Player oldPlayers = 2;</code>
+     */
+    public java.util.List<kstn.game.logic.playing_event.room.RoomMessage.Player> getOldPlayersList() {
+      return oldPlayers_;
+    }
+    /**
+     * <code>repeated .Player oldPlayers = 2;</code>
+     */
+    public java.util.List<? extends kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder> 
+        getOldPlayersOrBuilderList() {
+      return oldPlayers_;
+    }
+    /**
+     * <code>repeated .Player oldPlayers = 2;</code>
+     */
+    public int getOldPlayersCount() {
+      return oldPlayers_.size();
+    }
+    /**
+     * <code>repeated .Player oldPlayers = 2;</code>
+     */
+    public kstn.game.logic.playing_event.room.RoomMessage.Player getOldPlayers(int index) {
+      return oldPlayers_.get(index);
+    }
+    /**
+     * <code>repeated .Player oldPlayers = 2;</code>
+     */
+    public kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder getOldPlayersOrBuilder(
+        int index) {
+      return oldPlayers_.get(index);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (newPlayer_ != null) {
+        output.writeMessage(1, getNewPlayer());
+      }
+      for (int i = 0; i < oldPlayers_.size(); i++) {
+        output.writeMessage(2, oldPlayers_.get(i));
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (newPlayer_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, getNewPlayer());
+      }
+      for (int i = 0; i < oldPlayers_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, oldPlayers_.get(i));
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom)) {
+        return super.equals(obj);
+      }
+      kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom other = (kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom) obj;
+
+      boolean result = true;
+      result = result && (hasNewPlayer() == other.hasNewPlayer());
+      if (hasNewPlayer()) {
+        result = result && getNewPlayer()
+            .equals(other.getNewPlayer());
+      }
+      result = result && getOldPlayersList()
+          .equals(other.getOldPlayersList());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (hasNewPlayer()) {
+        hash = (37 * hash) + NEWPLAYER_FIELD_NUMBER;
+        hash = (53 * hash) + getNewPlayer().hashCode();
+      }
+      if (getOldPlayersCount() > 0) {
+        hash = (37 * hash) + OLDPLAYERS_FIELD_NUMBER;
+        hash = (53 * hash) + getOldPlayersList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code AcceptJoinRoom}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:AcceptJoinRoom)
+        kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoomOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return kstn.game.logic.playing_event.room.RoomMessage.internal_static_AcceptJoinRoom_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return kstn.game.logic.playing_event.room.RoomMessage.internal_static_AcceptJoinRoom_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom.class, kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom.Builder.class);
+      }
+
+      // Construct using kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getOldPlayersFieldBuilder();
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        if (newPlayerBuilder_ == null) {
+          newPlayer_ = null;
+        } else {
+          newPlayer_ = null;
+          newPlayerBuilder_ = null;
+        }
+        if (oldPlayersBuilder_ == null) {
+          oldPlayers_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        } else {
+          oldPlayersBuilder_.clear();
+        }
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return kstn.game.logic.playing_event.room.RoomMessage.internal_static_AcceptJoinRoom_descriptor;
+      }
+
+      public kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom getDefaultInstanceForType() {
+        return kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom.getDefaultInstance();
+      }
+
+      public kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom build() {
+        kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom buildPartial() {
+        kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom result = new kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (newPlayerBuilder_ == null) {
+          result.newPlayer_ = newPlayer_;
+        } else {
+          result.newPlayer_ = newPlayerBuilder_.build();
+        }
+        if (oldPlayersBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            oldPlayers_ = java.util.Collections.unmodifiableList(oldPlayers_);
+            bitField0_ = (bitField0_ & ~0x00000002);
+          }
+          result.oldPlayers_ = oldPlayers_;
+        } else {
+          result.oldPlayers_ = oldPlayersBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom) {
+          return mergeFrom((kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom other) {
+        if (other == kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom.getDefaultInstance()) return this;
+        if (other.hasNewPlayer()) {
+          mergeNewPlayer(other.getNewPlayer());
+        }
+        if (oldPlayersBuilder_ == null) {
+          if (!other.oldPlayers_.isEmpty()) {
+            if (oldPlayers_.isEmpty()) {
+              oldPlayers_ = other.oldPlayers_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+            } else {
+              ensureOldPlayersIsMutable();
+              oldPlayers_.addAll(other.oldPlayers_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.oldPlayers_.isEmpty()) {
+            if (oldPlayersBuilder_.isEmpty()) {
+              oldPlayersBuilder_.dispose();
+              oldPlayersBuilder_ = null;
+              oldPlayers_ = other.oldPlayers_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+              oldPlayersBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getOldPlayersFieldBuilder() : null;
+            } else {
+              oldPlayersBuilder_.addAllMessages(other.oldPlayers_);
+            }
+          }
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private kstn.game.logic.playing_event.room.RoomMessage.Player newPlayer_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          kstn.game.logic.playing_event.room.RoomMessage.Player, kstn.game.logic.playing_event.room.RoomMessage.Player.Builder, kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder> newPlayerBuilder_;
+      /**
+       * <code>.Player newPlayer = 1;</code>
+       */
+      public boolean hasNewPlayer() {
+        return newPlayerBuilder_ != null || newPlayer_ != null;
+      }
+      /**
+       * <code>.Player newPlayer = 1;</code>
+       */
+      public kstn.game.logic.playing_event.room.RoomMessage.Player getNewPlayer() {
+        if (newPlayerBuilder_ == null) {
+          return newPlayer_ == null ? kstn.game.logic.playing_event.room.RoomMessage.Player.getDefaultInstance() : newPlayer_;
+        } else {
+          return newPlayerBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>.Player newPlayer = 1;</code>
+       */
+      public Builder setNewPlayer(kstn.game.logic.playing_event.room.RoomMessage.Player value) {
+        if (newPlayerBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          newPlayer_ = value;
+          onChanged();
+        } else {
+          newPlayerBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.Player newPlayer = 1;</code>
+       */
+      public Builder setNewPlayer(
+          kstn.game.logic.playing_event.room.RoomMessage.Player.Builder builderForValue) {
+        if (newPlayerBuilder_ == null) {
+          newPlayer_ = builderForValue.build();
+          onChanged();
+        } else {
+          newPlayerBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>.Player newPlayer = 1;</code>
+       */
+      public Builder mergeNewPlayer(kstn.game.logic.playing_event.room.RoomMessage.Player value) {
+        if (newPlayerBuilder_ == null) {
+          if (newPlayer_ != null) {
+            newPlayer_ =
+              kstn.game.logic.playing_event.room.RoomMessage.Player.newBuilder(newPlayer_).mergeFrom(value).buildPartial();
+          } else {
+            newPlayer_ = value;
+          }
+          onChanged();
+        } else {
+          newPlayerBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.Player newPlayer = 1;</code>
+       */
+      public Builder clearNewPlayer() {
+        if (newPlayerBuilder_ == null) {
+          newPlayer_ = null;
+          onChanged();
+        } else {
+          newPlayer_ = null;
+          newPlayerBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>.Player newPlayer = 1;</code>
+       */
+      public kstn.game.logic.playing_event.room.RoomMessage.Player.Builder getNewPlayerBuilder() {
+        
+        onChanged();
+        return getNewPlayerFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.Player newPlayer = 1;</code>
+       */
+      public kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder getNewPlayerOrBuilder() {
+        if (newPlayerBuilder_ != null) {
+          return newPlayerBuilder_.getMessageOrBuilder();
+        } else {
+          return newPlayer_ == null ?
+              kstn.game.logic.playing_event.room.RoomMessage.Player.getDefaultInstance() : newPlayer_;
+        }
+      }
+      /**
+       * <code>.Player newPlayer = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          kstn.game.logic.playing_event.room.RoomMessage.Player, kstn.game.logic.playing_event.room.RoomMessage.Player.Builder, kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder> 
+          getNewPlayerFieldBuilder() {
+        if (newPlayerBuilder_ == null) {
+          newPlayerBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              kstn.game.logic.playing_event.room.RoomMessage.Player, kstn.game.logic.playing_event.room.RoomMessage.Player.Builder, kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder>(
+                  getNewPlayer(),
+                  getParentForChildren(),
+                  isClean());
+          newPlayer_ = null;
+        }
+        return newPlayerBuilder_;
+      }
+
+      private java.util.List<kstn.game.logic.playing_event.room.RoomMessage.Player> oldPlayers_ =
+        java.util.Collections.emptyList();
+      private void ensureOldPlayersIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          oldPlayers_ = new java.util.ArrayList<kstn.game.logic.playing_event.room.RoomMessage.Player>(oldPlayers_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          kstn.game.logic.playing_event.room.RoomMessage.Player, kstn.game.logic.playing_event.room.RoomMessage.Player.Builder, kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder> oldPlayersBuilder_;
+
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public java.util.List<kstn.game.logic.playing_event.room.RoomMessage.Player> getOldPlayersList() {
+        if (oldPlayersBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(oldPlayers_);
+        } else {
+          return oldPlayersBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public int getOldPlayersCount() {
+        if (oldPlayersBuilder_ == null) {
+          return oldPlayers_.size();
+        } else {
+          return oldPlayersBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public kstn.game.logic.playing_event.room.RoomMessage.Player getOldPlayers(int index) {
+        if (oldPlayersBuilder_ == null) {
+          return oldPlayers_.get(index);
+        } else {
+          return oldPlayersBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public Builder setOldPlayers(
+          int index, kstn.game.logic.playing_event.room.RoomMessage.Player value) {
+        if (oldPlayersBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureOldPlayersIsMutable();
+          oldPlayers_.set(index, value);
+          onChanged();
+        } else {
+          oldPlayersBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public Builder setOldPlayers(
+          int index, kstn.game.logic.playing_event.room.RoomMessage.Player.Builder builderForValue) {
+        if (oldPlayersBuilder_ == null) {
+          ensureOldPlayersIsMutable();
+          oldPlayers_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          oldPlayersBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public Builder addOldPlayers(kstn.game.logic.playing_event.room.RoomMessage.Player value) {
+        if (oldPlayersBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureOldPlayersIsMutable();
+          oldPlayers_.add(value);
+          onChanged();
+        } else {
+          oldPlayersBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public Builder addOldPlayers(
+          int index, kstn.game.logic.playing_event.room.RoomMessage.Player value) {
+        if (oldPlayersBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureOldPlayersIsMutable();
+          oldPlayers_.add(index, value);
+          onChanged();
+        } else {
+          oldPlayersBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public Builder addOldPlayers(
+          kstn.game.logic.playing_event.room.RoomMessage.Player.Builder builderForValue) {
+        if (oldPlayersBuilder_ == null) {
+          ensureOldPlayersIsMutable();
+          oldPlayers_.add(builderForValue.build());
+          onChanged();
+        } else {
+          oldPlayersBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public Builder addOldPlayers(
+          int index, kstn.game.logic.playing_event.room.RoomMessage.Player.Builder builderForValue) {
+        if (oldPlayersBuilder_ == null) {
+          ensureOldPlayersIsMutable();
+          oldPlayers_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          oldPlayersBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public Builder addAllOldPlayers(
+          java.lang.Iterable<? extends kstn.game.logic.playing_event.room.RoomMessage.Player> values) {
+        if (oldPlayersBuilder_ == null) {
+          ensureOldPlayersIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, oldPlayers_);
+          onChanged();
+        } else {
+          oldPlayersBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public Builder clearOldPlayers() {
+        if (oldPlayersBuilder_ == null) {
+          oldPlayers_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+          onChanged();
+        } else {
+          oldPlayersBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public Builder removeOldPlayers(int index) {
+        if (oldPlayersBuilder_ == null) {
+          ensureOldPlayersIsMutable();
+          oldPlayers_.remove(index);
+          onChanged();
+        } else {
+          oldPlayersBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public kstn.game.logic.playing_event.room.RoomMessage.Player.Builder getOldPlayersBuilder(
+          int index) {
+        return getOldPlayersFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder getOldPlayersOrBuilder(
+          int index) {
+        if (oldPlayersBuilder_ == null) {
+          return oldPlayers_.get(index);  } else {
+          return oldPlayersBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public java.util.List<? extends kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder> 
+           getOldPlayersOrBuilderList() {
+        if (oldPlayersBuilder_ != null) {
+          return oldPlayersBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(oldPlayers_);
+        }
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public kstn.game.logic.playing_event.room.RoomMessage.Player.Builder addOldPlayersBuilder() {
+        return getOldPlayersFieldBuilder().addBuilder(
+            kstn.game.logic.playing_event.room.RoomMessage.Player.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public kstn.game.logic.playing_event.room.RoomMessage.Player.Builder addOldPlayersBuilder(
+          int index) {
+        return getOldPlayersFieldBuilder().addBuilder(
+            index, kstn.game.logic.playing_event.room.RoomMessage.Player.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .Player oldPlayers = 2;</code>
+       */
+      public java.util.List<kstn.game.logic.playing_event.room.RoomMessage.Player.Builder> 
+           getOldPlayersBuilderList() {
+        return getOldPlayersFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          kstn.game.logic.playing_event.room.RoomMessage.Player, kstn.game.logic.playing_event.room.RoomMessage.Player.Builder, kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder> 
+          getOldPlayersFieldBuilder() {
+        if (oldPlayersBuilder_ == null) {
+          oldPlayersBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              kstn.game.logic.playing_event.room.RoomMessage.Player, kstn.game.logic.playing_event.room.RoomMessage.Player.Builder, kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder>(
+                  oldPlayers_,
+                  ((bitField0_ & 0x00000002) == 0x00000002),
+                  getParentForChildren(),
+                  isClean());
+          oldPlayers_ = null;
+        }
+        return oldPlayersBuilder_;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:AcceptJoinRoom)
+    }
+
+    // @@protoc_insertion_point(class_scope:AcceptJoinRoom)
+    private static final kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom();
+    }
+
+    public static kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<AcceptJoinRoom>
+        PARSER = new com.google.protobuf.AbstractParser<AcceptJoinRoom>() {
+      public AcceptJoinRoom parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new AcceptJoinRoom(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<AcceptJoinRoom> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<AcceptJoinRoom> getParserForType() {
+      return PARSER;
+    }
+
+    public kstn.game.logic.playing_event.room.RoomMessage.AcceptJoinRoom getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_Player_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Player_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_SawCreatedRoom_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_SawCreatedRoom_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_RequestJoinRoom_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_RequestJoinRoom_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_AcceptJoinRoom_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_AcceptJoinRoom_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -669,10 +2707,14 @@ public final class RoomMessage {
   static {
     java.lang.String[] descriptorData = {
       "\n5kstn/game/logic/playing_event/room/roo" +
-      "m_message.proto\"J\n\016SawCreatedRoom\022\021\n\tipA" +
-      "ddress\030\001 \001(\005\022\020\n\010roomName\030\002 \001(\t\022\023\n\013player" +
-      "Count\030\003 \001(\005B$\n\"kstn.game.logic.playing_e" +
-      "vent.roomb\006proto3"
+      "m_message.proto\";\n\006Player\022\021\n\tipAddress\030\001" +
+      " \001(\005\022\014\n\004name\030\002 \001(\t\022\020\n\010avatarId\030\003 \001(\005\"J\n\016" +
+      "SawCreatedRoom\022\021\n\tipAddress\030\001 \001(\005\022\020\n\010roo" +
+      "mName\030\002 \001(\t\022\023\n\013playerCount\030\003 \001(\005\"*\n\017Requ" +
+      "estJoinRoom\022\027\n\017clientIpAddress\030\001 \001(\005\"I\n\016" +
+      "AcceptJoinRoom\022\032\n\tnewPlayer\030\001 \001(\0132\007.Play" +
+      "er\022\033\n\noldPlayers\030\002 \003(\0132\007.PlayerB$\n\"kstn." +
+      "game.logic.playing_event.roomb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -686,12 +2728,30 @@ public final class RoomMessage {
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
-    internal_static_SawCreatedRoom_descriptor =
+    internal_static_Player_descriptor =
       getDescriptor().getMessageTypes().get(0);
+    internal_static_Player_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_Player_descriptor,
+        new java.lang.String[] { "IpAddress", "Name", "AvatarId", });
+    internal_static_SawCreatedRoom_descriptor =
+      getDescriptor().getMessageTypes().get(1);
     internal_static_SawCreatedRoom_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SawCreatedRoom_descriptor,
         new java.lang.String[] { "IpAddress", "RoomName", "PlayerCount", });
+    internal_static_RequestJoinRoom_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_RequestJoinRoom_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_RequestJoinRoom_descriptor,
+        new java.lang.String[] { "ClientIpAddress", });
+    internal_static_AcceptJoinRoom_descriptor =
+      getDescriptor().getMessageTypes().get(3);
+    internal_static_AcceptJoinRoom_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_AcceptJoinRoom_descriptor,
+        new java.lang.String[] { "NewPlayer", "OldPlayers", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
