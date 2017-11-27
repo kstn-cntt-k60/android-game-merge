@@ -20,6 +20,7 @@ import kstn.game.logic.playing_event.room.AcceptJoinRoomEvent;
 import kstn.game.logic.playing_event.room.ClickRoomEvent;
 import kstn.game.logic.playing_event.room.RequestJoinRoomEvent;
 import kstn.game.logic.playing_event.room.SetThisRoomEvent;
+import kstn.game.logic.process.Process;
 import kstn.game.logic.process.ProcessManager;
 import kstn.game.logic.state.multiplayer.Player;
 import kstn.game.logic.state.multiplayer.ThisPlayer;
@@ -50,7 +51,8 @@ public class LogicCreatedRoomsStateTest {
 
     private final int ip = 0x1234;
     private final int anotherIp = 0x789a;
-    private final ClickRoomEvent clickRoomEvent = new ClickRoomEvent(0x2233);
+    private final ClickRoomEvent clickRoomEvent
+            = new ClickRoomEvent(0x2233, "RoomName");
 
     private final Player newPlayer;
     private final List<Player> oldPlayers = new ArrayList<>();
@@ -116,6 +118,7 @@ public class LogicCreatedRoomsStateTest {
         eventManager.addListener(PlayingEventType.REQUEST_JOIN_ROOM, requestListener);
         eventManager.addListener(PlayingEventType.ACCEPT_JOIN_ROOM, acceptListener);
         eventManager.addListener(StateEventType.WAIT_ROOM, transitToWaitRoomListener);
+        eventManager.addListener(PlayingEventType.SET_THIS_ROOM, setRoomListener);
 
         when(udpForwarder.getIpAddress()).thenReturn(ip);
 
