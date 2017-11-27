@@ -2,10 +2,6 @@ package kstn.game.logic.state_event;
 
 import kstn.game.logic.event.EventType;
 
-/**
- * Created by qi on 13/11/2017.
- */
-
 public enum StateEventType implements EventType {
     MENU(30),
     LOGIN(31),

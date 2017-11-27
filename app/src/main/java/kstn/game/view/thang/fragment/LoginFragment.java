@@ -13,6 +13,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import kstn.game.R;
+import kstn.game.logic.playing_event.player.SetThisPlayerEvent;
 import kstn.game.logic.state_event.TransitToCreatedRoomsState;
 import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.thang.adapter.MyAdapter;
@@ -62,7 +63,8 @@ public class LoginFragment extends Fragment {
                     playerName = nameEditText.getText().toString();
                 }
                 Toast.makeText(getActivity(), playerName,Toast.LENGTH_SHORT).show();
-                stateManager.eventManager.queue(new TransitToCreatedRoomsState(playerName,avatarId ));
+                stateManager.eventManager.queue(new SetThisPlayerEvent(playerName, avatarId));
+                stateManager.eventManager.queue(new TransitToCreatedRoomsState());
             }
         });
     }

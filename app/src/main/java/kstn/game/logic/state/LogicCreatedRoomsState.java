@@ -7,14 +7,20 @@ import java.util.Map;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
-import kstn.game.logic.event.EventType;
+import kstn.game.logic.network.NetworkForwarder;
 import kstn.game.logic.network.UDPForwarder;
 import kstn.game.logic.playing_event.PlayingEventType;
+import kstn.game.logic.playing_event.room.AcceptJoinRoomEvent;
+import kstn.game.logic.playing_event.room.ClickRoomEvent;
 import kstn.game.logic.playing_event.room.RemoveCreatedRoomEvent;
+import kstn.game.logic.playing_event.room.RequestJoinRoomEvent;
 import kstn.game.logic.playing_event.room.SawCreatedRoomEvent;
 import kstn.game.logic.process.Process;
 import kstn.game.logic.process.ProcessManager;
+import kstn.game.logic.state.multiplayer.ThisPlayer;
+import kstn.game.logic.state.multiplayer.ThisRoom;
 import kstn.game.logic.state_event.TransitToLoginState;
+import kstn.game.logic.state_event.TransitToWaitRoom;
 import kstn.game.view.screen.View;
 import kstn.game.view.screen.ViewManager;
 
@@ -23,8 +29,14 @@ public class LogicCreatedRoomsState extends LogicGameState {
     private final ViewManager root;
     private final View backgroundView;
 
-    private final UDPForwarder forwarder;
+    private final ThisPlayer thisPlayer;
+    private final ThisRoom thisRoom;
+
+    private final UDPForwarder udpForwarder;
+    private final NetworkForwarder networkForwarder;
     private final EventListener roomListener;
+    private final EventListener clickRoomListener;
+    private final EventListener acceptRoomListener;
 
     Map<Integer, ExpireProcess> expireProcessMap = new HashMap<>();
 
@@ -73,14 +85,20 @@ public class LogicCreatedRoomsState extends LogicGameState {
     public LogicCreatedRoomsState(EventManager eventManager,
                                   ViewManager root,
                                   View backgroundView,
-                                  UDPForwarder forwarder,
+                                  ThisPlayer thisPlayer,
+                                  ThisRoom thisRoom,
+                                  UDPForwarder udpForwarder,
+                                  NetworkForwarder networkForwarder,
                                   final ProcessManager processManager) {
         super(null);
         this.eventManager = eventManager;
         this.root = root;
         this.backgroundView = backgroundView;
 
-        this.forwarder = forwarder;
+        this.thisPlayer = thisPlayer;
+        this.thisRoom = thisRoom;
+        this.udpForwarder = udpForwarder;
+        this.networkForwarder = networkForwarder;
 
         roomListener = new EventListener() {
             @Override
@@ -97,25 +115,64 @@ public class LogicCreatedRoomsState extends LogicGameState {
                 }
             }
         };
+
+        clickRoomListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                onClickRoomEvent((ClickRoomEvent) event);
+            }
+        };
+
+        acceptRoomListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                onAcceptRoomEvent((AcceptJoinRoomEvent) event);
+            }
+        };
     }
 
     @Override
     public void entry() {
-        expireProcessMap.clear();
         root.addView(backgroundView);
+        expireProcessMap.clear();
+
+        thisPlayer.entry();
+        thisRoom.entry();
+        eventManager.addListener(PlayingEventType.SAW_CREATED_ROOM, roomListener);
+        eventManager.addListener(PlayingEventType.CLICK_ROOM_EVENT, clickRoomListener);
+        eventManager.addListener(PlayingEventType.ACCEPT_JOIN_ROOM, acceptRoomListener);
+
         try {
-            forwarder.listen();
+            udpForwarder.listen();
         } catch (IOException e) {
             eventManager.queue(new TransitToLoginState());
-            return;
         }
-        eventManager.addListener(PlayingEventType.SAW_CREATED_ROOM, roomListener);
     }
 
     @Override
     public void exit() {
+        udpForwarder.shutdown();
+
+        eventManager.removeListener(PlayingEventType.ACCEPT_JOIN_ROOM, acceptRoomListener);
+        eventManager.removeListener(PlayingEventType.CLICK_ROOM_EVENT, clickRoomListener);
         eventManager.removeListener(PlayingEventType.SAW_CREATED_ROOM, roomListener);
-        forwarder.shutdown();
+        thisRoom.exit();
+        thisPlayer.exit();
         root.removeView(backgroundView);
+    }
+
+    private void onClickRoomEvent(ClickRoomEvent event) {
+        try {
+            networkForwarder.connect(event.getIpAddress());
+        } catch (IOException e) {
+            networkForwarder.shutdown();
+            return;
+        }
+        eventManager.trigger(new RequestJoinRoomEvent(udpForwarder.getIpAddress()));
+    }
+
+    private void onAcceptRoomEvent(AcceptJoinRoomEvent event) {
+        if (event.getNewPlayer().getIpAddress() == udpForwarder.getIpAddress())
+            eventManager.queue(new TransitToWaitRoom());
     }
 }

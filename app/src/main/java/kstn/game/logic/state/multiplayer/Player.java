@@ -1,9 +1,9 @@
 package kstn.game.logic.state.multiplayer;
 
 public class Player {
-    private int ipAddress;
-    private String name;
-    private int avatarId;
+    private final int ipAddress;
+    private final String name;
+    private final int avatarId;
 
     public Player(int ipAddress, String name, int avatarId) {
         this.ipAddress = ipAddress;

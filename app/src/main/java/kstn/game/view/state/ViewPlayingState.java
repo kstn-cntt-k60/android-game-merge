@@ -6,19 +6,14 @@ import java.util.List;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.state_event.TransitToCreatedRoomsState;
 import kstn.game.logic.state.IEntryExit;
-import kstn.game.logic.state.multiplayer.IThisPlayer;
 
 public class ViewPlayingState extends ViewGameState {
     private final EventManager eventManager;
     private List<IEntryExit> entryExitList = new ArrayList<>();
-    private final IThisPlayer thisPlayer;
 
-
-    public ViewPlayingState(EventManager eventManager,
-                            IThisPlayer thisPlayer) {
+    public ViewPlayingState(EventManager eventManager) {
         super(null);
         this.eventManager = eventManager;
-        this.thisPlayer = thisPlayer;
     }
 
     public void addEntryExit(IEntryExit entryExit) {
@@ -33,8 +28,7 @@ public class ViewPlayingState extends ViewGameState {
 
     @Override
     public boolean onBack() {
-        eventManager.queue(new TransitToCreatedRoomsState(
-                    thisPlayer.getName(), thisPlayer.getAvatarId()));
+        eventManager.queue(new TransitToCreatedRoomsState());
         return true;
     }
 

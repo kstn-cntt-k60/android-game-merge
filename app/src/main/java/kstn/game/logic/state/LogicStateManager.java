@@ -16,7 +16,6 @@ import kstn.game.logic.network.UDPForwarder;
 import kstn.game.logic.network.UDPManagerFactory;
 import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.process.ProcessManager;
-import kstn.game.logic.state.multiplayer.IThisPlayer;
 import kstn.game.logic.state.multiplayer.ThisPlayer;
 import kstn.game.logic.state.singleplayer.LogicSinglePlayerState;
 import kstn.game.logic.state_event.StateEventType;
@@ -27,6 +26,7 @@ import kstn.game.view.screen.ViewGroup;
 public class LogicStateManager {
     private LogicGameState prevState;
     private LogicGameState currentState;
+    private LogicGameState nextState;
 
     public final LogicMenuState menuState;
 
@@ -130,9 +130,7 @@ public class LogicStateManager {
 
         ThisPlayer thisPlayer = new ThisPlayer(eventManager);
         loginState = new LogicLoginState(
-                root, backgroundView, thisPlayer,
-                eventManager, networkForwarder
-        );
+                root, backgroundView, thisPlayer);
 
         // ----------------------------------
         listenToAllStateEvents();
@@ -144,8 +142,13 @@ public class LogicStateManager {
         return prevState;
     }
 
+    public LogicGameState getNextState() {
+        return nextState;
+    }
+
     public void makeTransitionTo(LogicGameState other) {
         prevState = currentState;
+        nextState = other;
         currentState.exit();
         currentState = other;
         currentState.entry();

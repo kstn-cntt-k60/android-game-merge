@@ -1,25 +1,9 @@
 package kstn.game.logic.state_event;
 
-import kstn.game.logic.event.BaseEventData;
-import kstn.game.logic.event.EventType;
+import kstn.game.logic.event.GameEventData;
 
-/**
- * Created by qi on 13/11/2017.
- */
-
-public class TransitToRoomCreator extends BaseEventData {
-
+public class TransitToRoomCreator extends GameEventData {
     public TransitToRoomCreator() {
-        super(0);
-    }
-
-    @Override
-    public EventType getEventType() {
-        return StateEventType.ROOM_CREATOR;
-    }
-
-    @Override
-    public String getName() {
-        return null;
+        super(StateEventType.ROOM_CREATOR);
     }
 }

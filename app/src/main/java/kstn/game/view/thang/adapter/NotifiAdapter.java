@@ -61,7 +61,7 @@ public class NotifiAdapter extends BaseAdapter {
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stateManager.eventManager.queue(new TransitToWaitRoom(data.get(i).getRoomName(), false));
+                stateManager.eventManager.queue(new TransitToWaitRoom());
             }
         });
 

@@ -9,10 +9,13 @@ import kstn.game.app.process.BaseProcessManager;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
+import kstn.game.logic.network.NetworkForwarder;
 import kstn.game.logic.network.UDPForwarder;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.room.RemoveCreatedRoomEvent;
 import kstn.game.logic.playing_event.room.SawCreatedRoomEvent;
+import kstn.game.logic.state.multiplayer.ThisPlayer;
+import kstn.game.logic.state.multiplayer.ThisRoom;
 import kstn.game.view.screen.View;
 import kstn.game.view.screen.ViewManager;
 
@@ -30,11 +33,18 @@ public class ViewPlayingStateTestOnUDPEvent {
     private final LogicCreatedRoomsState state;
     private final ViewManager root = mock(ViewManager.class);
     private final View backgroundView = mock(View.class);
+
+    private final ThisPlayer thisPlayer = mock(ThisPlayer.class);
+    private final ThisRoom thisRoom = mock(ThisRoom.class);
+
     private final UDPForwarder forwarder = mock(UDPForwarder.class);
+    private final NetworkForwarder networkForwarder = mock(NetworkForwarder.class);
 
     public ViewPlayingStateTestOnUDPEvent() {
         state = new LogicCreatedRoomsState(
-                eventManager, root, backgroundView, forwarder, processManager);
+                eventManager, root, backgroundView,
+                thisPlayer, thisRoom,
+                forwarder, networkForwarder, processManager);
         state.entry();
     }
 

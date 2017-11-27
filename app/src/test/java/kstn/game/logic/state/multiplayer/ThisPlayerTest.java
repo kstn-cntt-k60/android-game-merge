@@ -41,15 +41,6 @@ public class ThisPlayerTest {
     }
 
     @Test
-    public void setIsHostWorkCorrectly() {
-        Assert.assertEquals(thisPlayer.isHost(), false);
-        thisPlayer.setIsHost(false);
-        Assert.assertEquals(thisPlayer.isHost(), false);
-        thisPlayer.setIsHost(true);
-        Assert.assertEquals(thisPlayer.isHost(), true);
-    }
-
-    @Test
     public void shouldNotUpdateNameAfterExit() {
         eventManager.trigger(new SetThisPlayerEvent("AXA", 223));
         thisPlayer.exit();

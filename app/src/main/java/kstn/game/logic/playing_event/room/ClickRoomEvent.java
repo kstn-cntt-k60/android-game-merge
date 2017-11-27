@@ -3,13 +3,13 @@ package kstn.game.logic.playing_event.room;
 import kstn.game.logic.event.GameEventData;
 import kstn.game.logic.playing_event.PlayingEventType;
 
-public class ChooseRoomEvent extends GameEventData {
+public class ClickRoomEvent extends GameEventData {
     private final int ipAddress;
     private final String roomName;
 
-    public ChooseRoomEvent(int ip, String roomName) {
-        super(PlayingEventType.CHOOSE_ROOM_EVENT);
-        this.ipAddress = ip;
+    public ClickRoomEvent(int ipAddress, String roomName) {
+        super(PlayingEventType.CLICK_ROOM_EVENT);
+        this.ipAddress = ipAddress;
         this.roomName = roomName;
     }
 
