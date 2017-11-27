@@ -1,7 +1,6 @@
 package kstn.game.app.root;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.io.IOException;
 
@@ -19,10 +18,10 @@ import kstn.game.app.screen.GameAnimationView;
 import kstn.game.app.screen.GameViewClient;
 import kstn.game.app.screen.ShaderProgram;
 import kstn.game.logic.event.EventManager;
-import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.network.ClientFactory;
 import kstn.game.logic.network.ServerFactory;
 import kstn.game.logic.network.UDPManagerFactory;
+import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.state.LogicStateManager;
 import kstn.game.view.asset.AssetManager;
 import kstn.game.view.screen.ViewGroup;
@@ -83,7 +82,7 @@ public class Root implements GameViewClient {
         final ViewGroup viewGroup = gameView.getRootViewGroup();
         gameView.setLLEventManager(llEventManager);
 
-        viewStateManager = new ViewStateManager(this.activity, uiEventManager);
+        viewStateManager = new ViewStateManager(this.activity, uiEventManager, wifiInfo);
         logicStateManager = new LogicStateManager(
                 viewGroup, processManager, timeManager,
                 eventManager, assetManager, wifiInfo,

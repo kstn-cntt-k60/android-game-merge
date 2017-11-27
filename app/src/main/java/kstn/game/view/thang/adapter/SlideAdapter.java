@@ -7,24 +7,24 @@ import android.support.v4.app.FragmentPagerAdapter;
 import kstn.game.R;
 import kstn.game.view.thang.fragment.SlideFragment;
 
-public class MyAdapter extends FragmentPagerAdapter {
-    public MyAdapter(FragmentManager fm) {
+public class SlideAdapter extends FragmentPagerAdapter {
+    public SlideAdapter(FragmentManager fm) {
         super(fm);
     }
 
     @Override
     public Fragment getItem(int position) {
-        switch (position){
+        switch (position%4){
             case 0:
-                return SlideFragment.doiTuongMoi(R.drawable.index1);
+                return SlideFragment.newInstance(R.drawable.index1);
             case 1:
-                return SlideFragment.doiTuongMoi(R.drawable.index2);
+                return SlideFragment.newInstance(R.drawable.index2);
             case 2:
-                return SlideFragment.doiTuongMoi(R.drawable.index3);
+                return SlideFragment.newInstance(R.drawable.index3);
             case 3:
-                return SlideFragment.doiTuongMoi(R.drawable.index4);
+                return SlideFragment.newInstance(R.drawable.index4);
             default:
-                return null;
+                return SlideFragment.newInstance(R.drawable.index1);
         }
     }
 

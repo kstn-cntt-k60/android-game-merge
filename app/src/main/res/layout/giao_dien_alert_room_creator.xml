@@ -1,0 +1,60 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <EditText
+        android:id="@+id/edtRoomName"
+        android:hint="Nhập tên phòng"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+    <!--<LinearLayout-->
+
+        <!--android:weightSum="3"-->
+        <!--android:gravity="center"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="100dp">-->
+    <!--<TextView-->
+        <!--android:textStyle="bold"-->
+        <!--android:textSize="20dp"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="Chủ Phòng:"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent" />-->
+        <!--<TextView-->
+            <!--android:id="@+id/txtNameHost"-->
+            <!--android:textSize="20dp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:gravity="center"-->
+            <!--android:text="abcxyzzzzzzz"-->
+            <!--android:layout_weight="2"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent" />-->
+    <!--</LinearLayout>-->
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+    <Button
+        android:id="@+id/btnHUY"
+        android:textColor="#FFFF00"
+        android:background="@drawable/trangthai_button"
+        android:layout_marginLeft="20dp"
+        android:text="HỦY"
+        android:layout_width="150dp"
+        android:layout_height="50dp" />
+    <Button
+        android:id="@+id/btnOK"
+        android:textColor="#FFFF00"
+        android:background="@drawable/trangthai_button"
+        android:layout_marginLeft="20dp"
+        android:text="OK"
+        android:layout_width="150dp"
+        android:layout_height="50dp" />
+    </LinearLayout>
+
+</LinearLayout>

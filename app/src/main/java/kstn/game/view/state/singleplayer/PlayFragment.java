@@ -32,7 +32,7 @@ public class PlayFragment extends Fragment {
     private TextView txtNoiDungKim;
     private  KeyboardManager keyboardManager;
 
-    int height;
+     int height;
     View guessView, giveAnswerView;
 
     Button btnDoan;

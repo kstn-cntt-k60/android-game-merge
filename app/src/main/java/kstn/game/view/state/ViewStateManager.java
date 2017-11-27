@@ -4,6 +4,7 @@ import kstn.game.MainActivity;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
+import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.state_event.StateEventType;
 
 public class ViewStateManager {
@@ -13,8 +14,8 @@ public class ViewStateManager {
 
     // Multiplayer
     public final ViewLoginState loginState;
-    public final ViewGameState createdRoomsState ;
-    public final ViewGameState roomCreatorState;
+    public final ViewCreatedRoomsState createdRoomsState ;
+    public final ViewRoomCreatorState roomCreatorState;
     public final ViewGameState waitRoomState = null;
     public final ViewPlayingState playingState = null;
     public final ViewGameState resultState = null;
@@ -29,6 +30,7 @@ public class ViewStateManager {
     // Managers
     public final MainActivity activity;
     public final EventManager eventManager;
+    public final WifiInfo wifiInfo;
     
 
     private void listenToAllStateEvents() {
@@ -74,9 +76,11 @@ public class ViewStateManager {
     }
 
     public ViewStateManager(MainActivity activity,
-                            EventManager eventManager) {
+                            EventManager eventManager,
+                            WifiInfo wifiInfo) {
         this.activity = activity;
         this.eventManager = eventManager;
+        this.wifiInfo = wifiInfo;
 
         // States
         menuState = new ViewMenuState(this);

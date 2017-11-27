@@ -1,21 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:background="#2d4476"
-    android:layout_height="match_parent">
+    android:weightSum="10"
+    android:background="@drawable/shape2_button"
+    android:layout_height="100dp">
     <TextView
         android:id="@+id/txtNoti"
+        android:layout_weight="5.7"
         android:textColor="@android:color/white"
         android:gravity="center"
         android:textSize="20dp"
         android:text="Đã Tạo Phòng chơi"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="0dp" />
     <LinearLayout
+        android:gravity="center"
+        android:layout_weight="0.3"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <TextView
+            android:layout_gravity="center"
+
+            android:id="@+id/checkbox1"
+            android:background="@android:color/darker_gray"
+
+            android:gravity="center"
+            android:textSize="20dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center"
+            android:id="@+id/checkbox2"
+            android:background="@android:color/darker_gray"
+
+            android:gravity="center"
+            android:textSize="20dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center"
+            android:id="@+id/checkbox3"
+            android:background="@android:color/darker_gray"
+
+            android:gravity="center"
+            android:textSize="20dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_weight="4"
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:weightSum="3"
-        android:layout_height="50dp">
+        android:layout_height="0dp">
         <Button
             android:id="@+id/btnHide"
             android:layout_gravity="center"

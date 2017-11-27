@@ -17,6 +17,7 @@ import kstn.game.logic.network.UDPManagerFactory;
 import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.process.ProcessManager;
 import kstn.game.logic.state.multiplayer.ThisPlayer;
+import kstn.game.logic.state.multiplayer.ThisRoom;
 import kstn.game.logic.state.singleplayer.LogicSinglePlayerState;
 import kstn.game.logic.state_event.StateEventType;
 import kstn.game.view.asset.AssetManager;
@@ -33,7 +34,7 @@ public class LogicStateManager {
     // Multiplayer
 
     private final LogicLoginState loginState;
-    private final LogicCreatedRoomsState createdRoomsState = null;
+    private final LogicCreatedRoomsState createdRoomsState;
     private final LogicGameState roomCreatorState = null;
     private final LogicGameState waitRoomState = null;
     private final LogicGameState playingState = null;
@@ -137,8 +138,15 @@ public class LogicStateManager {
                 eventManager, serverFactory, clientFactory);
 
         ThisPlayer thisPlayer = new ThisPlayer(eventManager);
+        ThisRoom thisRoom = new ThisRoom(eventManager);
+
         loginState = new LogicLoginState(
                 root, backgroundView, thisPlayer);
+
+        createdRoomsState = new LogicCreatedRoomsState(
+                eventManager, root, backgroundView,
+                thisPlayer, thisRoom,
+                udpForwarder, networkForwarder, processManager);
 
         // ----------------------------------
         listenToAllStateEvents();

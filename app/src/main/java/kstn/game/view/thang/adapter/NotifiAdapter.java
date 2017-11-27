@@ -10,9 +10,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import kstn.game.R;
-import kstn.game.logic.model.Room;
 import kstn.game.logic.state_event.TransitToWaitRoom;
 import kstn.game.view.state.ViewStateManager;
+import kstn.game.view.thang.Model.Room;
 
 /**
  * Created by thang on 11/9/2017.
@@ -51,6 +51,8 @@ public class NotifiAdapter extends BaseAdapter {
         Button btnHide = (Button)view.findViewById(R.id.btnHide);
         Button btnAccept = (Button)view.findViewById(R.id.btnAccept);
         txtNoti.setText(data.get(i).getRoomName());
+
+
         btnHide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
