@@ -9,7 +9,6 @@ import java.util.List;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.GameEventData;
 import kstn.game.logic.playing_event.PlayingEventType;
-import kstn.game.logic.playing_event.guess.AcceptRequestGuessEvent;
 import kstn.game.logic.state.multiplayer.Player;
 
 public class AcceptJoinRoomEvent extends GameEventData {
