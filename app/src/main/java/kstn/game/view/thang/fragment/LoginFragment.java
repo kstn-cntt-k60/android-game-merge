@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import kstn.game.R;
 import kstn.game.logic.state_event.TransitToCreatedRoomsState;
 import kstn.game.view.state.ViewStateManager;
-import kstn.game.view.thang.adapter.MyAdapter;
+import kstn.game.view.thang.adapter.SlideAdapter;
 
 public class LoginFragment extends Fragment {
     private ViewStateManager stateManager;
@@ -40,7 +40,7 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         final EditText nameEditText = (EditText) view.findViewById(R.id.ten);
         final ViewPager vpPager = view.findViewById(R.id.vpPager);
-        MyAdapter adapter = new MyAdapter(getActivity().getSupportFragmentManager());
+        SlideAdapter adapter = new SlideAdapter(getActivity().getSupportFragmentManager());
         vpPager.setAdapter(adapter);
         final ArrayList<Integer> data = new ArrayList<>();
         data.add(R.drawable.index1);

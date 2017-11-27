@@ -26,6 +26,13 @@ public class DialogManager {
         w.height = (int) (height * 0.53);
         hopthoai.getWindow().setAttributes(w);
     }
+    public DialogManager(MainActivity activity, View v){
+        this.hopthoai = new Dialog(activity, R.style.Theme_Alert_Dialog);
+        hopthoai.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        hopthoai.setContentView(v);
+        hopthoai.show();
+    }
+
 
     public Dialog getHopthoai() {
         return hopthoai;

@@ -47,7 +47,8 @@ public class WaitPlayAdapter extends BaseAdapter {
         view = inflater.inflate(R.layout.player_waitting,viewGroup,false);
         ImageView idAvatar =(ImageView) view.findViewById(R.id.idAvatar);
         TextView PlayerName = (TextView) view.findViewById(R.id.PlayerName);
-       //
+        idAvatar.setImageResource(data.get(i).getAvatarId());
+        PlayerName.setText(data.get(i).getName());
 
         return view;
     }

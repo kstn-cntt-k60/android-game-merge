@@ -15,12 +15,13 @@ import kstn.game.R;
  * A simple {@link Fragment} subclass.
  */
 public class SlideFragment extends Fragment {
-    int idAnh;
+   private int idAnh;
+    private ImageView img;
 
     public SlideFragment() {
         // Required empty public constructor
     }
-    public static SlideFragment doiTuongMoi(int idAnh) {
+    public static SlideFragment newInstance(int idAnh) {
         SlideFragment sildeFragment = new SlideFragment();
         Bundle bd = new Bundle();
         bd.putInt("idAnh",idAnh);
@@ -38,13 +39,10 @@ public class SlideFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ImageView img = (ImageView) view.findViewById(R.id.img);
+        img = (ImageView) view.findViewById(R.id.img);
         Bundle bd = getArguments();
-        if(bd!=null){
-            idAnh=bd.getInt("idAnh");
-            img.setImageResource(idAnh);
-
-        }
+        idAnh=bd.getInt("idAnh");
+        img.setImageResource(idAnh);
     }
 
 

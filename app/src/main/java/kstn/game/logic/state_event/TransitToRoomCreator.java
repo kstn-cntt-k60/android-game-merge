@@ -8,9 +8,11 @@ import kstn.game.logic.event.EventType;
  */
 
 public class TransitToRoomCreator extends BaseEventData {
+    private  String roomName;
 
-    public TransitToRoomCreator() {
+    public TransitToRoomCreator(String roomName) {
         super(0);
+        this.roomName = roomName;
     }
 
     @Override
