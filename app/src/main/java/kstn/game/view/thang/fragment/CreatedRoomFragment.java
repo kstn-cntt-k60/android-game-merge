@@ -83,7 +83,8 @@ public class CreatedRoomFragment extends Fragment implements ICreatedRooms{
                     public void onClick(View view) {
                         String roomName = edtRoomName.getText().toString();
                         if(!roomName.isEmpty()){
-                            stateManager.eventManager.queue(new SetThisRoomEvent(roomName, 0));
+                            stateManager.eventManager.queue(
+                                    new SetThisRoomEvent(roomName, stateManager.wifiInfo.getIP()));
                             stateManager.eventManager.queue(new TransitToWaitRoom());
                         }
                         else Toast.makeText(stateManager.activity,"Vui long nhap ten phong",
@@ -112,7 +113,7 @@ public class CreatedRoomFragment extends Fragment implements ICreatedRooms{
     }
 
     @Override
-    public void remoteRoom(int ipAddress) {
+    public void removeRoom(int ipAddress) {
         for(Room r:data){
             if(r.getIpAddress()==ipAddress){
                 data.remove(r);

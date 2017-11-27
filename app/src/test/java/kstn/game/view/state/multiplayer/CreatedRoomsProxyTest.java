@@ -44,7 +44,7 @@ public class CreatedRoomsProxyTest {
         proxy.entry();
         eventManager.trigger(new RemoveCreatedRoomEvent(1555));
         verify(createdRooms, times(1))
-                .remoteRoom(1555);
+                .removeRoom(1555);
     }
 
     @Test
@@ -53,6 +53,6 @@ public class CreatedRoomsProxyTest {
         proxy.exit();
         eventManager.trigger(new RemoveCreatedRoomEvent(1555));
         verify(createdRooms, times(0))
-                .remoteRoom(1555);
+                .removeRoom(1555);
     }
 }

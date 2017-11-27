@@ -32,7 +32,7 @@ public class CreatedRoomsProxy implements IEntryExit {
             @Override
             public void onEvent(EventData event) {
                 RemoveCreatedRoomEvent event1 = (RemoveCreatedRoomEvent) event;
-                createdRooms.remoteRoom(event1.getIpAddress());
+                createdRooms.removeRoom(event1.getIpAddress());
             }
         };
     }
