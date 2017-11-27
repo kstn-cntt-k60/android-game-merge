@@ -11,6 +11,9 @@ import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.event.EventType;
+import kstn.game.logic.playing_event.PlayingEventType;
+import kstn.game.logic.playing_event.room.AcceptJoinRoomEvent;
+import kstn.game.logic.playing_event.room.RequestJoinRoomEvent;
 
 public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
     private final EventManager eventManager;
@@ -44,6 +47,10 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
         // Cone
         parserMap.put(ConeEventType.MOVE, new ConeMoveEventData.Parser());
         parserMap.put(ConeEventType.ACCELERATE, new ConeAccelerateEventData.Parser());
+
+        //
+        parserMap.put(PlayingEventType.REQUEST_JOIN_ROOM, new RequestJoinRoomEvent.Parser());
+        parserMap.put(PlayingEventType.ACCEPT_JOIN_ROOM, new AcceptJoinRoomEvent.Parser());
     }
 
     private void addListeners() {

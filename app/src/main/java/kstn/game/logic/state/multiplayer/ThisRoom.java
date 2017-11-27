@@ -46,6 +46,9 @@ public class ThisRoom implements IEntryExit {
 
     @Override
     public void entry() {
+        roomName = "";
+        ipAddress = 0;
+        playerList.clear();
         eventManager.addListener(PlayingEventType.SET_THIS_ROOM, setRoomListener);
         eventManager.addListener(PlayingEventType.ACCEPT_JOIN_ROOM, acceptJoinRoomListener);
     }

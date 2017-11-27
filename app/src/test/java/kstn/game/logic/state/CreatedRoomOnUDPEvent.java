@@ -24,7 +24,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-public class ViewPlayingStateTestOnUDPEvent {
+public class CreatedRoomOnUDPEvent {
     private SawCreatedRoomEvent event =
             new SawCreatedRoomEvent(3344, "ABC", 2);
 
@@ -40,7 +40,7 @@ public class ViewPlayingStateTestOnUDPEvent {
     private final UDPForwarder forwarder = mock(UDPForwarder.class);
     private final NetworkForwarder networkForwarder = mock(NetworkForwarder.class);
 
-    public ViewPlayingStateTestOnUDPEvent() {
+    public CreatedRoomOnUDPEvent() {
         state = new LogicCreatedRoomsState(
                 eventManager, root, backgroundView,
                 thisPlayer, thisRoom,
@@ -62,7 +62,7 @@ public class ViewPlayingStateTestOnUDPEvent {
         Assert.assertEquals(state.expireProcessMap.size(), 1);
 
         processManager.updateProcesses(2001);
-        // Assert.assertEquals(state.expireProcessMap.size(), 0);
+        Assert.assertEquals(state.expireProcessMap.size(), 0);
 
         ArgumentCaptor<EventData> captor = ArgumentCaptor.forClass(EventData.class);
         verify(listener).onEvent(captor.capture());

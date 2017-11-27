@@ -93,7 +93,6 @@ public class Root implements GameViewClient {
 
     @Override
 	public void onDrawFrame() {
-        Log.i("Draw", "draw" + Thread.currentThread().getId());
         llEventManager.update();
         eventManager.update();
 
@@ -114,21 +113,18 @@ public class Root implements GameViewClient {
     }
 	
 	public void shutdown() {
-        Log.i("shutdown", " shutdown");
         processManager.abortAllProcesses(true);
         eventManager.abortAllEvents();
 	}
 
 	@Override
     public void onResume() {
-        Log.i("resume", "resume" + Thread.currentThread().getId());
         long timeStamp = System.currentTimeMillis();
         llEventManager.queue(new RootResumeEvent(timeStamp));
     }
 
     @Override
 	public void onPause() {
-        Log.i("Pause", "pause" + Thread.currentThread().getId());
         long timeStamp = System.currentTimeMillis();
         llEventManager.queue(new RootPauseEvent(timeStamp));
     }

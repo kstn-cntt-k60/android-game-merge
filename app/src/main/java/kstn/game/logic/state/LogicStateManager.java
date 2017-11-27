@@ -28,23 +28,23 @@ public class LogicStateManager {
     private LogicGameState currentState;
     private LogicGameState nextState;
 
-    public final LogicMenuState menuState;
+    private final LogicMenuState menuState;
 
     // Multiplayer
 
-    public final LogicLoginState loginState;
-    public final LogicCreatedRoomsState createdRoomsState = null;
-    public final LogicGameState roomCreatorState = null;
-    public final LogicGameState waitRoomState = null;
-    public final LogicGameState playingState = null;
-    public final LogicGameState resultState = null;
+    private final LogicLoginState loginState;
+    private final LogicCreatedRoomsState createdRoomsState = null;
+    private final LogicGameState roomCreatorState = null;
+    private final LogicGameState waitRoomState = null;
+    private final LogicGameState playingState = null;
+    private final LogicGameState resultState = null;
 
     // Single SinglePlayerModel
-    public final LogicSinglePlayerState singlePlayerState;
-    public final LogicSingleResultState singleResultState;
+    private final LogicSinglePlayerState singlePlayerState;
+    private final LogicSingleResultState singleResultState;
 
     // Statistics
-    public final LogicGameState statState = null;
+    private final LogicGameState statState = null;
 
     // Managers
     public final ViewGroup root;
@@ -52,8 +52,16 @@ public class LogicStateManager {
     public final BaseTimeManager timeManager;
     public final EventManager eventManager;
     public final AssetManager assetManager;
-    public final WifiInfo wifiInfo;
+    private final WifiInfo wifiInfo;
     public final MainActivity mainActivity;
+
+    public LogicGameState getCreatedRoomsState() {
+        return createdRoomsState;
+    }
+
+    public LogicGameState getRoomCreatorState() {
+        return roomCreatorState;
+    }
 
     private void listenToAllStateEvents() {
         eventManager.addListener(StateEventType.MENU, new EventListener() {
