@@ -16,7 +16,7 @@ public class ViewStateManager {
     public final ViewLoginState loginState;
     public final ViewCreatedRoomsState createdRoomsState ;
     public final ViewRoomCreatorState roomCreatorState;
-    public final ViewGameState waitRoomState = null;
+    public final ViewWaitRoomState waitRoomState;
     public final ViewPlayingState playingState = null;
     public final ViewGameState resultState = null;
 
@@ -61,16 +61,25 @@ public class ViewStateManager {
                 makeTransitionTo(loginState);
             }
         });
+
         eventManager.addListener(StateEventType.CREATED_ROOMS, new EventListener() {
             @Override
             public void onEvent(EventData event) {
                 makeTransitionTo(createdRoomsState);
             }
         });
+
         eventManager.addListener(StateEventType.ROOM_CREATOR, new EventListener() {
             @Override
             public void onEvent(EventData event) {
                 makeTransitionTo(roomCreatorState);
+            }
+        });
+
+        eventManager.addListener(StateEventType.WAIT_ROOM, new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                makeTransitionTo(waitRoomState);
             }
         });
     }
@@ -89,6 +98,8 @@ public class ViewStateManager {
         loginState = new ViewLoginState(this);
         createdRoomsState = new ViewCreatedRoomsState(this);
         roomCreatorState = new ViewRoomCreatorState(this);
+        waitRoomState = new ViewWaitRoomState(this);
+
         listenToAllStateEvents();
         currentState = menuState;
         currentState.entry();

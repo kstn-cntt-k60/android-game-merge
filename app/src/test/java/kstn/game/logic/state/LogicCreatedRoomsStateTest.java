@@ -174,9 +174,10 @@ public class LogicCreatedRoomsStateTest {
     }
 
     @Test
-    public void shouldCallThisRoomThisPlayerEntryExit() {
+    public void shouldCallThisRoomThisPlayerEntryExitAndClearRoomOnEntry() {
         state.entry();
         verify(thisPlayer).entry();
+        verify(thisRoom).clear();
         verify(thisRoom).entry();
         verify(thisPlayer, never()).exit();
         verify(thisRoom, never()).exit();

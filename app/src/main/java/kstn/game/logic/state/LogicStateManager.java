@@ -18,11 +18,11 @@ import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.process.ProcessManager;
 import kstn.game.logic.state.multiplayer.ThisPlayer;
 import kstn.game.logic.state.multiplayer.ThisRoom;
-import kstn.game.logic.state.singleplayer.LogicSinglePlayerState;
 import kstn.game.logic.state_event.StateEventType;
 import kstn.game.view.asset.AssetManager;
 import kstn.game.view.screen.ImageView;
 import kstn.game.view.screen.ViewGroup;
+import kstn.game.view.state.ViewStateManager;
 
 public class LogicStateManager {
     private LogicGameState prevState;
@@ -35,8 +35,8 @@ public class LogicStateManager {
 
     private final LogicLoginState loginState;
     private final LogicCreatedRoomsState createdRoomsState;
-    private final LogicGameState roomCreatorState = null;
-    private final LogicGameState waitRoomState = null;
+    private final LogicRoomCreatorState roomCreatorState;
+    private final LogicWaitRoomState waitRoomState;
     private final LogicGameState playingState = null;
     private final LogicGameState resultState = null;
 
@@ -48,6 +48,7 @@ public class LogicStateManager {
     private final LogicGameState statState = null;
 
     // Managers
+    private final ViewStateManager viewStateManager;
     public final ViewGroup root;
     public final ProcessManager processManager;
     public final BaseTimeManager timeManager;
@@ -85,21 +86,38 @@ public class LogicStateManager {
                 makeTransitionTo(singleResultState);
             }
         });
+
         eventManager.addListener(StateEventType.LOGIN, new EventListener() {
             @Override
             public void onEvent(EventData event) {
                 makeTransitionTo(loginState);
             }
         });
+
         eventManager.addListener(StateEventType.CREATED_ROOMS, new EventListener() {
             @Override
             public void onEvent(EventData event) {
                 makeTransitionTo(createdRoomsState);
             }
         });
+
+        eventManager.addListener(StateEventType.ROOM_CREATOR, new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                makeTransitionTo(roomCreatorState);
+            }
+        });
+
+        eventManager.addListener(StateEventType.WAIT_ROOM, new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                makeTransitionTo(waitRoomState);
+            }
+        });
     }
 
-    public LogicStateManager(ViewGroup root,
+    public LogicStateManager(ViewStateManager viewStateManager,
+                             ViewGroup root,
                              ProcessManager processManager,
                              BaseTimeManager timeManager,
                              EventManager eventManager,
@@ -109,6 +127,7 @@ public class LogicStateManager {
                              ServerFactory serverFactory,
                              ClientFactory clientFactory,
                              MainActivity mainActivity) {
+        this.viewStateManager = viewStateManager;
         this.root = root;
         this.processManager = processManager;
         this.timeManager = timeManager;
@@ -119,7 +138,8 @@ public class LogicStateManager {
 
         // States
         menuState = new LogicMenuState(this);
-        singlePlayerState = new LogicSinglePlayerState(this);
+        singlePlayerState = new LogicSinglePlayerState(
+                this, processManager, viewStateManager.singlePlayerState);
         singleResultState = new LogicSingleResultState(this);
 
         Bitmap background = null;
@@ -147,6 +167,16 @@ public class LogicStateManager {
                 eventManager, root, backgroundView,
                 thisPlayer, thisRoom,
                 udpForwarder, networkForwarder, processManager);
+
+        roomCreatorState = new LogicRoomCreatorState(root, backgroundView);
+
+        waitRoomState = new LogicWaitRoomState(
+                this, eventManager, processManager,
+                viewStateManager.waitRoomState,
+                root, backgroundView,
+                thisPlayer, thisRoom,
+                udpForwarder, networkForwarder
+        );
 
         // ----------------------------------
         listenToAllStateEvents();

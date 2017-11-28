@@ -1,6 +1,5 @@
 package kstn.game.view.thang.fragment;
 
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -14,10 +13,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.ListIterator;
 
 import kstn.game.R;
+import kstn.game.logic.playing_event.room.AcceptJoinRoomEvent;
 import kstn.game.logic.playing_event.room.SetThisRoomEvent;
 import kstn.game.logic.state.multiplayer.Player;
+import kstn.game.logic.state_event.TransitToCreatedRoomsState;
 import kstn.game.logic.state_event.TransitToRoomCreator;
 import kstn.game.logic.state_event.TransitToWaitRoom;
 import kstn.game.view.state.ViewStateManager;
@@ -26,9 +29,6 @@ import kstn.game.view.state.singleplayer.DialogManager;
 import kstn.game.view.thang.Model.Room;
 import kstn.game.view.thang.adapter.NotifiAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class CreatedRoomFragment extends Fragment implements ICreatedRooms{
     private Player Watchingplayer;
     private ViewStateManager stateManager;
@@ -51,9 +51,14 @@ public class CreatedRoomFragment extends Fragment implements ICreatedRooms{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_rom_created, container, false);
     }
+
+    public void init() {
+        data = new ArrayList<>();
+        adapter = new NotifiAdapter(data,stateManager);
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -76,6 +81,7 @@ public class CreatedRoomFragment extends Fragment implements ICreatedRooms{
                     @Override
                     public void onClick(View view) {
                         dialogManager.getHopthoai().dismiss();
+                        stateManager.eventManager.queue(new TransitToCreatedRoomsState());
                     }
                 });
                 btnOK.setOnClickListener(new View.OnClickListener() {
@@ -86,30 +92,32 @@ public class CreatedRoomFragment extends Fragment implements ICreatedRooms{
                             stateManager.eventManager.queue(
                                     new SetThisRoomEvent(roomName, stateManager.wifiInfo.getIP()));
                             stateManager.eventManager.queue(new TransitToWaitRoom());
+                            dialogManager.getHopthoai().dismiss();
                         }
                         else Toast.makeText(stateManager.activity,"Vui long nhap ten phong",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
-
-
             }
         });
     }
-    public void entry() {
 
-    }
+    public void entry() {}
 
     @Override
     public void addRoom(int ipAddress, String roomName, int numberOfPlayers) {
-        Room room= new Room(ipAddress,roomName,numberOfPlayers);
-        if(data==null) data = new ArrayList<>();
-        data.add(room);
-        if(adapter == null) adapter = new NotifiAdapter(data,stateManager);
-        adapter.notifyDataSetChanged();
+        Room newRoom = new Room(ipAddress, roomName, numberOfPlayers);
+        ListIterator<Room> it = data.listIterator();
+        while (it.hasNext()) {
+            Room room = it.next();
+            if (room.getIpAddress() == ipAddress) {
+                it.set(newRoom);
+                return;
+            }
+        }
 
+        data.add(newRoom);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

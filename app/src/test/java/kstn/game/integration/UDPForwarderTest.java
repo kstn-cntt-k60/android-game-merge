@@ -35,8 +35,8 @@ public class UDPForwarderTest {
         when(wifiInfo.getMask()).thenReturn(NetworkUtil.ipStringToInt("255.255.255.0"));
         forwarder.listen();
         // eventManager.trigger(new SawCreatedRoomEvent(344, "ROOM", 3));
-        forwarder.sendEvent(new SawCreatedRoomEvent(34, "Tung", 51));
-        forwarder.sendEvent(new SawCreatedRoomEvent(132, "Linh", 10));
+        forwarder.sendEvent(new SawCreatedRoomEvent(34, "Tung", 2));
+        forwarder.sendEvent(new SawCreatedRoomEvent(132, "Linh",3));
         forwarder.shutdown();
     }
 }

@@ -84,6 +84,7 @@ public class Root implements GameViewClient {
 
         viewStateManager = new ViewStateManager(this.activity, uiEventManager, wifiInfo);
         logicStateManager = new LogicStateManager(
+                viewStateManager,
                 viewGroup, processManager, timeManager,
                 eventManager, assetManager, wifiInfo,
                 udpManagerFactory, serverFactory, clientFactory,

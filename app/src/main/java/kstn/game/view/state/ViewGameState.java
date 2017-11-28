@@ -1,14 +1,23 @@
 package kstn.game.view.state;
 
-/**
- * Created by qi on 09/11/2017.
- */
-
 public abstract class ViewGameState {
     final protected ViewStateManager stateManager;
+    private volatile boolean viewIsReady = false;
 
     public ViewGameState(ViewStateManager stateManager) {
         this.stateManager = stateManager;
+    }
+
+    public boolean isReady() {
+        return viewIsReady;
+    }
+
+    protected void postEntry() {
+        viewIsReady = true;
+    }
+
+    protected void preExit() {
+        viewIsReady = false;
     }
 
     public abstract void entry();

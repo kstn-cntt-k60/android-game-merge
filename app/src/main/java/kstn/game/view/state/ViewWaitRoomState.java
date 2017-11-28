@@ -2,10 +2,6 @@ package kstn.game.view.state;
 
 import kstn.game.view.thang.fragment.WaitRoomFragment;
 
-/**
- * Created by thang on 11/24/2017.
- */
-
 public class ViewWaitRoomState extends  ViewGameState {
     public ViewWaitRoomState(ViewStateManager stateManager) {
         super(stateManager);
@@ -16,7 +12,7 @@ public class ViewWaitRoomState extends  ViewGameState {
         WaitRoomFragment fragment = new WaitRoomFragment();
         fragment.setStateManager(stateManager);
         stateManager.activity.addFragment(fragment);
-
+        postEntry();
     }
 
     @Override
@@ -26,6 +22,6 @@ public class ViewWaitRoomState extends  ViewGameState {
 
     @Override
     public void exit() {
-
+        preExit();
     }
 }

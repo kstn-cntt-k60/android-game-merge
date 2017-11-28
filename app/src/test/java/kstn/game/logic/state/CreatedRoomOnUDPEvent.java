@@ -61,6 +61,16 @@ public class CreatedRoomOnUDPEvent {
         verify(listener, never()).onEvent(any(EventData.class));
         Assert.assertEquals(state.expireProcessMap.size(), 1);
 
+        eventManager.trigger(event);
+        processManager.updateProcesses(3000);
+        verify(listener, never()).onEvent(any(EventData.class));
+        Assert.assertEquals(state.expireProcessMap.size(), 1);
+
+        eventManager.trigger(event);
+        processManager.updateProcesses(3000);
+        verify(listener, never()).onEvent(any(EventData.class));
+        Assert.assertEquals(state.expireProcessMap.size(), 1);
+
         processManager.updateProcesses(2001);
         Assert.assertEquals(state.expireProcessMap.size(), 0);
 

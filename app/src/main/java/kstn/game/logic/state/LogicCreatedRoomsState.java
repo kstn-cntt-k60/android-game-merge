@@ -35,7 +35,7 @@ public class LogicCreatedRoomsState extends LogicGameState {
 
     private final UDPForwarder udpForwarder;
     private final NetworkForwarder networkForwarder;
-    private final EventListener roomListener;
+    private final EventListener sawRoomListener;
     private final EventListener clickRoomListener;
     private final EventListener acceptRoomListener;
 
@@ -104,7 +104,7 @@ public class LogicCreatedRoomsState extends LogicGameState {
         this.udpForwarder = udpForwarder;
         this.networkForwarder = networkForwarder;
 
-        roomListener = new EventListener() {
+        sawRoomListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
                 SawCreatedRoomEvent event1 = (SawCreatedRoomEvent) event;
@@ -141,8 +141,9 @@ public class LogicCreatedRoomsState extends LogicGameState {
         expireProcessMap.clear();
 
         thisPlayer.entry();
+        thisRoom.clear();
         thisRoom.entry();
-        eventManager.addListener(PlayingEventType.SAW_CREATED_ROOM, roomListener);
+        eventManager.addListener(PlayingEventType.SAW_CREATED_ROOM, sawRoomListener);
         eventManager.addListener(PlayingEventType.CLICK_ROOM_EVENT, clickRoomListener);
         eventManager.addListener(PlayingEventType.ACCEPT_JOIN_ROOM, acceptRoomListener);
 
@@ -159,7 +160,7 @@ public class LogicCreatedRoomsState extends LogicGameState {
 
         eventManager.removeListener(PlayingEventType.ACCEPT_JOIN_ROOM, acceptRoomListener);
         eventManager.removeListener(PlayingEventType.CLICK_ROOM_EVENT, clickRoomListener);
-        eventManager.removeListener(PlayingEventType.SAW_CREATED_ROOM, roomListener);
+        eventManager.removeListener(PlayingEventType.SAW_CREATED_ROOM, sawRoomListener);
         thisRoom.exit();
         thisPlayer.exit();
         root.removeView(backgroundView);

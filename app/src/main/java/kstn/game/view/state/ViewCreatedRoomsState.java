@@ -21,20 +21,13 @@ public class ViewCreatedRoomsState extends ViewGameState {
         createdRoomsProxy = new CreatedRoomsProxy(stateManager.eventManager, fragment);
         fragment.setStateManager(stateManager);
         stateManager.activity.addFragment(fragment);
+        fragment.init();
 
         createdRoomsProxy.entry();
-
-
-        fragment.addRoom(500,"Thang",1);
-        fragment.addRoom(501,"QUY",2);
-        fragment.addRoom(502,"Tung",2);
-        fragment.addRoom(502,"Tung",2);
-        fragment.addRoom(502,"Tung",2);
-
     }
     @Override
     public void exit() {
-        createdRoomsProxy.entry();
+        createdRoomsProxy.exit();
         createdRoomsProxy = null;
     }
 }

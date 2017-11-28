@@ -72,8 +72,6 @@ public class SinglePlayerManager {
 
     private QuestionManagerDAO questionManager;
 
-    private EventListener playingReadyListener;
-
     private EventListener coneAccelListener;
     private EventListener coneStopListener;
     private EventListener answerListener;
@@ -138,6 +136,10 @@ public class SinglePlayerManager {
         setQuestion(question, answer);
     }
 
+    public void onViewReady() {
+        newQuestion();
+    }
+
     public SinglePlayerManager(
             Cone cone_,
             LogicStateManager stateManager_) {
@@ -154,13 +156,6 @@ public class SinglePlayerManager {
         questionManager.open();
 
         initConeCells();
-
-        playingReadyListener = new EventListener() {
-            @Override
-            public void onEvent(EventData event) {
-                newQuestion();
-            }
-        };
 
         coneAccelListener = new EventListener() {
             @Override
@@ -223,7 +218,6 @@ public class SinglePlayerManager {
         currentState = rotatableState;
         currentState.entry();
 
-        stateManager.eventManager.addListener(PlayingEventType.PLAYING_READY, playingReadyListener);
         stateManager.eventManager.addListener(ConeEventType.ACCELERATE, coneAccelListener);
         stateManager.eventManager.addListener(ConeEventType.STOP, coneStopListener);
         stateManager.eventManager.addListener(PlayingEventType.ANSWER, answerListener);
@@ -242,7 +236,6 @@ public class SinglePlayerManager {
         stateManager.eventManager.removeListener(ConeEventType.STOP, coneStopListener);
         stateManager.eventManager.removeListener(PlayingEventType.ANSWER, answerListener);
         stateManager.eventManager.removeListener(PlayingEventType.CELL_CHOSEN, cellChosenListener);
-        stateManager.eventManager.removeListener(PlayingEventType.PLAYING_READY, playingReadyListener);
 
         stateManager.eventManager.removeListener(PlayingEventType.REQUEST_GUESS,
                 requestGuessListener);

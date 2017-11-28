@@ -12,7 +12,12 @@ import kstn.game.logic.event.EventType;
 import kstn.game.logic.network.Endpoint;
 import kstn.game.logic.network.NetworkForwarder;
 import kstn.game.logic.playing_event.PlayingEventType;
+import kstn.game.logic.process.Process;
+import kstn.game.logic.process.ProcessManager;
+import kstn.game.logic.state.multiplayer.ThisPlayer;
+import kstn.game.logic.state.multiplayer.ThisRoom;
 import kstn.game.logic.state_event.StateEventType;
+import kstn.game.view.state.ViewGameState;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -24,10 +29,20 @@ public class LogicWaitRoomStateClientTest {
     private LogicWaitRoomState state;
     private NetworkForwarder networkForwarder = mock(NetworkForwarder.class);
     private EventManager eventManager = mock(EventManager.class);
+    private ProcessManager processManager = mock(ProcessManager.class);
+    private ViewGameState viewGameState = mock(ViewGameState.class);
+    private ThisPlayer thisPlayer = mock(ThisPlayer.class);
+    private ThisRoom thisRoom = mock(ThisRoom.class);
 
     public LogicWaitRoomStateClientTest() {
+        when(viewGameState.isReady()).thenReturn(true);
+
         state = new LogicWaitRoomState(
-                stateManager, eventManager,null, networkForwarder);
+                stateManager, eventManager,
+                processManager, viewGameState,
+                null, null,
+                thisPlayer, thisRoom,
+                null, networkForwarder);
     }
 
     @Test
