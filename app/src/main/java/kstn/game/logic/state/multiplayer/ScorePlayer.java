@@ -3,6 +3,8 @@ package kstn.game.logic.state.multiplayer;
 public class ScorePlayer {
     private Player player;
     private int score;
+    private boolean isReady;
+    private boolean isActive;
 
     public ScorePlayer(Player player) {
         this.player = player;

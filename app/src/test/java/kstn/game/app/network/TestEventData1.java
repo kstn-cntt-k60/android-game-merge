@@ -1,32 +1,21 @@
 package kstn.game.app.network;
 
-import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventData;
-import kstn.game.logic.event.EventType;
+import kstn.game.logic.event.GameEventData;
 import kstn.game.logic.event.TestEventType;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class TestEventData1 extends BaseEventData {
+public class TestEventData1 extends GameEventData {
     private final int id;
     private final String name;
 
     public TestEventData1(long timeStamp, int id, String name) {
-        super(timeStamp);
+        super(TestEventType.EVENT_TEST1);
         this.id = id;
         this.name = name;
-    }
-
-    @Override
-    public EventType getEventType() {
-        return TestEventType.EVENT_TEST1;
-    }
-
-    @Override
-    public String getName() {
-        return "test";
     }
 
     public String name() {

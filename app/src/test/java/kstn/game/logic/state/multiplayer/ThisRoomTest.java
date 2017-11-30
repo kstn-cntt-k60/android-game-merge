@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kstn.game.app.event.BaseEventManager;
+import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.playing_event.room.AcceptJoinRoomEvent;
+import kstn.game.logic.playing_event.room.ExitRoomEvent;
 import kstn.game.logic.playing_event.room.SetThisRoomEvent;
 
 public class ThisRoomTest {
@@ -72,5 +74,16 @@ public class ThisRoomTest {
         Assert.assertEquals(players.get(1).getAvatarId(), 2);
     }
 
-
+    @Test
+    public void shouldListenToExitRoom() {
+        thisRoom.entry();
+        int ip = 244;
+        thisRoom.getPlayerList().add(
+                new Player(ip, "Tung", 3));
+        Assert.assertEquals(thisRoom.getPlayerList().size(), 1);
+        eventManager.trigger(new ExitRoomEvent(22));
+        Assert.assertEquals(thisRoom.getPlayerList().size(), 1);
+        eventManager.trigger(new ExitRoomEvent(ip));
+        Assert.assertEquals(thisRoom.getPlayerList().size(), 0);
+    }
 }

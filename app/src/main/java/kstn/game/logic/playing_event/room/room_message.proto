@@ -22,3 +22,7 @@ message AcceptJoinRoom {
     Player newPlayer = 1;
     repeated Player oldPlayers = 2;
 }
+
+message ExitRoom {
+    int32 playerIpAddress = 1;
+}

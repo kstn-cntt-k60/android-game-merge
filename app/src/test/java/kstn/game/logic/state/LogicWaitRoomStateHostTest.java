@@ -114,6 +114,8 @@ public class LogicWaitRoomStateHostTest {
         ArgumentCaptor<Server.OnAcceptErrorListener> listenerCaptor
                 = ArgumentCaptor.forClass(Server.OnAcceptErrorListener.class);
         state.entryWhenIsHost();
+        Assert.assertEquals(state.isHost, true);
+
         verify(networkForwarder).setOnAcceptErrorListener(listenerCaptor.capture());
         listenerCaptor.getValue().onAcceptError();
         verify(eventManager).queue(any(EventData.class));
@@ -122,6 +124,8 @@ public class LogicWaitRoomStateHostTest {
     @Test
     public void exitShouldShutdownUDPServerAndShutdownTCPServerWhenBackToCreatedRooms() {
         state.entryWhenIsHost();
+        Assert.assertEquals(state.isHost, true);
+
         when(stateManager.getNextState()).thenReturn(createdRoomsState);
         when(stateManager.getCreatedRoomsState()).thenReturn(createdRoomsState);
         state.exitWhenIsHost();
@@ -132,10 +136,18 @@ public class LogicWaitRoomStateHostTest {
     @Test
     public void exitShouldShutdownUDPServerAndNotShutdownTCPServerWhenGoToPlayingState() {
         state.entryWhenIsHost();
+        Assert.assertEquals(state.isHost, true);
+
         when(stateManager.getNextState()).thenReturn(null);
         when(stateManager.getCreatedRoomsState()).thenReturn(createdRoomsState);
         state.exitWhenIsHost();
         verify(udpForwarder).shutdown();
         verify(networkForwarder, never()).shutdown();
+    }
+
+    @Test
+    public void testIsHost() {
+        state.entryWhenIsHost();
+        Assert.assertEquals(state.isHost, true);
     }
 }

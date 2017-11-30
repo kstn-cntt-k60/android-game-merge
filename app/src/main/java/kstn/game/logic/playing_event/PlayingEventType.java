@@ -36,7 +36,8 @@ public enum PlayingEventType implements EventType {
     SAW_CREATED_ROOM(17400),
     REMOVE_CREATED_ROOM(17401),
     SET_THIS_ROOM(17402),
-    CLICK_ROOM_EVENT(17403),
+    CLICK_ROOM(17403),
+    EXIT_ROOM(17404),
     ;
     PlayingEventType(int value) {
         this.value = value;

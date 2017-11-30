@@ -1,33 +1,21 @@
 package kstn.game.logic.playing_event;
 
-import kstn.game.logic.event.BaseEventData;
-import kstn.game.logic.event.EventType;
+import kstn.game.logic.event.GameEventData;
 
-public class NextQuestionEvent extends BaseEventData {
+public class NextQuestionEvent extends GameEventData {
     private final String question;
     private final String answer;
 
     public NextQuestionEvent(String question, String answer) {
-        super(0);
+        super(PlayingEventType.NEXT_QUESTION);
         this.question = question;
         this.answer = answer;
     }
-
-    @Override
-    public EventType getEventType() {
-        return PlayingEventType.NEXT_QUESTION;
-    }
-
     public String getQuestion() {
         return question;
     }
 
     public String getAnswer() {
         return answer;
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 }

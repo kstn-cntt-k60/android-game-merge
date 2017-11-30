@@ -9,10 +9,10 @@ import org.mockito.ArgumentCaptor;
 import java.util.List;
 
 import kstn.game.app.network.TestEventData1;
-import kstn.game.logic.event.BaseEventData;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
+import kstn.game.logic.event.GameEventData;
 import kstn.game.logic.event.TestEventType;
 
 import static org.junit.Assert.assertEquals;
@@ -31,7 +31,7 @@ public class TestUIEventManager {
     private EventListener logicListener2 = mock(EventListener.class);
 
     private TestEventData1 testEventData1 = new TestEventData1(123, 333, "TUNG");
-    private BaseEventData testEventData2 = mock(BaseEventData.class);
+    private GameEventData testEventData2 = mock(GameEventData.class);
     private TestEventData1 testEventData3 = new TestEventData1(555, 222, "VAN");
 
     @Before

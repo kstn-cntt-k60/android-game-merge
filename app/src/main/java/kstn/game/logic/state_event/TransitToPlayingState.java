@@ -1,8 +1,6 @@
 package kstn.game.logic.state_event;
 
-import kstn.game.logic.event.GameEventData;
-
-public class TransitToPlayingState extends GameEventData {
+public class TransitToPlayingState extends StateEventData {
     public TransitToPlayingState() {
         super(StateEventType.PLAYING);
     }

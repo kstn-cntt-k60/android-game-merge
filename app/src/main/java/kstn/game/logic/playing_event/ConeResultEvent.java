@@ -1,27 +1,16 @@
 package kstn.game.logic.playing_event;
 
-import kstn.game.logic.event.BaseEventData;
-import kstn.game.logic.event.EventType;
+import kstn.game.logic.event.GameEventData;
 
-public class ConeResultEvent extends BaseEventData {
+public class ConeResultEvent extends GameEventData {
     private int result;
 
     public ConeResultEvent(int result) {
-        super(0);
+        super(PlayingEventType.ROTATE_RESULT);
         this.result = result;
-    }
-
-    @Override
-    public EventType getEventType() {
-        return PlayingEventType.ROTATE_RESULT;
     }
 
     public int getResult() {
         return result;
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 }

@@ -144,7 +144,7 @@ public class LogicCreatedRoomsState extends LogicGameState {
         thisRoom.clear();
         thisRoom.entry();
         eventManager.addListener(PlayingEventType.SAW_CREATED_ROOM, sawRoomListener);
-        eventManager.addListener(PlayingEventType.CLICK_ROOM_EVENT, clickRoomListener);
+        eventManager.addListener(PlayingEventType.CLICK_ROOM, clickRoomListener);
         eventManager.addListener(PlayingEventType.ACCEPT_JOIN_ROOM, acceptRoomListener);
 
         try {
@@ -159,7 +159,7 @@ public class LogicCreatedRoomsState extends LogicGameState {
         udpForwarder.shutdown();
 
         eventManager.removeListener(PlayingEventType.ACCEPT_JOIN_ROOM, acceptRoomListener);
-        eventManager.removeListener(PlayingEventType.CLICK_ROOM_EVENT, clickRoomListener);
+        eventManager.removeListener(PlayingEventType.CLICK_ROOM, clickRoomListener);
         eventManager.removeListener(PlayingEventType.SAW_CREATED_ROOM, sawRoomListener);
         thisRoom.exit();
         thisPlayer.exit();

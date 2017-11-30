@@ -16,26 +16,16 @@ import static org.junit.Assert.*;
 
 public class TestParser {
 	
-	private static class TestEventData extends BaseEventData {
+	private static class TestEventData extends GameEventData {
 		private int id;
 		private String name;
 
 		public TestEventData(int id, String name, long timeStamp) {
-			super(timeStamp);
+			super(TestEventType.TEST_PARSER);
 			this.id = id;
 			this.name = name;
 		}
 
-		@Override
-		public EventType getEventType() {
-			return TestEventType.TEST_PARSER;
-		}
-
-		@Override
-		public String getName() {
-			return "Test Parser";
-		}
-		
 		@Override
 		public void serialize(OutputStream out) throws IOException {
 			TestMessage.Test message = TestMessage.Test.newBuilder()
@@ -46,7 +36,7 @@ public class TestParser {
 			message.writeTo(out);
 		}
 		
-		public static class Parser extends BaseEventData.Parser {
+		public static class Parser implements EventData.Parser {
 			@Override
 			public EventData parseFrom(InputStream in) throws IOException {
 				TestMessage.Test message = null;

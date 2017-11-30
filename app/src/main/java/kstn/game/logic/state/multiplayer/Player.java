@@ -22,4 +22,15 @@ public class Player {
     public int getAvatarId() {
         return avatarId;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof Player) {
+            Player other = (Player) object;
+            return ipAddress == other.getIpAddress()
+                    && name == other.getName()
+                    && avatarId == other.getAvatarId();
+        }
+        return false;
+    }
 }

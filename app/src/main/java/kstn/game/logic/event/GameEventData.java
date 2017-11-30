@@ -27,11 +27,6 @@ public abstract class GameEventData implements EventData {
     @Override
     public void serialize(OutputStream out) throws IOException {}
 
-    public static abstract class Parser implements EventData.Parser {
-        @Override
-        public EventData parseFrom(InputStream in) throws IOException { return null; }
-    }
-
     @Override
     public EventType getEventType() {
         return eventType;
@@ -45,5 +40,14 @@ public abstract class GameEventData implements EventData {
     @Override
     public String getName() {
         return null;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof GameEventData) {
+            GameEventData event = (GameEventData) object;
+            return event.getEventType() == this.getEventType();
+        }
+        return false;
     }
 }

@@ -8,7 +8,7 @@ public class ClickRoomEvent extends GameEventData {
     private final String roomName;
 
     public ClickRoomEvent(int ipAddress, String roomName) {
-        super(PlayingEventType.CLICK_ROOM_EVENT);
+        super(PlayingEventType.CLICK_ROOM);
         this.ipAddress = ipAddress;
         this.roomName = roomName;
     }

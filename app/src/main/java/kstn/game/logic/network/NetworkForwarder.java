@@ -13,6 +13,7 @@ import kstn.game.logic.event.EventManager;
 import kstn.game.logic.event.EventType;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.room.AcceptJoinRoomEvent;
+import kstn.game.logic.playing_event.room.ExitRoomEvent;
 import kstn.game.logic.playing_event.room.RequestJoinRoomEvent;
 
 public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
@@ -51,6 +52,7 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
         //
         parserMap.put(PlayingEventType.REQUEST_JOIN_ROOM, new RequestJoinRoomEvent.Parser());
         parserMap.put(PlayingEventType.ACCEPT_JOIN_ROOM, new AcceptJoinRoomEvent.Parser());
+        parserMap.put(PlayingEventType.EXIT_ROOM, new ExitRoomEvent.Parser());
     }
 
     private void addListeners() {

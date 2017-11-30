@@ -1,27 +1,16 @@
 package kstn.game.logic.playing_event;
 
-import kstn.game.logic.event.BaseEventData;
-import kstn.game.logic.event.EventType;
+import kstn.game.logic.event.GameEventData;
 
-public class BonusEvent extends BaseEventData {
+public class BonusEvent extends GameEventData {
     private final int bonus;
 
     public BonusEvent(int bonus) {
-        super(0);
+        super(PlayingEventType.BONUS);
         this.bonus = bonus;
-    }
-
-    @Override
-    public EventType getEventType() {
-        return PlayingEventType.BONUS;
     }
 
     public int getBonus() {
         return bonus;
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 }
