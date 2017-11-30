@@ -45,6 +45,6 @@ public enum PlayingEventType implements EventType {
     private int value;
     @Override
     public int getValue() {
-        return 0;
+        return value;
     }
 }

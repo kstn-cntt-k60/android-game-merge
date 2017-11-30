@@ -1299,9 +1299,17 @@ public final class RoomMessage {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>int32 clientIpAddress = 1;</code>
+     * <code>.Player clientPlayer = 1;</code>
      */
-    int getClientIpAddress();
+    boolean hasClientPlayer();
+    /**
+     * <code>.Player clientPlayer = 1;</code>
+     */
+    kstn.game.logic.playing_event.room.RoomMessage.Player getClientPlayer();
+    /**
+     * <code>.Player clientPlayer = 1;</code>
+     */
+    kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder getClientPlayerOrBuilder();
   }
   /**
    * Protobuf type {@code RequestJoinRoom}
@@ -1315,7 +1323,6 @@ public final class RoomMessage {
       super(builder);
     }
     private RequestJoinRoom() {
-      clientIpAddress_ = 0;
     }
 
     @java.lang.Override
@@ -1343,9 +1350,17 @@ public final class RoomMessage {
               }
               break;
             }
-            case 8: {
+            case 10: {
+              kstn.game.logic.playing_event.room.RoomMessage.Player.Builder subBuilder = null;
+              if (clientPlayer_ != null) {
+                subBuilder = clientPlayer_.toBuilder();
+              }
+              clientPlayer_ = input.readMessage(kstn.game.logic.playing_event.room.RoomMessage.Player.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(clientPlayer_);
+                clientPlayer_ = subBuilder.buildPartial();
+              }
 
-              clientIpAddress_ = input.readInt32();
               break;
             }
           }
@@ -1371,13 +1386,25 @@ public final class RoomMessage {
               kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom.class, kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom.Builder.class);
     }
 
-    public static final int CLIENTIPADDRESS_FIELD_NUMBER = 1;
-    private int clientIpAddress_;
+    public static final int CLIENTPLAYER_FIELD_NUMBER = 1;
+    private kstn.game.logic.playing_event.room.RoomMessage.Player clientPlayer_;
     /**
-     * <code>int32 clientIpAddress = 1;</code>
+     * <code>.Player clientPlayer = 1;</code>
      */
-    public int getClientIpAddress() {
-      return clientIpAddress_;
+    public boolean hasClientPlayer() {
+      return clientPlayer_ != null;
+    }
+    /**
+     * <code>.Player clientPlayer = 1;</code>
+     */
+    public kstn.game.logic.playing_event.room.RoomMessage.Player getClientPlayer() {
+      return clientPlayer_ == null ? kstn.game.logic.playing_event.room.RoomMessage.Player.getDefaultInstance() : clientPlayer_;
+    }
+    /**
+     * <code>.Player clientPlayer = 1;</code>
+     */
+    public kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder getClientPlayerOrBuilder() {
+      return getClientPlayer();
     }
 
     private byte memoizedIsInitialized = -1;
@@ -1392,8 +1419,8 @@ public final class RoomMessage {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (clientIpAddress_ != 0) {
-        output.writeInt32(1, clientIpAddress_);
+      if (clientPlayer_ != null) {
+        output.writeMessage(1, getClientPlayer());
       }
     }
 
@@ -1402,9 +1429,9 @@ public final class RoomMessage {
       if (size != -1) return size;
 
       size = 0;
-      if (clientIpAddress_ != 0) {
+      if (clientPlayer_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, clientIpAddress_);
+          .computeMessageSize(1, getClientPlayer());
       }
       memoizedSize = size;
       return size;
@@ -1422,8 +1449,11 @@ public final class RoomMessage {
       kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom other = (kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom) obj;
 
       boolean result = true;
-      result = result && (getClientIpAddress()
-          == other.getClientIpAddress());
+      result = result && (hasClientPlayer() == other.hasClientPlayer());
+      if (hasClientPlayer()) {
+        result = result && getClientPlayer()
+            .equals(other.getClientPlayer());
+      }
       return result;
     }
 
@@ -1434,8 +1464,10 @@ public final class RoomMessage {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + CLIENTIPADDRESS_FIELD_NUMBER;
-      hash = (53 * hash) + getClientIpAddress();
+      if (hasClientPlayer()) {
+        hash = (37 * hash) + CLIENTPLAYER_FIELD_NUMBER;
+        hash = (53 * hash) + getClientPlayer().hashCode();
+      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1565,8 +1597,12 @@ public final class RoomMessage {
       }
       public Builder clear() {
         super.clear();
-        clientIpAddress_ = 0;
-
+        if (clientPlayerBuilder_ == null) {
+          clientPlayer_ = null;
+        } else {
+          clientPlayer_ = null;
+          clientPlayerBuilder_ = null;
+        }
         return this;
       }
 
@@ -1589,7 +1625,11 @@ public final class RoomMessage {
 
       public kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom buildPartial() {
         kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom result = new kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom(this);
-        result.clientIpAddress_ = clientIpAddress_;
+        if (clientPlayerBuilder_ == null) {
+          result.clientPlayer_ = clientPlayer_;
+        } else {
+          result.clientPlayer_ = clientPlayerBuilder_.build();
+        }
         onBuilt();
         return result;
       }
@@ -1631,8 +1671,8 @@ public final class RoomMessage {
 
       public Builder mergeFrom(kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom other) {
         if (other == kstn.game.logic.playing_event.room.RoomMessage.RequestJoinRoom.getDefaultInstance()) return this;
-        if (other.getClientIpAddress() != 0) {
-          setClientIpAddress(other.getClientIpAddress());
+        if (other.hasClientPlayer()) {
+          mergeClientPlayer(other.getClientPlayer());
         }
         onChanged();
         return this;
@@ -1660,30 +1700,121 @@ public final class RoomMessage {
         return this;
       }
 
-      private int clientIpAddress_ ;
+      private kstn.game.logic.playing_event.room.RoomMessage.Player clientPlayer_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          kstn.game.logic.playing_event.room.RoomMessage.Player, kstn.game.logic.playing_event.room.RoomMessage.Player.Builder, kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder> clientPlayerBuilder_;
       /**
-       * <code>int32 clientIpAddress = 1;</code>
+       * <code>.Player clientPlayer = 1;</code>
        */
-      public int getClientIpAddress() {
-        return clientIpAddress_;
+      public boolean hasClientPlayer() {
+        return clientPlayerBuilder_ != null || clientPlayer_ != null;
       }
       /**
-       * <code>int32 clientIpAddress = 1;</code>
+       * <code>.Player clientPlayer = 1;</code>
        */
-      public Builder setClientIpAddress(int value) {
-        
-        clientIpAddress_ = value;
-        onChanged();
+      public kstn.game.logic.playing_event.room.RoomMessage.Player getClientPlayer() {
+        if (clientPlayerBuilder_ == null) {
+          return clientPlayer_ == null ? kstn.game.logic.playing_event.room.RoomMessage.Player.getDefaultInstance() : clientPlayer_;
+        } else {
+          return clientPlayerBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>.Player clientPlayer = 1;</code>
+       */
+      public Builder setClientPlayer(kstn.game.logic.playing_event.room.RoomMessage.Player value) {
+        if (clientPlayerBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          clientPlayer_ = value;
+          onChanged();
+        } else {
+          clientPlayerBuilder_.setMessage(value);
+        }
+
         return this;
       }
       /**
-       * <code>int32 clientIpAddress = 1;</code>
+       * <code>.Player clientPlayer = 1;</code>
        */
-      public Builder clearClientIpAddress() {
-        
-        clientIpAddress_ = 0;
-        onChanged();
+      public Builder setClientPlayer(
+          kstn.game.logic.playing_event.room.RoomMessage.Player.Builder builderForValue) {
+        if (clientPlayerBuilder_ == null) {
+          clientPlayer_ = builderForValue.build();
+          onChanged();
+        } else {
+          clientPlayerBuilder_.setMessage(builderForValue.build());
+        }
+
         return this;
+      }
+      /**
+       * <code>.Player clientPlayer = 1;</code>
+       */
+      public Builder mergeClientPlayer(kstn.game.logic.playing_event.room.RoomMessage.Player value) {
+        if (clientPlayerBuilder_ == null) {
+          if (clientPlayer_ != null) {
+            clientPlayer_ =
+              kstn.game.logic.playing_event.room.RoomMessage.Player.newBuilder(clientPlayer_).mergeFrom(value).buildPartial();
+          } else {
+            clientPlayer_ = value;
+          }
+          onChanged();
+        } else {
+          clientPlayerBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.Player clientPlayer = 1;</code>
+       */
+      public Builder clearClientPlayer() {
+        if (clientPlayerBuilder_ == null) {
+          clientPlayer_ = null;
+          onChanged();
+        } else {
+          clientPlayer_ = null;
+          clientPlayerBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>.Player clientPlayer = 1;</code>
+       */
+      public kstn.game.logic.playing_event.room.RoomMessage.Player.Builder getClientPlayerBuilder() {
+        
+        onChanged();
+        return getClientPlayerFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.Player clientPlayer = 1;</code>
+       */
+      public kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder getClientPlayerOrBuilder() {
+        if (clientPlayerBuilder_ != null) {
+          return clientPlayerBuilder_.getMessageOrBuilder();
+        } else {
+          return clientPlayer_ == null ?
+              kstn.game.logic.playing_event.room.RoomMessage.Player.getDefaultInstance() : clientPlayer_;
+        }
+      }
+      /**
+       * <code>.Player clientPlayer = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          kstn.game.logic.playing_event.room.RoomMessage.Player, kstn.game.logic.playing_event.room.RoomMessage.Player.Builder, kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder> 
+          getClientPlayerFieldBuilder() {
+        if (clientPlayerBuilder_ == null) {
+          clientPlayerBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              kstn.game.logic.playing_event.room.RoomMessage.Player, kstn.game.logic.playing_event.room.RoomMessage.Player.Builder, kstn.game.logic.playing_event.room.RoomMessage.PlayerOrBuilder>(
+                  getClientPlayer(),
+                  getParentForChildren(),
+                  isClean());
+          clientPlayer_ = null;
+        }
+        return clientPlayerBuilder_;
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -2710,11 +2841,12 @@ public final class RoomMessage {
       "m_message.proto\";\n\006Player\022\021\n\tipAddress\030\001" +
       " \001(\005\022\014\n\004name\030\002 \001(\t\022\020\n\010avatarId\030\003 \001(\005\"J\n\016" +
       "SawCreatedRoom\022\021\n\tipAddress\030\001 \001(\005\022\020\n\010roo" +
-      "mName\030\002 \001(\t\022\023\n\013playerCount\030\003 \001(\005\"*\n\017Requ" +
-      "estJoinRoom\022\027\n\017clientIpAddress\030\001 \001(\005\"I\n\016" +
-      "AcceptJoinRoom\022\032\n\tnewPlayer\030\001 \001(\0132\007.Play" +
-      "er\022\033\n\noldPlayers\030\002 \003(\0132\007.PlayerB$\n\"kstn." +
-      "game.logic.playing_event.roomb\006proto3"
+      "mName\030\002 \001(\t\022\023\n\013playerCount\030\003 \001(\005\"0\n\017Requ" +
+      "estJoinRoom\022\035\n\014clientPlayer\030\001 \001(\0132\007.Play" +
+      "er\"I\n\016AcceptJoinRoom\022\032\n\tnewPlayer\030\001 \001(\0132" +
+      "\007.Player\022\033\n\noldPlayers\030\002 \003(\0132\007.PlayerB$\n" +
+      "\"kstn.game.logic.playing_event.roomb\006pro" +
+      "to3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2745,7 +2877,7 @@ public final class RoomMessage {
     internal_static_RequestJoinRoom_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_RequestJoinRoom_descriptor,
-        new java.lang.String[] { "ClientIpAddress", });
+        new java.lang.String[] { "ClientPlayer", });
     internal_static_AcceptJoinRoom_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_AcceptJoinRoom_fieldAccessorTable = new

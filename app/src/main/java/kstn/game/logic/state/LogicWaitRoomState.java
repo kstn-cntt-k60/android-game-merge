@@ -1,11 +1,10 @@
 package kstn.game.logic.state;
 
-import android.util.Log;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import kstn.game.logic.cone.Cone;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
@@ -16,9 +15,11 @@ import kstn.game.logic.network.Server;
 import kstn.game.logic.network.UDPForwarder;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.room.AcceptJoinRoomEvent;
+import kstn.game.logic.playing_event.room.RequestJoinRoomEvent;
 import kstn.game.logic.playing_event.room.SawCreatedRoomEvent;
 import kstn.game.logic.process.Process;
 import kstn.game.logic.process.ProcessManager;
+import kstn.game.logic.state.multiplayer.ActiveConnections;
 import kstn.game.logic.state.multiplayer.Player;
 import kstn.game.logic.state.multiplayer.ThisPlayer;
 import kstn.game.logic.state.multiplayer.ThisRoom;
@@ -38,10 +39,14 @@ public class LogicWaitRoomState extends LogicGameState {
     private final ThisRoom thisRoom;
     private final UDPForwarder udpForwarder;
     private final NetworkForwarder networkForwarder;
+    private final ActiveConnections activeConnections;
     private boolean isHost = false;
     private BroadcastProcess process = null;
 
+    private EventListener requestJoinRoomListener;
+
     private final EventListener startPlayingListener;
+    private Cone cone;
 
     private class BroadcastProcess extends Process {
         private long currentTime = 0;
@@ -86,9 +91,11 @@ public class LogicWaitRoomState extends LogicGameState {
                               ViewGameState viewWaitRoomState,
                               ViewManager root, View backgroundView,
                               ThisPlayer thisPlayer,
-                              ThisRoom thisRoom,
+                              final ThisRoom thisRoom,
                               UDPForwarder udpForwarder,
-                              NetworkForwarder networkForwarder) {
+                              NetworkForwarder networkForwarder,
+                              final ActiveConnections activeConnections,
+                              Cone cone) {
         super(stateManager, processManager, viewWaitRoomState);
         this.eventManager = eventManager;
         this.processManager = processManager;
@@ -98,6 +105,21 @@ public class LogicWaitRoomState extends LogicGameState {
         this.thisRoom = thisRoom;
         this.udpForwarder = udpForwarder;
         this.networkForwarder = networkForwarder;
+        this.activeConnections = activeConnections;
+
+        this.cone = cone;
+
+        requestJoinRoomListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                RequestJoinRoomEvent event1 = (RequestJoinRoomEvent) event;
+                activeConnections.addConnection(event1.getConnection());
+                eventManager.queue(new AcceptJoinRoomEvent(
+                        event1.getClientPlayer(),
+                        thisRoom.getPlayerList()
+                ));
+            }
+        };
 
         startPlayingListener = new EventListener() {
             @Override
@@ -107,9 +129,15 @@ public class LogicWaitRoomState extends LogicGameState {
         };
     }
 
+
     @Override
     public void entry() {
         root.addView(backgroundView);
+        activeConnections.clear();
+
+        // Test
+        cone.entry();
+
         thisRoom.entry();
         if (stateManager.getPrevState() == stateManager.getCreatedRoomsState()) {
             entryWhenIsClient();
@@ -120,12 +148,11 @@ public class LogicWaitRoomState extends LogicGameState {
         else {
             throw new RuntimeException("Can't have another state");
         }
-        postEntry();
+        super.postEntry();
     }
 
     void entryWhenIsClient() {
         isHost = false;
-        eventManager.addListener(PlayingEventType.START_PLAYING, startPlayingListener);
         networkForwarder.setOnConnectionErrorListener(
                 new Endpoint.OnConnectionErrorListener() {
             @Override
@@ -133,6 +160,8 @@ public class LogicWaitRoomState extends LogicGameState {
                 eventManager.queue(new TransitToCreatedRoomsState());
             }
         });
+
+        eventManager.addListener(PlayingEventType.START_PLAYING, startPlayingListener);
     }
 
     @Override
@@ -177,17 +206,22 @@ public class LogicWaitRoomState extends LogicGameState {
                 new Endpoint.OnConnectionErrorListener() {
                     @Override
                     public void onConnectionError(Connection connection) {
-                        eventManager.queue(new TransitToCreatedRoomsState());
+                        if (activeConnections.isActive(connection))
+                            eventManager.queue(new TransitToCreatedRoomsState());
                     }
                 }
         );
+
         eventManager.addListener(PlayingEventType.START_PLAYING, startPlayingListener);
+        eventManager.addListener(PlayingEventType.REQUEST_JOIN_ROOM, requestJoinRoomListener);
     }
 
 
     @Override
     public void exit() {
-        preExit();
+        // Test
+        cone.exit();
+        super.preExit();
         if (isHost) {
             exitWhenIsHost();
         }
@@ -206,7 +240,9 @@ public class LogicWaitRoomState extends LogicGameState {
     }
 
     void exitWhenIsHost() {
+        eventManager.removeListener(PlayingEventType.REQUEST_JOIN_ROOM, requestJoinRoomListener);
         eventManager.removeListener(PlayingEventType.START_PLAYING, startPlayingListener);
+
         if (process != null && process.isAlive())
             process.succeed();
 

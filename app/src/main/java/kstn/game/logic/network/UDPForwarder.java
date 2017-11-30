@@ -58,6 +58,7 @@ public class UDPForwarder implements UDPManager.OnReceiveDataListener {
     }
 
     public void listen() throws IOException {
+        shutdown();
         manager = factory.create(
                 wifiInfo.getIP(), port, wifiInfo.getMask(), parserMap);
         if (manager != null) {

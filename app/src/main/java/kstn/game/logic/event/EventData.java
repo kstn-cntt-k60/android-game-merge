@@ -3,16 +3,21 @@ package kstn.game.logic.event;
 import java.io.IOException;
 import java.io.InputStream;
 
-public interface EventData extends Serializable {
+import kstn.game.logic.network.Connection;
 
+public interface EventData extends Serializable {
 	EventType getEventType();
 
 	// In millisecond
 	long getTimeStamp();
+
+	void setConnection(Connection connection);
+
+	Connection getConnection();
 	
 	String getName();
 	
-	public interface Parser {
+	interface Parser {
 		EventData parseFrom(InputStream in) throws IOException;
 	}
 

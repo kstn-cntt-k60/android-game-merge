@@ -77,9 +77,7 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
     }
 
     public void listen() throws IOException {
-        if (endpoint != null)
-            throw new RuntimeException("Can't listen with working endpoint");
-
+        shutdown();
         server = serverFactory.create(port, parserMap);
         endpoint = server.getEndpoint();
         if (endpoint != null) {
@@ -90,9 +88,7 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
     }
 
     public void connect(int ipAddress) throws IOException {
-        if (endpoint != null)
-            throw new RuntimeException("Can't listen with working endpoint");
-
+        shutdown();
         endpoint = clientFactory.connect(ipAddress, port, parserMap);
         if (endpoint != null) {
             isReceiving = false;

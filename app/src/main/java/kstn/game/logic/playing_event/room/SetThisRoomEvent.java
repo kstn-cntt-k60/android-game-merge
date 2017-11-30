@@ -1,6 +1,5 @@
 package kstn.game.logic.playing_event.room;
 
-import kstn.game.logic.event.EventType;
 import kstn.game.logic.event.GameEventData;
 import kstn.game.logic.playing_event.PlayingEventType;
 

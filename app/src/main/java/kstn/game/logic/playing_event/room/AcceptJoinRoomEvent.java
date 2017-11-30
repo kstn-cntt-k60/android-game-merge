@@ -17,8 +17,20 @@ public class AcceptJoinRoomEvent extends GameEventData {
 
     public AcceptJoinRoomEvent(Player newPlayer, List<Player> oldPlayers) {
         super(PlayingEventType.ACCEPT_JOIN_ROOM);
-        this.newPlayer = newPlayer;
-        this.oldPlayers = oldPlayers;
+        this.newPlayer = new Player(
+                newPlayer.getIpAddress(),
+                newPlayer.getName(),
+                newPlayer.getAvatarId()
+        );
+
+        this.oldPlayers = new ArrayList<>();
+        for (Player oldPlayer: oldPlayers) {
+            this.oldPlayers.add(new Player(
+                    oldPlayer.getIpAddress(),
+                    oldPlayer.getName(),
+                    oldPlayer.getAvatarId()
+            ));
+        }
     }
 
     public Player getNewPlayer() {

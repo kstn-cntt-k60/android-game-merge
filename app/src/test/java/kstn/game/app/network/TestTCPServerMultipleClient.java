@@ -89,9 +89,9 @@ public class TestTCPServerMultipleClient {
         clientEndpoint3.setConnectionErrorListener(connectionErrorClient3);
 
         clientEndpoint1.send(testEvent1);
-        Thread.currentThread().sleep(30);
+        Thread.currentThread().sleep(80);
         clientEndpoint2.send(testEvent2);
-        Thread.currentThread().sleep(50);
+        Thread.currentThread().sleep(80);
 
         serverEventManager.update();
         clientEventManager1.update();
@@ -100,7 +100,7 @@ public class TestTCPServerMultipleClient {
 
         server.shutdown();
         serverEndpoint.shutdown();
-        Thread.currentThread().sleep(20);
+        Thread.currentThread().sleep(80);
 
         serverEventManager.update();
         clientEventManager1.update();

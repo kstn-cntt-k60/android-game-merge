@@ -7,19 +7,24 @@ import org.mockito.ArgumentCaptor;
 
 import java.io.IOException;
 
+import kstn.game.logic.cone.Cone;
+import kstn.game.logic.cone.ConeMessage;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.event.EventType;
+import kstn.game.logic.network.Connection;
 import kstn.game.logic.network.Endpoint;
 import kstn.game.logic.network.NetworkForwarder;
 import kstn.game.logic.network.Server;
 import kstn.game.logic.network.UDPForwarder;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.process.ProcessManager;
+import kstn.game.logic.state.multiplayer.ActiveConnections;
 import kstn.game.logic.state.multiplayer.ThisPlayer;
 import kstn.game.logic.state.multiplayer.ThisRoom;
 import kstn.game.logic.state_event.StateEventType;
+import kstn.game.view.asset.AssetManager;
 import kstn.game.view.state.ViewGameState;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -44,6 +49,8 @@ public class LogicWaitRoomStateHostTest {
     private ViewGameState viewGameState = mock(ViewGameState.class);
     private ThisPlayer thisPlayer = mock(ThisPlayer.class);
     private ThisRoom thisRoom = mock(ThisRoom.class);
+    private ActiveConnections activeConnections = new ActiveConnections();
+    private Cone cone = mock(Cone.class);
 
     public LogicWaitRoomStateHostTest() {
         when(viewGameState.isReady()).thenReturn(true);
@@ -52,7 +59,10 @@ public class LogicWaitRoomStateHostTest {
                 processManager, viewGameState,
                 null, null,
                 thisPlayer, thisRoom,
-                udpForwarder, networkForwarder);
+                udpForwarder, networkForwarder,
+                activeConnections,
+                cone
+        );
     }
 
     @Test
@@ -93,7 +103,9 @@ public class LogicWaitRoomStateHostTest {
                 = ArgumentCaptor.forClass(Endpoint.OnConnectionErrorListener.class);
         state.entryWhenIsHost();
         verify(networkForwarder).setOnConnectionErrorListener(listenerCaptor.capture());
-        listenerCaptor.getValue().onConnectionError(null);
+        Connection conn = mock(Connection.class);
+        activeConnections.addConnection(conn);
+        listenerCaptor.getValue().onConnectionError(conn);
         verify(eventManager).queue(any(EventData.class));
     }
 
@@ -126,28 +138,4 @@ public class LogicWaitRoomStateHostTest {
         verify(udpForwarder).shutdown();
         verify(networkForwarder, never()).shutdown();
     }
-
-    @Test
-    public void shouldListenToStartPlaying() {
-        state.entryWhenIsHost();
-
-        EventListener startListener;
-
-        ArgumentCaptor<EventType> typeCaptor = ArgumentCaptor.forClass(EventType.class);
-        ArgumentCaptor<EventListener> startCaptor = ArgumentCaptor.forClass(EventListener.class);
-        verify(eventManager).addListener(typeCaptor.capture(), startCaptor.capture());
-        Assert.assertSame(typeCaptor.getValue(), PlayingEventType.START_PLAYING);
-        startListener = startCaptor.getValue();
-
-        startListener.onEvent(null);
-        ArgumentCaptor<EventData> eventCaptor = ArgumentCaptor.forClass(EventData.class);
-        verify(eventManager).queue(eventCaptor.capture());
-        Assert.assertSame(eventCaptor.getValue().getEventType(), StateEventType.PLAYING);
-
-        state.exitWhenIsHost();
-        verify(eventManager).removeListener(typeCaptor.capture(), startCaptor.capture());
-        Assert.assertSame(typeCaptor.getValue(), PlayingEventType.START_PLAYING);
-        Assert.assertSame(startCaptor.getValue(), startListener);
-    }
-
 }

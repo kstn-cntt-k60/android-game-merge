@@ -140,29 +140,4 @@ public class NetworkForwarderTest {
         assertTrue(map.containsKey(ConeEventType.MOVE));
         assertTrue(map.containsKey(ConeEventType.ACCELERATE));
     }
-
-    @Test(expected = RuntimeException.class)
-    public void shouldNotAllowDoubleCallOnListen() throws IOException {
-        when(serverFactory.create(2017, forwarder.parserMap)).thenReturn(server);
-        when(server.getEndpoint()).thenReturn(endpoint);
-        forwarder.listen();
-        forwarder.listen();
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void shouldNotAllowListenAndThenConnect() throws IOException {
-        when(serverFactory.create(2017, forwarder.parserMap)).thenReturn(server);
-        when(server.getEndpoint()).thenReturn(endpoint);
-        forwarder.listen();
-        forwarder.connect(0x2344);
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void shouldNotAllowConnectAndThenListen() throws IOException {
-        when(serverFactory.create(2017, forwarder.parserMap)).thenReturn(server);
-        when(server.getEndpoint()).thenReturn(endpoint);
-        when(clientFactory.connect(ip, 2017, forwarder.parserMap)).thenReturn(endpoint);
-        forwarder.connect(ip);
-        forwarder.listen();
-    }
 }

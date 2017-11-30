@@ -105,8 +105,10 @@ public class BaseEndpoint implements Endpoint {
                 try {
                     int eventId = eventIdReader.readInt();
                     EventData.Parser parser = parserMap.get(eventId);
-                    assert (parser != null);
+                    if (parser == null)
+                        throw new RuntimeException("Can't have null parser");
                     EventData event = parser.parseFrom(inputStream);
+                    event.setConnection(this);
                     llEventManager.queue(new TCPReceiveData(event));
 
                     // Distribute to other connections

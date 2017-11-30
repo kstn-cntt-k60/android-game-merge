@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import kstn.game.logic.model.QuestionModel;
-
 /**
  * Created by thang on 9/12/2017.
  */

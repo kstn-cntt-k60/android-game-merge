@@ -1,4 +1,4 @@
-package kstn.game.logic.model;
+package kstn.game.logic.data;
 
 public class QuestionModel {
     int id;

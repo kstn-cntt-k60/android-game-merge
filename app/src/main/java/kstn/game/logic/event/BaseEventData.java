@@ -4,12 +4,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import kstn.game.logic.network.Connection;
+
 public abstract class BaseEventData implements EventData {
-	// In millisecond
 	private final long timeStamp;
-	
+	private Connection connection;
+
 	public BaseEventData(long timeStamp) {
 		this.timeStamp = timeStamp;
+	}
+
+	@Override
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+	@Override
+	public Connection getConnection() {
+		return connection;
 	}
 
 	@Override

@@ -18,6 +18,7 @@ import java.util.ListIterator;
 
 import kstn.game.R;
 import kstn.game.logic.playing_event.room.AcceptJoinRoomEvent;
+import kstn.game.logic.playing_event.room.ClickRoomEvent;
 import kstn.game.logic.playing_event.room.SetThisRoomEvent;
 import kstn.game.logic.state.multiplayer.Player;
 import kstn.game.logic.state_event.TransitToCreatedRoomsState;
@@ -30,18 +31,11 @@ import kstn.game.view.thang.Model.Room;
 import kstn.game.view.thang.adapter.NotifiAdapter;
 
 public class CreatedRoomFragment extends Fragment implements ICreatedRooms{
-    private Player Watchingplayer;
     private ViewStateManager stateManager;
     private ArrayList<Room> data;
     private NotifiAdapter adapter;
 
-    public void setWatchingplayer(Player watchingplayer) {
-        Watchingplayer = watchingplayer;
-    }
-
     public CreatedRoomFragment() {
-
-        // Required empty public constructor
     }
 
     public void setStateManager(ViewStateManager stateManager) {
@@ -70,7 +64,6 @@ public class CreatedRoomFragment extends Fragment implements ICreatedRooms{
             @Override
             public void onClick(View view) {
                 stateManager.eventManager.queue(new TransitToRoomCreator());
-
                 LayoutInflater inflater = LayoutInflater.from(stateManager.activity);
                 View viewAlertCreatorRoom = inflater.inflate(R.layout.giao_dien_alert_room_creator,null);
                 final DialogManager dialogManager = new DialogManager(stateManager.activity,viewAlertCreatorRoom);
@@ -89,10 +82,11 @@ public class CreatedRoomFragment extends Fragment implements ICreatedRooms{
                     public void onClick(View view) {
                         String roomName = edtRoomName.getText().toString();
                         if(!roomName.isEmpty()){
+                            dialogManager.getHopthoai().dismiss();
                             stateManager.eventManager.queue(
                                     new SetThisRoomEvent(roomName, stateManager.wifiInfo.getIP()));
-                            stateManager.eventManager.queue(new TransitToWaitRoom());
-                            dialogManager.getHopthoai().dismiss();
+                            stateManager.eventManager.queue(
+                                    new TransitToWaitRoom());
                         }
                         else Toast.makeText(stateManager.activity,"Vui long nhap ten phong",
                                 Toast.LENGTH_SHORT).show();

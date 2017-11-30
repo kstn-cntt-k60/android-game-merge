@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import kstn.game.MainActivity;
 import kstn.game.app.root.BaseTimeManager;
+import kstn.game.logic.cone.Cone;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
@@ -16,6 +17,7 @@ import kstn.game.logic.network.UDPForwarder;
 import kstn.game.logic.network.UDPManagerFactory;
 import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.process.ProcessManager;
+import kstn.game.logic.state.multiplayer.ActiveConnections;
 import kstn.game.logic.state.multiplayer.ThisPlayer;
 import kstn.game.logic.state.multiplayer.ThisRoom;
 import kstn.game.logic.state_event.StateEventType;
@@ -168,14 +170,24 @@ public class LogicStateManager {
                 thisPlayer, thisRoom,
                 udpForwarder, networkForwarder, processManager);
 
-        roomCreatorState = new LogicRoomCreatorState(root, backgroundView);
+        roomCreatorState = new LogicRoomCreatorState(root, backgroundView, thisRoom);
+
+        Cone cone = new Cone(
+                processManager, assetManager,
+                eventManager, timeManager,
+                root
+        );
+
+        ActiveConnections activeConnections = new ActiveConnections();
 
         waitRoomState = new LogicWaitRoomState(
                 this, eventManager, processManager,
                 viewStateManager.waitRoomState,
                 root, backgroundView,
                 thisPlayer, thisRoom,
-                udpForwarder, networkForwarder
+                udpForwarder, networkForwarder,
+                activeConnections,
+                cone
         );
 
         // ----------------------------------

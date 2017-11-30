@@ -15,7 +15,7 @@ message SawCreatedRoom {
 }
 
 message RequestJoinRoom {
-    int32 clientIpAddress = 1;
+    Player clientPlayer = 1;
 }
 
 message AcceptJoinRoom {

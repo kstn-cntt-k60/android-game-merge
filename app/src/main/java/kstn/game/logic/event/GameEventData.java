@@ -4,11 +4,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import kstn.game.logic.network.Connection;
+
 public abstract class GameEventData implements EventData {
     private final EventType eventType;
+    private Connection connection;
 
     public GameEventData(EventType eventType) {
         this.eventType = eventType;
+    }
+
+    @Override
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
+
+    @Override
+    public Connection getConnection() {
+        return connection;
     }
 
     @Override

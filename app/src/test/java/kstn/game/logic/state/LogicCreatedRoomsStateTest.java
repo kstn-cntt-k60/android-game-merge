@@ -128,7 +128,7 @@ public class LogicCreatedRoomsStateTest {
         ArgumentCaptor<EventData> captor = ArgumentCaptor.forClass(EventData.class);
         verify(requestListener).onEvent(captor.capture());
         RequestJoinRoomEvent event = (RequestJoinRoomEvent) captor.getValue();
-        Assert.assertEquals(event.getClientIpAddress(), ip);
+        Assert.assertEquals(event.getClientPlayer().getIpAddress(), ip);
 
         eventManager.trigger(acceptJoinRoomEvent);
         eventManager.update();
@@ -146,10 +146,7 @@ public class LogicCreatedRoomsStateTest {
     public void acceptJoinRoomFromDifferentPerson() throws IOException {
         state.entry();
 
-        EventListener acceptListener = mock(EventListener.class);
         EventListener transitToWaitRoomListener = mock(EventListener.class);
-
-        eventManager.addListener(PlayingEventType.ACCEPT_JOIN_ROOM, acceptListener);
         eventManager.addListener(StateEventType.WAIT_ROOM, transitToWaitRoomListener);
 
         when(udpForwarder.getIpAddress()).thenReturn(ip);

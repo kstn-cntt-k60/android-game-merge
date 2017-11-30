@@ -10,11 +10,11 @@ import kstn.game.app.event.LLEventManager;
 import kstn.game.app.network.BaseClientFactory;
 import kstn.game.app.network.BaseServerFactory;
 import kstn.game.app.network.NetworkUtil;
-import kstn.game.logic.cone.ConeMoveEventData;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.network.ClientFactory;
 import kstn.game.logic.network.NetworkForwarder;
 import kstn.game.logic.network.ServerFactory;
+import kstn.game.logic.playing_event.room.RequestJoinRoomEvent;
 
 public class NetworkForwarderTest{
     private final LLEventManager llEventManager = new LLBaseEventManager();
@@ -32,6 +32,8 @@ public class NetworkForwarderTest{
     @Test
     public void sendEvent() throws IOException {
         forwarder.connect(ip);
-        eventManager.trigger(new ConeMoveEventData(233));
+        eventManager.trigger(new RequestJoinRoomEvent(
+                233, "Tung", 2));
+        forwarder.shutdown();
     }
 }

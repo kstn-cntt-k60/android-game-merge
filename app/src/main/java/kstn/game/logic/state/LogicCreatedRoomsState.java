@@ -173,7 +173,10 @@ public class LogicCreatedRoomsState extends LogicGameState {
             networkForwarder.shutdown();
             return;
         }
-        eventManager.trigger(new RequestJoinRoomEvent(udpForwarder.getIpAddress()));
+        eventManager.trigger(new RequestJoinRoomEvent(
+                udpForwarder.getIpAddress(),
+                thisPlayer.getName(), thisPlayer.getAvatarId()
+        ));
         roomIpAddress = event.getIpAddress();
         roomName = event.getRoomName();
     }
