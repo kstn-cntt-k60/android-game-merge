@@ -157,6 +157,7 @@ public class LogicWaitRoomState extends LogicGameState {
         cone.entry();
 
         thisRoom.entry();
+        Log.d("Prev",stateManager.getPrevState().getClass().getName());
         if (stateManager.getPrevState() == stateManager.getCreatedRoomsState()) {
             entryWhenIsClient();
         }
@@ -244,7 +245,6 @@ public class LogicWaitRoomState extends LogicGameState {
                 new Server.OnAcceptErrorListener() {
                     @Override
                     public void onAcceptError() {
-                        Log.i("WaitRoom", "Accept Error");
                         eventManager.queue(new TransitToCreatedRoomsState());
                     }
                 }

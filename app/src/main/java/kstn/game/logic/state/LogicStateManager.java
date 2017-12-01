@@ -42,7 +42,6 @@ public class LogicStateManager {
     private final LogicWaitRoomState waitRoomState;
     private final LogicPlayingState playingState = null;
     private final LogicGameState resultState = null;
-
     // Single SinglePlayerModel
     private final LogicSinglePlayerState singlePlayerState;
     public final LogicSingleResultState singleResultState;
@@ -124,6 +123,12 @@ public class LogicStateManager {
                 makeTransitionTo(playingState);
             }
         });
+        eventManager.addListener(StateEventType.RESULT, new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                makeTransitionTo(resultState);
+            }
+        });
     }
 
     public LogicStateManager(ViewStateManager viewStateManager,
@@ -197,6 +202,7 @@ public class LogicStateManager {
                 activeConnections,
                 cone
         );
+
 
         // playingState = new LogicPlayingState();
 
