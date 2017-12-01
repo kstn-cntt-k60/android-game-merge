@@ -18,6 +18,11 @@ android {
         }
     }
 }
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
 
 repositories {
     // Use jcenter for resolving your dependencies.
@@ -26,6 +31,7 @@ repositories {
 }
 
 dependencies {
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.+'
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
