@@ -1,5 +1,7 @@
 package kstn.game.logic.state;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -181,7 +183,8 @@ public class LogicWaitRoomState extends LogicGameState {
                 udpForwarder.getIpAddress(), thisPlayer.getName(), thisPlayer.getAvatarId());
         List<Player> playerList = new ArrayList<>();
         AcceptJoinRoomEvent event = new AcceptJoinRoomEvent(hostPlayer, playerList);
-        eventManager.trigger(event);
+        eventManager.queue(event);
+        Log.i("LogicWaitRoom", "ready");
     }
 
     void entryWhenIsClient() {

@@ -1,8 +1,13 @@
 package kstn.game.view.state;
 
+import android.util.Log;
+
+import kstn.game.view.state.multiplayer.WaitRoomProxy;
 import kstn.game.view.thang.fragment.WaitRoomFragment;
 
 public class ViewWaitRoomState extends  ViewGameState {
+    private WaitRoomProxy proxy;
+
     public ViewWaitRoomState(ViewStateManager stateManager) {
         super(stateManager);
     }
@@ -10,9 +15,14 @@ public class ViewWaitRoomState extends  ViewGameState {
     @Override
     public void entry() {
         WaitRoomFragment fragment = new WaitRoomFragment();
+        proxy = new WaitRoomProxy(stateManager.eventManager, fragment);
         fragment.setStateManager(stateManager);
         stateManager.activity.addFragment(fragment);
-        postEntry();
+        fragment.init();
+
+        proxy.entry();
+        Log.i("ViewWaitRoom", "entry");
+        super.postEntry();
     }
 
     @Override
@@ -22,6 +32,8 @@ public class ViewWaitRoomState extends  ViewGameState {
 
     @Override
     public void exit() {
-        preExit();
+        super.preExit();
+        proxy.exit();
+        proxy = null;
     }
 }

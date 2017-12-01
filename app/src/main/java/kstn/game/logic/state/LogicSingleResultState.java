@@ -1,9 +1,11 @@
 package kstn.game.logic.state;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.io.IOException;
 
+import kstn.game.logic.playing_event.ResultGameOverEvent;
 import kstn.game.view.screen.ImageView;
 
 public class LogicSingleResultState extends LogicGameState {
@@ -11,7 +13,8 @@ public class LogicSingleResultState extends LogicGameState {
     private int score = 0;
 
     public LogicSingleResultState(LogicStateManager stateManager) {
-        super(stateManager);
+        super(stateManager, stateManager.processManager,
+                stateManager.viewStateManager.singleResultState);
         Bitmap background = null;
         try {
             background = stateManager.assetManager.getBitmap("bg.jpg");
@@ -26,12 +29,21 @@ public class LogicSingleResultState extends LogicGameState {
     }
 
     @Override
+    public void onViewReady() {
+        ResultGameOverEvent event = new ResultGameOverEvent(score);
+        stateManager.eventManager.trigger(event);
+        Log.i("SingleResult", "" + score);
+    }
+
+    @Override
     public void entry() {
         stateManager.root.addView(backgroundView);
+        super.postEntry();
     }
 
     @Override
     public void exit() {
+        super.preExit();
         stateManager.root.removeView(backgroundView);
     }
 }

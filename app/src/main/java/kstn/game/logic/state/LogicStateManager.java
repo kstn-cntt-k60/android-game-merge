@@ -44,13 +44,13 @@ public class LogicStateManager {
 
     // Single SinglePlayerModel
     private final LogicSinglePlayerState singlePlayerState;
-    private final LogicSingleResultState singleResultState;
+    public final LogicSingleResultState singleResultState;
 
     // Statistics
     private final LogicGameState statState = null;
 
     // Managers
-    private final ViewStateManager viewStateManager;
+    public final ViewStateManager viewStateManager;
     public final ViewGroup root;
     public final ProcessManager processManager;
     public final BaseTimeManager timeManager;

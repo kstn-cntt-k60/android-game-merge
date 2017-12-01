@@ -1,7 +1,5 @@
 package kstn.game.logic.state.singleplayer;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -12,14 +10,12 @@ import kstn.game.logic.cone.ConeEventType;
 import kstn.game.logic.cone.ConeResult;
 import kstn.game.logic.cone.ConeStopEventData;
 import kstn.game.logic.data.QuestionManagerDAO;
+import kstn.game.logic.data.QuestionModel;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
-import kstn.game.logic.state.LogicStateManager;
-import kstn.game.logic.data.QuestionModel;
 import kstn.game.logic.playing_event.ConeResultEvent;
 import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
-import kstn.game.logic.playing_event.ResultGameOverEvent;
 import kstn.game.logic.playing_event.answer.AnswerEvent;
 import kstn.game.logic.playing_event.answer.GiveAnswerEvent;
 import kstn.game.logic.playing_event.cell.CellChosenEvent;
@@ -29,6 +25,7 @@ import kstn.game.logic.playing_event.cell.OpenMultipleCellEvent;
 import kstn.game.logic.playing_event.guess.AcceptRequestGuessEvent;
 import kstn.game.logic.playing_event.guess.GuessResultEvent;
 import kstn.game.logic.playing_event.player.SinglePlayerStateChangeEvent;
+import kstn.game.logic.state.LogicStateManager;
 import kstn.game.logic.state_event.TransitToSingleResultState;
 
 public class SinglePlayerManager {
@@ -288,8 +285,7 @@ public class SinglePlayerManager {
                     if (player.getLife() == 0) {
                         int score = player.getScore();
                         stateManager.eventManager.queue(new TransitToSingleResultState());
-                        stateManager.eventManager.queue(new ResultGameOverEvent(score));
-
+                        stateManager.singleResultState.setScore(score);
                         return;
                     }
                 }
@@ -307,9 +303,8 @@ public class SinglePlayerManager {
             if (player.getLife() == 0) {
                 if (isGuessed) {
                     int score = player.getScore();
-                    ResultGameOverEvent event = new ResultGameOverEvent(score);
                     stateManager.eventManager.queue(new TransitToSingleResultState());
-                    stateManager.eventManager.queue(event);
+                    stateManager.singleResultState.setScore(score);
                 } else {
                     requestGuess();
                 }
