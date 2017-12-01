@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import kstn.game.R;
 import kstn.game.logic.playing_event.player.SetThisPlayerEvent;
@@ -20,6 +21,7 @@ import kstn.game.view.thang.adapter.SlideAdapter;
 
 public class LoginFragment extends Fragment {
     private ViewStateManager stateManager;
+    private Random random = new Random();
 
     public void setStateManager(ViewStateManager stateManager) {
         this.stateManager = stateManager;
@@ -57,7 +59,7 @@ public class LoginFragment extends Fragment {
                 int avatarId = data.get(vpPager.getCurrentItem());
                 String playerName;
                 if (nameEditText.getText().toString().isEmpty()) {
-                    playerName = "GUEST" + (int)((System.currentTimeMillis()/10000));
+                    playerName = "GUEST" + random.nextInt(100);
                 }
                 else {
                     playerName = nameEditText.getText().toString();

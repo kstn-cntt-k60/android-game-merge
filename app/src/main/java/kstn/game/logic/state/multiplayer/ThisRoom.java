@@ -1,5 +1,7 @@
 package kstn.game.logic.state.multiplayer;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,8 +44,7 @@ public class ThisRoom implements IEntryExit {
             public void onEvent(EventData event) {
                 AcceptJoinRoomEvent event1 = (AcceptJoinRoomEvent) event;
                 playerList.clear();
-                for (Player player: event1.getOldPlayers())
-                    playerList.add(player);
+                playerList.addAll(event1.getOldPlayers());
                 playerList.add(event1.getNewPlayer());
             }
         };
@@ -82,6 +83,10 @@ public class ThisRoom implements IEntryExit {
         eventManager.removeListener(PlayingEventType.EXIT_ROOM, exitRoomListener);
         eventManager.removeListener(PlayingEventType.ACCEPT_JOIN_ROOM, acceptJoinRoomListener);
         eventManager.removeListener(PlayingEventType.SET_THIS_ROOM, setRoomListener);
+    }
+
+    public void addPlayer(Player player) {
+        playerList.add(player);
     }
 
     public String getRoomName() {

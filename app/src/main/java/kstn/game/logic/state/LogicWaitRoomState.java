@@ -19,6 +19,7 @@ import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.room.AcceptJoinRoomEvent;
 import kstn.game.logic.playing_event.room.RequestJoinRoomEvent;
 import kstn.game.logic.playing_event.room.SawCreatedRoomEvent;
+import kstn.game.logic.playing_event.room.SetRoomPlayerListEvent;
 import kstn.game.logic.process.Process;
 import kstn.game.logic.process.ProcessManager;
 import kstn.game.logic.state.multiplayer.ActiveConnections;
@@ -134,8 +135,10 @@ public class LogicWaitRoomState extends LogicGameState {
         exitRoomListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
+                Log.i("WaitRoom", "exitRoom");
                 if (isHost)
                     activeConnections.removeConnection(event.getConnection());
+                eventManager.queue(new TransitToCreatedRoomsState());
             }
         };
     }
@@ -178,13 +181,19 @@ public class LogicWaitRoomState extends LogicGameState {
 
     @Override
     protected void onViewReady() {
-        // Add host player
-        Player hostPlayer = new Player(
-                udpForwarder.getIpAddress(), thisPlayer.getName(), thisPlayer.getAvatarId());
-        List<Player> playerList = new ArrayList<>();
-        AcceptJoinRoomEvent event = new AcceptJoinRoomEvent(hostPlayer, playerList);
-        eventManager.queue(event);
-        Log.i("LogicWaitRoom", "ready");
+        if (isHost) {
+            Player hostPlayer = new Player(
+                    udpForwarder.getIpAddress(), thisPlayer.getName(), thisPlayer.getAvatarId());
+            List<Player> playerList = new ArrayList<>();
+            playerList.add(hostPlayer);
+            thisRoom.addPlayer(hostPlayer);
+            eventManager.queue(new SetRoomPlayerListEvent(playerList));
+        }
+        else {
+            List<Player> playerList = new ArrayList<>();
+            playerList.addAll(thisRoom.getPlayerList());
+            eventManager.queue(new SetRoomPlayerListEvent(playerList));
+        }
     }
 
     void entryWhenIsClient() {
@@ -230,6 +239,7 @@ public class LogicWaitRoomState extends LogicGameState {
                 new Server.OnAcceptErrorListener() {
                     @Override
                     public void onAcceptError() {
+                        Log.i("WaitRoom", "Accept Error");
                         eventManager.queue(new TransitToCreatedRoomsState());
                     }
                 }
@@ -239,8 +249,9 @@ public class LogicWaitRoomState extends LogicGameState {
                 new Endpoint.OnConnectionErrorListener() {
                     @Override
                     public void onConnectionError(Connection connection) {
-                        if (activeConnections.isActive(connection))
+                        if (activeConnections.isActive(connection)) {
                             eventManager.queue(new TransitToCreatedRoomsState());
+                        }
                     }
                 }
         );
@@ -251,7 +262,7 @@ public class LogicWaitRoomState extends LogicGameState {
 
     void exitWhenIsHost() {
         exitBoth();
-        eventManager.removeListener(PlayingEventType.START_PLAYING, startPlayingListener);
+        eventManager.removeListener(PlayingEventType.REQUEST_JOIN_ROOM, requestJoinRoomListener);
 
         if (process != null && process.isAlive())
             process.succeed();

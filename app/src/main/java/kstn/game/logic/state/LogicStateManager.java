@@ -215,9 +215,9 @@ public class LogicStateManager {
     }
 
     public void makeTransitionTo(LogicGameState other) {
-        prevState = currentState;
         nextState = other;
         currentState.exit();
+        prevState = currentState;
         currentState = other;
         currentState.entry();
     }

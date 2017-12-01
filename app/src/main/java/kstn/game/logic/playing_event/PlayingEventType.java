@@ -40,6 +40,7 @@ public enum PlayingEventType implements EventType {
     SET_THIS_ROOM(17402),
     CLICK_ROOM(17403),
     EXIT_ROOM(17404),
+    SET_ROOM_PLAYER_LIST(17405),
     ;
     PlayingEventType(int value) {
         this.value = value;

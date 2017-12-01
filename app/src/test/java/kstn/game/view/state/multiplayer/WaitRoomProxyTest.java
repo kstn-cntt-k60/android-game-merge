@@ -28,7 +28,6 @@ public class WaitRoomProxyTest {
                 new AcceptJoinRoomEvent(newPlayer, oldPlayers));
 
         verify(waitRoom).addPlayer(new Player(22, "XX", 2));
-        verify(waitRoom).addPlayer(new Player(33, "AA", 1));
     }
 
     @Test

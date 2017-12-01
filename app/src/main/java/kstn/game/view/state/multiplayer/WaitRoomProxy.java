@@ -1,13 +1,12 @@
 package kstn.game.view.state.multiplayer;
 
-import android.util.Log;
-
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.room.AcceptJoinRoomEvent;
 import kstn.game.logic.playing_event.room.ExitRoomEvent;
+import kstn.game.logic.playing_event.room.SetRoomPlayerListEvent;
 import kstn.game.logic.state.IEntryExit;
 import kstn.game.logic.state.multiplayer.Player;
 
@@ -15,6 +14,7 @@ public class WaitRoomProxy implements IEntryExit {
     private final EventManager eventManager;
 
     private final EventListener acceptJoinRoomListener;
+    private final EventListener setRoomPlayerListListener;
     private final EventListener exitRoomListener;
 
     public WaitRoomProxy(EventManager eventManager,
@@ -24,10 +24,16 @@ public class WaitRoomProxy implements IEntryExit {
         acceptJoinRoomListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
-                Log.i("WaitRoomProxy", "Ok");
                 AcceptJoinRoomEvent event1 = (AcceptJoinRoomEvent) event;
                 waitRoom.addPlayer(event1.getNewPlayer());
-                for (Player player: event1.getOldPlayers()) {
+            }
+        };
+
+        setRoomPlayerListListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                SetRoomPlayerListEvent event1 = (SetRoomPlayerListEvent) event;
+                for (Player player: event1.getPlayerList()) {
                     waitRoom.addPlayer(player);
                 }
             }
@@ -44,14 +50,15 @@ public class WaitRoomProxy implements IEntryExit {
 
     @Override
     public void entry() {
-        Log.i("WaitRoomProxy", "Entry");
         eventManager.addListener(PlayingEventType.ACCEPT_JOIN_ROOM, acceptJoinRoomListener);
+        eventManager.addListener(PlayingEventType.SET_ROOM_PLAYER_LIST, setRoomPlayerListListener);
         eventManager.addListener(PlayingEventType.EXIT_ROOM, exitRoomListener);
     }
 
     @Override
     public void exit() {
         eventManager.removeListener(PlayingEventType.EXIT_ROOM, exitRoomListener);
+        eventManager.removeListener(PlayingEventType.SET_ROOM_PLAYER_LIST, setRoomPlayerListListener);
         eventManager.removeListener(PlayingEventType.ACCEPT_JOIN_ROOM, acceptJoinRoomListener);
     }
 }
