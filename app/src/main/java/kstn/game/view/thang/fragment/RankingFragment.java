@@ -7,32 +7,27 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import kstn.game.R;
+import kstn.game.logic.data.QuestionManagerDAO;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BFragment extends Fragment {
+public class RankingFragment extends Fragment {
 
 
-    public BFragment() {
+    public RankingFragment() {
         // Required empty public constructor
     }
 
-    public static BFragment newObj (String noidung){
-        BFragment fragmentB = new BFragment();
-        Bundle bd = new Bundle();
-        bd.putString("noidung",noidung);
-        fragmentB.setArguments(bd); // luu gia tri
-
-
-
-
-
-        return fragmentB;
-    }
+//    public static RankingFragment newObj (String noidung){
+//        RankingFragment fragmentB = new RankingFragment();
+//        Bundle bd = new Bundle();
+//        bd.putString("noidung",noidung);
+//        fragmentB.setArguments(bd); // luu gia tri
+//        return fragmentB;
+//    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,8 +38,9 @@ public class BFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView txt = (TextView) view.findViewById(R.id.txt);
-        String noidungCanLay = getArguments().getString("noidung","");
-        txt.setText(noidungCanLay);
+//        TextView txt = (TextView) view.findViewById(R.id.txt);
+//        String noidungCanLay = getArguments().getString("noidung","");
+//        txt.setText(noidungCanLay);
+        QuestionManagerDAO questionManager = new QuestionManagerDAO(getActivity(),"CauHoiDataBase1.sqlite");
     }
 }

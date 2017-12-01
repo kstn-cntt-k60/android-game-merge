@@ -136,6 +136,7 @@ public class LogicWaitRoomState extends LogicGameState {
             public void onEvent(EventData event) {
                 if (isHost)
                     activeConnections.removeConnection(event.getConnection());
+                eventManager.queue(new TransitToCreatedRoomsState());
             }
         };
     }
@@ -149,6 +150,7 @@ public class LogicWaitRoomState extends LogicGameState {
         cone.entry();
 
         thisRoom.entry();
+        Log.d("Prev",stateManager.getPrevState().getClass().getName());
         if (stateManager.getPrevState() == stateManager.getCreatedRoomsState()) {
             entryWhenIsClient();
         }

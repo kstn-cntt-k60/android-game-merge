@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import kstn.game.R;
 import kstn.game.logic.playing_event.room.ExitRoomEvent;
 import kstn.game.logic.state.multiplayer.Player;
+import kstn.game.logic.state_event.TransitToPlayingState;
 import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.state.multiplayer.IWaitRoom;
 import kstn.game.view.thang.adapter.WaitPlayAdapter;
@@ -50,12 +51,20 @@ public class WaitRoomFragment extends Fragment implements IWaitRoom {
         lvPlayerWaiting.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         Button btnExit = view.findViewById(R.id.btnExit);
+        Button btnStart = view.findViewById(R.id.btnStart);
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 stateManager.eventManager.queue(new ExitRoomEvent(
                         stateManager.wifiInfo.getIP()
                 ));
+
+            }
+        });
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stateManager.eventManager.queue(new TransitToPlayingState());
             }
         });
     }

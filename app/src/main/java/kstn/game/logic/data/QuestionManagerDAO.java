@@ -17,8 +17,8 @@ public class QuestionManagerDAO {
     private SQLiteDatabase database;
     private Random random = new Random();
 
-    public QuestionManagerDAO(Context context){
-        questionManagerDatabase = new QuestionManagerDatabase(context);
+    public QuestionManagerDAO(Context context, String name){
+        questionManagerDatabase = new QuestionManagerDatabase(context,name);
     }
 
     public void open() {

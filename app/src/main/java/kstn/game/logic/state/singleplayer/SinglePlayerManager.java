@@ -152,7 +152,7 @@ public class SinglePlayerManager {
         waitChooseCellState = new WaitChooseCellState();
         waitGuessResultState = new WaitGuessResultState();
 
-        questionManager = new QuestionManagerDAO(stateManager.mainActivity);
+        questionManager = new QuestionManagerDAO(stateManager.mainActivity,"CauHoiDataBase1.sqlite");
         questionManager.open();
 
         initConeCells();

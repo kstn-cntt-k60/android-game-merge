@@ -1,7 +1,5 @@
 package kstn.game.view.state.multiplayer;
 
-import android.util.Log;
-
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
@@ -24,12 +22,11 @@ public class WaitRoomProxy implements IEntryExit {
         acceptJoinRoomListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
-                Log.i("WaitRoomProxy", "Ok");
                 AcceptJoinRoomEvent event1 = (AcceptJoinRoomEvent) event;
-                waitRoom.addPlayer(event1.getNewPlayer());
                 for (Player player: event1.getOldPlayers()) {
                     waitRoom.addPlayer(player);
                 }
+                waitRoom.addPlayer(event1.getNewPlayer());
             }
         };
 
@@ -44,7 +41,6 @@ public class WaitRoomProxy implements IEntryExit {
 
     @Override
     public void entry() {
-        Log.i("WaitRoomProxy", "Entry");
         eventManager.addListener(PlayingEventType.ACCEPT_JOIN_ROOM, acceptJoinRoomListener);
         eventManager.addListener(PlayingEventType.EXIT_ROOM, exitRoomListener);
     }
