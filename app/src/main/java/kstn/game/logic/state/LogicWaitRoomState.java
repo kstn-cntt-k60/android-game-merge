@@ -17,6 +17,7 @@ import kstn.game.logic.network.Server;
 import kstn.game.logic.network.UDPForwarder;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.room.AcceptJoinRoomEvent;
+import kstn.game.logic.playing_event.room.ExitRoomEvent;
 import kstn.game.logic.playing_event.room.RequestJoinRoomEvent;
 import kstn.game.logic.playing_event.room.SawCreatedRoomEvent;
 import kstn.game.logic.playing_event.room.SetRoomPlayerListEvent;
@@ -96,7 +97,7 @@ public class LogicWaitRoomState extends LogicGameState {
                               ViewManager root, View backgroundView,
                               ThisPlayer thisPlayer,
                               final ThisRoom thisRoom,
-                              UDPForwarder udpForwarder,
+                              final UDPForwarder udpForwarder,
                               NetworkForwarder networkForwarder,
                               final ActiveConnections activeConnections,
                               Cone cone) {
@@ -135,10 +136,14 @@ public class LogicWaitRoomState extends LogicGameState {
         exitRoomListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
-                Log.i("WaitRoom", "exitRoom");
-                if (isHost)
+                ExitRoomEvent event1 = (ExitRoomEvent) event;
+                if (event1.getPlayerIpAddress() == udpForwarder.getIpAddress()) {
+                    eventManager.queue(new TransitToCreatedRoomsState());
+                }
+                else if (isHost) {
+                    // Remove safely the connection
                     activeConnections.removeConnection(event.getConnection());
-                eventManager.queue(new TransitToCreatedRoomsState());
+                }
             }
         };
     }
