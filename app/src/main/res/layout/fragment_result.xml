@@ -15,9 +15,11 @@
         android:layout_weight="2"
         android:orientation="horizontal"
         android:weightSum="2"
+        android:scaleX="0.9"
         android:layout_width="match_parent"
         android:layout_height="0dp">
         <TextView
+            android:background="@drawable/shape_listview"
             android:textSize="40dp"
             android:gravity="center"
             android:layout_weight="1"
@@ -26,6 +28,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent" />
         <TextView
+
+            android:background="@drawable/shape_listview"
             android:text="aaaaaaa"
             android:textStyle="bold"
             android:textSize="30dp"
@@ -39,12 +43,18 @@
 
     </LinearLayout>
     <EditText
+        android:scaleX="0.9"
+        android:textColorHint="@android:color/white"
+        android:background="@drawable/shape_listview"
+        android:gravity="center"
+        android:textColor="@android:color/white"
         android:id="@+id/edtSaveName"
         android:layout_weight="1.5"
         android:hint="Nhập tên để lưu điểm"
         android:layout_width="match_parent"
         android:layout_height="0dp" />
     <LinearLayout
+        android:layout_marginTop="20dp"
         android:layout_weight="2.5"
         android:orientation="horizontal"
         android:weightSum="2"

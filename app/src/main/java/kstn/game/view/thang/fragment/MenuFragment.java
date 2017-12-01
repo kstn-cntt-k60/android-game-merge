@@ -12,6 +12,7 @@ import android.widget.Button;
 import kstn.game.R;
 import kstn.game.logic.state_event.TransitToLoginState;
 import kstn.game.logic.state_event.TransitToSinglePlayerState;
+import kstn.game.logic.state_event.TransitToStatState;
 import kstn.game.view.state.ViewStateManager;
 
 public class MenuFragment extends Fragment {
@@ -63,6 +64,7 @@ public class MenuFragment extends Fragment {
         btnBangXepHang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                stateManager.eventManager.queue(new TransitToStatState());
             }
         });
     }

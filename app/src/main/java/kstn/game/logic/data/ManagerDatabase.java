@@ -6,8 +6,8 @@ package kstn.game.logic.data;
 import android.content.Context;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
-public class QuestionManagerDatabase extends SQLiteAssetHelper {
-    public QuestionManagerDatabase(Context context,String name) {
-        super(context, name, null, 1);
+public class ManagerDatabase extends SQLiteAssetHelper {
+    public ManagerDatabase(Context context) {
+        super(context,"CauHoiDataBase1.sqlite", null, 1);
     }
 }

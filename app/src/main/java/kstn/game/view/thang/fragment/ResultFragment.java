@@ -12,7 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import kstn.game.MainActivity;
 import kstn.game.R;
+import kstn.game.logic.data.ManagerDAO;
 import kstn.game.logic.state_event.TransitToMenuState;
 import kstn.game.view.state.ViewStateManager;
 
@@ -56,14 +58,15 @@ public class ResultFragment extends Fragment {
         edtSaveName = (EditText)view.findViewById(R.id.edtSaveName);
         txtSaveScore = (TextView)view.findViewById(R.id.txtSaveScore);
         txtSaveScore.setText("" + score);
-
+        final ManagerDAO questionManager = new ManagerDAO((MainActivity)getActivity());
+        questionManager.open();
         btnSaveScore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name = edtSaveName.getText().toString();
                 if(!name.isEmpty()){
-                    //TODO
-
+                    questionManager.SaveScore(name,score);
+                    questionManager.close();
                     stateManager.eventManager.queue(new TransitToMenuState());
                 }else Toast.makeText(getActivity(),"Nhập tên để lưu điểm",Toast.LENGTH_SHORT).show();
             }

@@ -7,9 +7,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import java.util.ArrayList;
+
+import kstn.game.MainActivity;
 import kstn.game.R;
-import kstn.game.logic.data.QuestionManagerDAO;
+import kstn.game.logic.data.ManagerDAO;
+import kstn.game.logic.state.multiplayer.ScoreDb;
+import kstn.game.view.thang.adapter.RankingAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,27 +27,35 @@ public class RankingFragment extends Fragment {
     public RankingFragment() {
         // Required empty public constructor
     }
-
-//    public static RankingFragment newObj (String noidung){
-//        RankingFragment fragmentB = new RankingFragment();
-//        Bundle bd = new Bundle();
-//        bd.putString("noidung",noidung);
-//        fragmentB.setArguments(bd); // luu gia tri
-//        return fragmentB;
-//    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_b, container, false);
+        return inflater.inflate(R.layout.ranking, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        TextView txt = (TextView) view.findViewById(R.id.txt);
-//        String noidungCanLay = getArguments().getString("noidung","");
-//        txt.setText(noidungCanLay);
-        QuestionManagerDAO questionManager = new QuestionManagerDAO(getActivity(),"CauHoiDataBase1.sqlite");
+        ListView lvRanking = view.findViewById(R.id.lvRanking);
+        TextView txtNameRank1 = (TextView) view.findViewById(R.id.txtNameRank1);
+        TextView txtNameRank2 = (TextView) view.findViewById(R.id.txtNameRank2);
+        TextView txtNameRank3 = (TextView) view.findViewById(R.id.txtNameRank3);
+        TextView txtScoreR1 = (TextView) view.findViewById(R.id.txtScoreR1);
+        TextView txtScoreR2 = (TextView) view.findViewById(R.id.txtScoreR2);
+        TextView txtScoreR3 = (TextView) view.findViewById(R.id.txtScoreR3);
+        ManagerDAO rankingManager = new ManagerDAO((MainActivity)getActivity());
+        rankingManager.open();
+        ArrayList<ScoreDb> data = rankingManager.getRanking();
+        RankingAdapter adapter = new RankingAdapter(getActivity(),data);
+        lvRanking.setAdapter(adapter);
+        txtNameRank1.setText(data.get(0).getName());
+        txtNameRank2.setText(data.get(1).getName());
+        txtNameRank3.setText(data.get(2).getName());
+        txtScoreR1.setText(data.get(0).getScore()+"");
+        txtScoreR2.setText(data.get(1).getScore()+"");
+        txtScoreR3.setText(data.get(2).getScore()+"");
+
+
     }
 }

@@ -6,10 +6,13 @@ import java.io.IOException;
 
 import kstn.game.view.screen.ImageView;
 
-public class LogicMenuState extends LogicGameState {
-    ImageView backgroundView;
+/**
+ * Created by thang on 12/1/2017.
+ */
 
-    public LogicMenuState(LogicStateManager manager) {
+public class LogicStatState extends LogicGameState {
+    ImageView backgroundView;
+    public LogicStatState(LogicStateManager manager) {
         super(manager);
         Bitmap background = null;
         try {
@@ -19,7 +22,6 @@ public class LogicMenuState extends LogicGameState {
         }
         backgroundView = new ImageView(0, 0, 2, 1.8f * 2, background);
     }
-
     @Override
     public void entry() {
         stateManager.root.addView(backgroundView);

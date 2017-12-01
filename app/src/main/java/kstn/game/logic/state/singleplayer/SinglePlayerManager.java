@@ -9,7 +9,7 @@ import kstn.game.logic.cone.ConeAccelerateEventData;
 import kstn.game.logic.cone.ConeEventType;
 import kstn.game.logic.cone.ConeResult;
 import kstn.game.logic.cone.ConeStopEventData;
-import kstn.game.logic.data.QuestionManagerDAO;
+import kstn.game.logic.data.ManagerDAO;
 import kstn.game.logic.data.QuestionModel;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
@@ -70,7 +70,7 @@ public class SinglePlayerManager {
         rightGuess = false;
     }
 
-    private QuestionManagerDAO questionManager;
+    private ManagerDAO questionManager;
 
     private EventListener coneAccelListener;
     private EventListener coneStopListener;
@@ -152,7 +152,7 @@ public class SinglePlayerManager {
         waitChooseCellState = new WaitChooseCellState();
         waitGuessResultState = new WaitGuessResultState();
 
-        questionManager = new QuestionManagerDAO(stateManager.mainActivity,"CauHoiDataBase1.sqlite");
+        questionManager = new ManagerDAO(stateManager.mainActivity);
         questionManager.open();
 
         initConeCells();

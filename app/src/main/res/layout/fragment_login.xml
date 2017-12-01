@@ -15,6 +15,11 @@
         android:layout_height="200dp">
     </android.support.v4.view.ViewPager>
     <EditText
+        android:background="@drawable/shape_listview"
+        android:textColorHint="@android:color/white"
+        android:gravity="center"
+        android:hint="Nhập tên"
+        android:textColor="@android:color/white"
         android:id="@+id/ten"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/vpPager"

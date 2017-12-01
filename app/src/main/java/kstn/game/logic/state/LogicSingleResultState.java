@@ -17,7 +17,7 @@ public class LogicSingleResultState extends LogicGameState {
                 stateManager.viewStateManager.singleResultState);
         Bitmap background = null;
         try {
-            background = stateManager.assetManager.getBitmap("bg.jpg");
+            background = stateManager.assetManager.getBitmap("bg2.jpg");
         } catch (IOException e) {
             e.printStackTrace();
         }
