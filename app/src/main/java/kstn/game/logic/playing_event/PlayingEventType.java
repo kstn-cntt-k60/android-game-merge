@@ -3,6 +3,8 @@ package kstn.game.logic.playing_event;
 import kstn.game.logic.event.EventType;
 
 public enum PlayingEventType implements EventType {
+    PLAYING_READY(2296),
+    GAME_OVER(1997),
     OPEN_MULTIPLE_CELL(2399),
     GIVE_CHOOSE_CELL(2356),
     CELL_CHOSEN(2357),

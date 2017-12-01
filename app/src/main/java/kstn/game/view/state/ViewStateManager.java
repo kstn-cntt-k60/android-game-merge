@@ -95,6 +95,7 @@ public class ViewStateManager {
         menuState = new ViewMenuState(this);
         singlePlayerState = new ViewSinglePlayerState(this);
         singleResultState = new ViewSingleResultState(this);
+
         loginState = new ViewLoginState(this);
         createdRoomsState = new ViewCreatedRoomsState(this);
         roomCreatorState = new ViewRoomCreatorState(this);
