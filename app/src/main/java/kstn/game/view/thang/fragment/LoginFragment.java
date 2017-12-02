@@ -17,7 +17,7 @@ import kstn.game.R;
 import kstn.game.logic.playing_event.player.SetThisPlayerEvent;
 import kstn.game.logic.state_event.TransitToCreatedRoomsState;
 import kstn.game.view.state.ViewStateManager;
-import kstn.game.view.thang.adapter.SlideAdapter;
+import kstn.game.view.thang.adapter.ViewPaperAdapter;
 
 public class LoginFragment extends Fragment {
     private ViewStateManager stateManager;
@@ -41,17 +41,16 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final EditText nameEditText = (EditText) view.findViewById(R.id.ten);
-        final ViewPager vpPager = view.findViewById(R.id.vpPager);
-        SlideAdapter adapter = new SlideAdapter(getActivity().getSupportFragmentManager());
-        vpPager.setAdapter(adapter);
         final ArrayList<Integer> data = new ArrayList<>();
         data.add(R.drawable.index1);
         data.add(R.drawable.index2);
         data.add(R.drawable.index3);
         data.add(R.drawable.index4);
-
-       // final SinglePlayerModel user =new SinglePlayerModel("thang",R.drawable.index2);
+        final EditText nameEditText = (EditText) view.findViewById(R.id.ten);
+        final ViewPager vpPager = view.findViewById(R.id.vpPager);
+        ViewPaperAdapter adapter = new ViewPaperAdapter(data,getContext());
+        vpPager.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         Button btnDau = (Button) view.findViewById(R.id.btnDau);
         btnDau.setOnClickListener(new View.OnClickListener() {
             @Override
