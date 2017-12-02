@@ -3,39 +3,34 @@ package kstn.game.logic.state.multiplayer;
 import java.util.ArrayList;
 import java.util.List;
 
+import kstn.game.logic.event.EventManager;
 import kstn.game.logic.state.IEntryExit;
 import kstn.game.logic.state.multiplayer.ministate.State;
 
 public class MultiPlayerManager implements IEntryExit {
-    private ThisRoom thisRoom;
-    private List<ScorePlayer> scorePlayerList = new ArrayList<>();
+    private final EventManager eventManager;
+    private final List<ScorePlayer> scorePlayerList = new ArrayList<>();
+    private final ScorePlayerManager scoreManager;
 
     private State currentState;
 
-    MultiPlayerManager() {
-
+    public MultiPlayerManager(EventManager eventManager,
+                              ScorePlayerManager scoreManager) {
+        this.eventManager = eventManager;
+        this.scoreManager = scoreManager;
     }
 
     @Override
     public void entry() {
+        scoreManager.entry();
     }
 
-    public void onViewReady() {
-        for (Player player: thisRoom.getPlayerList()) {
-            scorePlayerList.add(new ScorePlayer(player));
-        }
-        scorePlayerList.get(0).ready();
-    }
-
-    public boolean allPlayersAreReady() {
-        for (ScorePlayer scorePlayer: scorePlayerList)
-            if (!scorePlayer.isReady())
-                return false;
-        return true;
+    void onViewReady() {
+        scoreManager.onViewReady();
     }
 
     @Override
     public void exit() {
-
+        scoreManager.exit();
     }
 }

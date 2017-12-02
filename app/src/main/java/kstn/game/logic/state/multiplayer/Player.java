@@ -28,7 +28,7 @@ public class Player {
         if (object instanceof Player) {
             Player other = (Player) object;
             return ipAddress == other.getIpAddress()
-                    && name == other.getName()
+                    && name.equals(other.getName())
                     && avatarId == other.getAvatarId();
         }
         return false;

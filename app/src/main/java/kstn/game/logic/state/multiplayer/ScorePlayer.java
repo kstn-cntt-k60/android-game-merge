@@ -31,6 +31,10 @@ public class ScorePlayer {
     }
 
     public void deactivate() {
+        isActive = false;
+    }
+
+    public void activate() {
         isActive = true;
     }
 

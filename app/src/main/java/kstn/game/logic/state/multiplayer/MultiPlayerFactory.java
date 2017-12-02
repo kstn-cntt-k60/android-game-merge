@@ -1,15 +1,59 @@
 package kstn.game.logic.state.multiplayer;
 
+import kstn.game.logic.cone.Cone;
+import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.state.LogicStateManager;
+import kstn.game.view.screen.View;
+import kstn.game.view.screen.ViewManager;
 
 public class MultiPlayerFactory {
     private final LogicStateManager stateManager;
+    private final WifiInfo wifiInfo;
+    private final ViewManager root;
+    private final View backgroundView;
+    private final Cone cone;
 
-    public MultiPlayerFactory(LogicStateManager stateManager) {
+    private final ThisRoom thisRoom;
+    private final ThisPlayer thisPlayer;
+
+    public MultiPlayerFactory(LogicStateManager stateManager,
+                              WifiInfo wifiInfo,
+                              ViewManager root,
+                              View backgroundView,
+                              Cone cone,
+                              ThisPlayer thisPlayer,
+                              ThisRoom thisRoom
+    ) {
         this.stateManager = stateManager;
+        this.wifiInfo = wifiInfo;
+        this.root = root;
+        this.backgroundView = backgroundView;
+        this.cone = cone;
+
+        this.thisRoom = thisRoom;
+        this.thisPlayer = thisPlayer;
     }
 
     public LogicPlayingState create() {
-        return null;
+        ScorePlayerManager scorePlayerManager = new ScorePlayerManager(
+                stateManager.eventManager,
+                wifiInfo,
+                thisRoom
+        );
+
+        MultiPlayerManager playerManager = new MultiPlayerManager(
+                stateManager.eventManager,
+                scorePlayerManager
+        );
+
+        return new LogicPlayingState(
+                stateManager,
+                stateManager.processManager,
+                stateManager.viewStateManager.playingState,
+                playerManager,
+                root,
+                backgroundView,
+                cone
+        );
     }
 }

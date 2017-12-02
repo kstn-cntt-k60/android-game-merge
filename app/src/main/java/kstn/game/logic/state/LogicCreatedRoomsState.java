@@ -184,9 +184,7 @@ public class LogicCreatedRoomsState extends LogicGameState {
     }
 
     private void onAcceptRoomEvent(AcceptJoinRoomEvent event) {
-        Log.i("CreatedRoom", "Accept");
         if (event.getNewPlayer().getIpAddress() == udpForwarder.getIpAddress()) {
-            Log.i("CreatedRoom", "Accept Inside");
             eventManager.trigger(new SetThisRoomEvent(roomName, roomIpAddress));
             eventManager.queue(new TransitToWaitRoom());
         }

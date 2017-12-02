@@ -1,7 +1,5 @@
 package kstn.game.logic.state;
 
-import android.util.Log;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -157,7 +155,6 @@ public class LogicWaitRoomState extends LogicGameState {
         cone.entry();
 
         thisRoom.entry();
-        Log.d("Prev",stateManager.getPrevState().getClass().getName());
         if (stateManager.getPrevState() == stateManager.getCreatedRoomsState()) {
             entryWhenIsClient();
         }

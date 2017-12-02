@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_package = "kstn.game.logic.playing_event.player";
+
+message NextPlayer {
+    int32 playerIndex = 1;
+}
+
+message PlayerDeactivate {
+    int32 playerIndex = 1;
+}
+
+message PlayerReady {
+    int32 ipAddress = 1;
+}
+
+message PlayerSetScore {
+    int32 score = 1;
+}

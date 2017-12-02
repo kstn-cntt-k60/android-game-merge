@@ -20,4 +20,14 @@ public class PlayerSetAvatarEvent extends GameEventData {
     public int getAvatarId() {
         return avatarId;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof PlayerSetAvatarEvent) {
+            PlayerSetAvatarEvent event = (PlayerSetAvatarEvent) other;
+            return this.playerIndex == event.playerIndex
+                    && this.avatarId == event.avatarId;
+        }
+        return false;
+    }
 }

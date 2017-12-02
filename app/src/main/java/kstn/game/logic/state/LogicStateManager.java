@@ -19,6 +19,7 @@ import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.process.ProcessManager;
 import kstn.game.logic.state.multiplayer.ActiveConnections;
 import kstn.game.logic.state.multiplayer.LogicPlayingState;
+import kstn.game.logic.state.multiplayer.MultiPlayerFactory;
 import kstn.game.logic.state.multiplayer.ThisPlayer;
 import kstn.game.logic.state.multiplayer.ThisRoom;
 import kstn.game.logic.state_event.StateEventType;
@@ -35,12 +36,11 @@ public class LogicStateManager {
     private final LogicMenuState menuState;
 
     // Multiplayer
-
     private final LogicLoginState loginState;
     private final LogicCreatedRoomsState createdRoomsState;
     private final LogicRoomCreatorState roomCreatorState;
     private final LogicWaitRoomState waitRoomState;
-    private final LogicPlayingState playingState = null;
+    private final LogicPlayingState playingState;
     private final LogicGameState resultState = null;
     // Single SinglePlayerModel
     private final LogicSinglePlayerState singlePlayerState;
@@ -123,6 +123,7 @@ public class LogicStateManager {
                 makeTransitionTo(playingState);
             }
         });
+
         eventManager.addListener(StateEventType.RESULT, new EventListener() {
             @Override
             public void onEvent(EventData event) {
@@ -204,7 +205,12 @@ public class LogicStateManager {
         );
 
 
-        // playingState = new LogicPlayingState();
+        MultiPlayerFactory multiPlayerFactory = new MultiPlayerFactory(
+                this, wifiInfo,
+                root, backgroundView, cone,
+                thisPlayer, thisRoom
+        );
+        playingState = multiPlayerFactory.create();
 
         // ----------------------------------
         listenToAllStateEvents();

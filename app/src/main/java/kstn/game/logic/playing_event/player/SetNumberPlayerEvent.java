@@ -14,4 +14,13 @@ public class SetNumberPlayerEvent extends GameEventData {
     public int getPlayerCount() {
         return playerCount;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof SetNumberPlayerEvent) {
+            SetNumberPlayerEvent event = (SetNumberPlayerEvent) other;
+            return this.playerCount == event.playerCount;
+        }
+        return false;
+    }
 }

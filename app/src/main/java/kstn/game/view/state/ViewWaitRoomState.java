@@ -1,7 +1,5 @@
 package kstn.game.view.state;
 
-import android.util.Log;
-
 import kstn.game.view.state.multiplayer.WaitRoomProxy;
 import kstn.game.view.thang.fragment.WaitRoomFragment;
 
@@ -21,7 +19,6 @@ public class ViewWaitRoomState extends  ViewGameState {
         fragment.init();
 
         proxy.entry();
-        Log.i("ViewWaitRoom", "entry");
         super.postEntry();
     }
 

@@ -20,4 +20,14 @@ public class PlayerSetNameEvent extends GameEventData {
     public String getPlayerName() {
         return playerName;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof PlayerSetNameEvent) {
+            PlayerSetNameEvent event = (PlayerSetNameEvent) other;
+            return this.playerIndex == event.playerIndex
+                    && this.playerName.equals(event.playerName);
+        }
+        return false;
+    }
 }
