@@ -45,10 +45,8 @@ public class LogicStateManager {
     // Single SinglePlayerModel
     private final LogicSinglePlayerState singlePlayerState;
     public final LogicSingleResultState singleResultState;
-
-    // Statistics
-    private final LogicGameState statState = null;
-
+    // bxh
+    private final LogicStatState statState;
     // Managers
     public final ViewStateManager viewStateManager;
     public final ViewGroup root;
@@ -130,6 +128,12 @@ public class LogicStateManager {
                 makeTransitionTo(resultState);
             }
         });
+        eventManager.addListener(StateEventType.STAT, new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                makeTransitionTo(statState);
+            }
+        });
     }
 
     public LogicStateManager(ViewStateManager viewStateManager,
@@ -160,7 +164,7 @@ public class LogicStateManager {
 
         Bitmap background = null;
         try {
-            background = assetManager.getBitmap("bg.jpg");
+            background = assetManager.getBitmap("bg2.jpg");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -203,6 +207,7 @@ public class LogicStateManager {
                 activeConnections,
                 cone
         );
+        statState = new LogicStatState(this);
 
 
         MultiPlayerFactory multiPlayerFactory = new MultiPlayerFactory(

@@ -25,7 +25,7 @@ public class ViewStateManager {
     public final ViewSingleResultState singleResultState;
 
     // Statistics
-    public final ViewGameState statState = null;
+    public final ViewStatState statState;
 
     // Managers
     public final MainActivity activity;
@@ -94,6 +94,13 @@ public class ViewStateManager {
                 makeTransitionTo(resultState);
             }
         });
+        eventManager.addListener(StateEventType.STAT, new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                makeTransitionTo(statState);
+            }
+        });
+
 
     }
 
@@ -115,6 +122,7 @@ public class ViewStateManager {
         waitRoomState = new ViewWaitRoomState(this);
         playingState = new ViewPlayingState(eventManager);
         resultState = new ViewMultiResultState(this);
+        statState = new ViewStatState(this);
         listenToAllStateEvents();
         currentState = menuState;
         currentState.entry();
