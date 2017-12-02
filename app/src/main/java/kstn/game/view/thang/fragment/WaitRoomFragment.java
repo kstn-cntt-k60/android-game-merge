@@ -60,6 +60,7 @@ public class WaitRoomFragment extends Fragment implements IWaitRoom {
 
             }
         });
+
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

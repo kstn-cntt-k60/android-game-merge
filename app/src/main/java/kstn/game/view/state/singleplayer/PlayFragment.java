@@ -41,7 +41,7 @@ public class PlayFragment extends Fragment {
     // Listeners
     private EventListener rotateResultListener;
     private EventListener nextQuestionListener;
-
+    private EventListener nextLevelListener;
     public PlayFragment() {
         rotateResultListener = new EventListener() {
             @Override
@@ -58,16 +58,26 @@ public class PlayFragment extends Fragment {
                 handleNextQuestion(event.getQuestion(), event.getAnswer());
             }
         };
+        nextLevelListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                if(txtLevel!=null){
+                    txtLevel.setText((Integer.parseInt(txtLevel.getText().toString())+1)+"");
+                }
+            }
+        };
     }
 
     public void entry() {
         stateManager.eventManager.addListener(PlayingEventType.ROTATE_RESULT, rotateResultListener);
         stateManager.eventManager.addListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
+        stateManager.eventManager.addListener(PlayingEventType.NEXT_LEVEL,nextLevelListener);
     }
 
     public void exit() {
         stateManager.eventManager.removeListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
         stateManager.eventManager.removeListener(PlayingEventType.ROTATE_RESULT, rotateResultListener);
+        stateManager.eventManager.removeListener(PlayingEventType.NEXT_LEVEL,nextLevelListener);
     }
 
     public void setStateManager(ViewStateManager stateManager) {

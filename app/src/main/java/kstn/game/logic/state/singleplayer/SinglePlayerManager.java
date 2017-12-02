@@ -14,6 +14,7 @@ import kstn.game.logic.data.QuestionModel;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.playing_event.ConeResultEvent;
+import kstn.game.logic.playing_event.NextLevelEvent;
 import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.answer.AnswerEvent;
@@ -135,7 +136,9 @@ public class SinglePlayerManager {
                 new NextQuestionEvent(question, answer));
         setQuestion(question, answer);
     }
-
+    private void nextLevel(){
+        stateManager.eventManager.trigger(new NextLevelEvent());
+    }
     public void onViewReady() {
         newQuestion();
     }
@@ -277,6 +280,7 @@ public class SinglePlayerManager {
             if (player.getLife() != 0 && isGuessed) {
                 if (rightGuess) {
                     player.setScore(player.getScore() + 1000);
+                    nextLevel();
                     notifyState();
                 }
                 else {
