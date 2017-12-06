@@ -1,0 +1,4 @@
+#!/bin/bash
+find | grep -E "\.java$" | grep -v -E "R\.java$" \
+    | grep -vE "Config\.java$" | grep -vE "Message\.java$" \
+    | xargs wc -l
