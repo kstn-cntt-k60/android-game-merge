@@ -1,8 +1,5 @@
 package kstn.game.logic.state.multiplayer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import kstn.game.logic.cone.ConeAccelerateEventData;
 import kstn.game.logic.cone.ConeEventType;
 import kstn.game.logic.cone.ConeStopEventData;
@@ -21,9 +18,9 @@ import kstn.game.logic.state.multiplayer.ministate.State;
 
 public class MultiPlayerManager implements IEntryExit {
     private final EventManager eventManager;
-    private final List<ScorePlayer> scorePlayerList = new ArrayList<>();
     private final ScorePlayerManager scoreManager;
     private final QuestionManager questionManager;
+    private final CellManager cellManager;
     private final WifiInfo wifiInfo;
 
     State currentState;
@@ -60,10 +57,12 @@ public class MultiPlayerManager implements IEntryExit {
     public MultiPlayerManager(EventManager eventManager,
                               final ScorePlayerManager scoreManager,
                               final QuestionManager questionManager,
+                              CellManager cellManager,
                               WifiInfo wifiInfo) {
         this.eventManager = eventManager;
         this.scoreManager = scoreManager;
         this.questionManager = questionManager;
+        this.cellManager = cellManager;
         this.wifiInfo = wifiInfo;
 
         coneAccelListener = new EventListener() {
@@ -146,6 +145,8 @@ public class MultiPlayerManager implements IEntryExit {
         viewIsReady = false;
         scoreManager.loadInfoFromThisRoom();
         scoreManager.entry();
+        questionManager.entry();
+        cellManager.entry();
 
         currentState = waitOtherPlayersState;
 
@@ -194,6 +195,8 @@ public class MultiPlayerManager implements IEntryExit {
         eventManager.removeListener(ConeEventType.STOP, coneStopListener);
         eventManager.removeListener(ConeEventType.ACCELERATE, coneAccelListener);
 
+        cellManager.exit();
+        questionManager.exit();
         scoreManager.exit();
     }
 }

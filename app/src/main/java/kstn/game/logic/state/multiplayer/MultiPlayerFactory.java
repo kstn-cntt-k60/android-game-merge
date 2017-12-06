@@ -49,10 +49,15 @@ public class MultiPlayerFactory {
                 managerDAO
         );
 
+        CellManager cellManager = new CellManager(
+                stateManager.eventManager
+        );
+
         MultiPlayerManager playerManager = new MultiPlayerManager(
                 stateManager.eventManager,
                 scorePlayerManager,
                 questionManager,
+                cellManager,
                 wifiInfo
         );
 

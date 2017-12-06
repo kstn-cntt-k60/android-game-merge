@@ -13,7 +13,6 @@ import kstn.game.logic.event.EventManager;
 import kstn.game.logic.event.EventType;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.answer.AnswerEvent;
-import kstn.game.logic.playing_event.cell.CellChosenEvent;
 import kstn.game.logic.playing_event.cell.OpenCellEvent;
 import kstn.game.logic.playing_event.cell.OpenMultipleCellEvent;
 import kstn.game.logic.playing_event.guess.GuessResultEvent;

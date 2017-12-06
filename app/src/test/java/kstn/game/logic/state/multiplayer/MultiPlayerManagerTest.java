@@ -19,6 +19,7 @@ import kstn.game.logic.playing_event.guess.GuessResultEvent;
 import kstn.game.logic.playing_event.guess.RequestGuessEvent;
 import kstn.game.logic.playing_event.player.NextPlayerEvent;
 import kstn.game.logic.playing_event.player.PlayerReadyEvent;
+import kstn.game.logic.state.EntryExitUtil;
 import kstn.game.logic.state.multiplayer.ministate.State;
 
 import static org.mockito.Mockito.mock;
@@ -38,6 +39,8 @@ public class MultiPlayerManagerTest {
 
     private QuestionManager getMockedQuestionManager() { return mock(QuestionManager.class); }
 
+    private CellManager getMockedCellManager() { return mock(CellManager.class); }
+
     private WifiInfo getMockedWifiInfo() {
         return mock(WifiInfo.class);
     }
@@ -45,8 +48,31 @@ public class MultiPlayerManagerTest {
     private MultiPlayerManager createManager(EventManager eventManager,
                                              ScorePlayerManager scoreManager,
                                              QuestionManager questionManager,
+                                             CellManager cellManager,
                                              WifiInfo wifiInfo) {
-        return new MultiPlayerManager(eventManager, scoreManager, questionManager, wifiInfo);
+        return new MultiPlayerManager(
+                eventManager, scoreManager,
+                questionManager, cellManager, wifiInfo);
+    }
+
+    private MultiPlayerManager createManager(CellManager cellManager) {
+        return createManager(
+                getMockedEventManager(),
+                getMockedScoreManager(),
+                getMockedQuestionManager(),
+                cellManager,
+                getMockedWifiInfo()
+        );
+    }
+
+    private MultiPlayerManager createManager(EventManager eventManager,
+                                             ScorePlayerManager scoreManager,
+                                             QuestionManager questionManager,
+                                             WifiInfo wifiInfo) {
+        return createManager(
+                eventManager, scoreManager, questionManager,
+                getMockedCellManager(), wifiInfo
+        );
     }
 
     private MultiPlayerManager createManager(EventManager eventManager,
@@ -54,6 +80,11 @@ public class MultiPlayerManagerTest {
                                              QuestionManager questionManager) {
         WifiInfo wifiInfo = mock(WifiInfo.class);
         return createManager(eventManager, scoreManager, questionManager, wifiInfo);
+    }
+
+    private MultiPlayerManager createManager(QuestionManager questionManager) {
+        return createManager(getMockedEventManager(),
+                getMockedScoreManager(), questionManager);
     }
 
     private MultiPlayerManager createManager(EventManager eventManager,
@@ -423,5 +454,19 @@ public class MultiPlayerManagerTest {
 
         verify(state1).exit();
         verify(state2).entry();
+    }
+
+    @Test
+    public void setUpQuestionManager() {
+        QuestionManager questionManager = getMockedQuestionManager();
+        MultiPlayerManager manager = createManager(questionManager);
+        EntryExitUtil.assertSetUpEntryExit(manager, questionManager);
+    }
+
+    @Test
+    public void setUpCellManager() {
+        CellManager cellManager = getMockedCellManager();
+        MultiPlayerManager manager = createManager(cellManager);
+        EntryExitUtil.assertSetUpEntryExit(manager, cellManager);
     }
 }
