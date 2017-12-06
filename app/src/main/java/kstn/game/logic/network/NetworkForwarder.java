@@ -12,6 +12,15 @@ import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.event.EventType;
 import kstn.game.logic.playing_event.PlayingEventType;
+import kstn.game.logic.playing_event.answer.AnswerEvent;
+import kstn.game.logic.playing_event.cell.CellChosenEvent;
+import kstn.game.logic.playing_event.cell.OpenCellEvent;
+import kstn.game.logic.playing_event.cell.OpenMultipleCellEvent;
+import kstn.game.logic.playing_event.guess.GuessResultEvent;
+import kstn.game.logic.playing_event.player.NextPlayerEvent;
+import kstn.game.logic.playing_event.player.PlayerDeactivateEvent;
+import kstn.game.logic.playing_event.player.PlayerReadyEvent;
+import kstn.game.logic.playing_event.player.PlayerSetScoreEvent;
 import kstn.game.logic.playing_event.room.AcceptJoinRoomEvent;
 import kstn.game.logic.playing_event.room.ExitRoomEvent;
 import kstn.game.logic.playing_event.room.RequestJoinRoomEvent;
@@ -49,7 +58,23 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
         parserMap.put(ConeEventType.MOVE, new ConeMoveEventData.Parser());
         parserMap.put(ConeEventType.ACCELERATE, new ConeAccelerateEventData.Parser());
 
-        //
+        // Answer
+        parserMap.put(PlayingEventType.ANSWER, new AnswerEvent.Parser());
+
+        // Cell
+        parserMap.put(PlayingEventType.OPEN_CELL, new OpenCellEvent.Parser());
+        parserMap.put(PlayingEventType.OPEN_MULTIPLE_CELL, new OpenMultipleCellEvent.Parser());
+
+        // Guess
+        parserMap.put(PlayingEventType.GUESS_RESULT, new GuessResultEvent.Parser());
+
+        // Player
+        parserMap.put(PlayingEventType.NEXT_PLAYER, new NextPlayerEvent.Parser());
+        parserMap.put(PlayingEventType.PLAYER_DEACTIVATE, new PlayerDeactivateEvent.Parser());
+        parserMap.put(PlayingEventType.PLAYER_READY, new PlayerReadyEvent.Parser());
+        parserMap.put(PlayingEventType.PLAYER_SET_SCORE, new PlayerSetScoreEvent.Parser());
+
+        // Room
         parserMap.put(PlayingEventType.REQUEST_JOIN_ROOM, new RequestJoinRoomEvent.Parser());
         parserMap.put(PlayingEventType.ACCEPT_JOIN_ROOM, new AcceptJoinRoomEvent.Parser());
         parserMap.put(PlayingEventType.EXIT_ROOM, new ExitRoomEvent.Parser());

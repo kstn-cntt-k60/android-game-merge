@@ -106,8 +106,8 @@ public class ScorePlayerManagerTest extends ScorePlayerManagerFixture{
     }
 
     @Test
-    public void nextPlayer_WhenNoPlayerActive() {
-        manager.currentPlayerIndex = 0;
+    public void nextPlayer_ReturnMinusOne_NotChangeCurrentIndex_WhenNoPlayerActive() {
+        manager.currentPlayerIndex = 2;
         player1.deactivate();
         player2.deactivate();
         player3.deactivate();
@@ -116,11 +116,11 @@ public class ScorePlayerManagerTest extends ScorePlayerManagerFixture{
         int result = manager.nextPlayer();
 
         Assert.assertEquals(result, -1);
-        Assert.assertEquals(manager.currentPlayerIndex, 0);
+        Assert.assertEquals(manager.currentPlayerIndex, 2);
     }
 
     @Test
-    public void deactivatePlayerShouldSendEvent() {
+    public void deactivatePlayer_SendEvent() {
         Assert.assertTrue(manager.scorePlayerList.get(2).isActive());
         manager.deactivatePlayer(2);
         verify(deactivateListener).onEvent(new PlayerDeactivateEvent(2));
@@ -129,7 +129,7 @@ public class ScorePlayerManagerTest extends ScorePlayerManagerFixture{
     }
 
     @Test
-    public void deactivateAllExceptShouldDoOnRightPlayers() {
+    public void deactivateAllExcept_DoOnRightPlayers() {
         player1.deactivate();
 
         Assert.assertFalse(manager.scorePlayerList.get(0).isActive());
@@ -149,7 +149,7 @@ public class ScorePlayerManagerTest extends ScorePlayerManagerFixture{
     }
 
     @Test
-    public void chooseHighestScoreShouldCallDeactiveAllExcept_NextToThatPlayer() {
+    public void chooseHighestScore_CallDeactiveAllExcept_NextToThatPlayer() {
         player1.setScore(100);
         player2.setScore(500);
         player3.setScore(200);
@@ -204,7 +204,7 @@ public class ScorePlayerManagerTest extends ScorePlayerManagerFixture{
     }
 
     @Test
-    public void nextQuestionShouldReactivateAllPlayers() {
+    public void onNextQuestion_ReactivateAllPlayers() {
         player1.deactivate();
         player3.deactivate();
         eventManager.trigger(new NextQuestionEvent("", ""));

@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+option java_package = "kstn.game.logic.playing_event.guess";
+
+message GuessResult {
+    string result = 1;
+}

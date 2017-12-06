@@ -53,7 +53,7 @@ public class TestUDPServerClient {
 		client.broadcast(event1);
 		client.broadcast(event2);
 
-		Thread.currentThread().sleep(50);
+		Thread.currentThread().sleep(150);
 
 		llBaseEventManager.update();
 		llBaseEventManager.update();

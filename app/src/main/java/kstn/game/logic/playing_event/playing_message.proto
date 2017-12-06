@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option java_package = "kstn.game.logic.playing_event";
+
+message ConeResult {
+    int32 result = 1;
+}
+
+message NextQuestion {
+    string question = 1;
+    string answer = 2;
+}
+
+message StartPlaying {
+}

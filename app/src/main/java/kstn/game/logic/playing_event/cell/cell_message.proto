@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_package = "kstn.game.logic.playing_event.cell";
+
+message OpenCell {
+    int32 index = 1;
+}
+
+message OpenMultipleCell {
+    int32 character = 1;
+}

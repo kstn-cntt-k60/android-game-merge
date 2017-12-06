@@ -14,8 +14,9 @@ import kstn.game.logic.playing_event.player.PlayerSetAvatarEvent;
 import kstn.game.logic.playing_event.player.PlayerSetNameEvent;
 import kstn.game.logic.playing_event.player.PlayerSetScoreEvent;
 import kstn.game.logic.playing_event.player.SetNumberPlayerEvent;
+import kstn.game.logic.state.IEntryExit;
 
-public class ScorePlayerManager {
+public class ScorePlayerManager implements IEntryExit {
     private final EventManager eventManager;
     private final WifiInfo wifiInfo;
     private final ThisRoom thisRoom;
@@ -27,7 +28,7 @@ public class ScorePlayerManager {
 
     final List<ScorePlayer> scorePlayerList = new ArrayList<>();
     int thisIpAddress;
-    private boolean isHost = false;
+    boolean isHost;
     int thisPlayerIndex;
     int currentPlayerIndex;
 
@@ -71,21 +72,7 @@ public class ScorePlayerManager {
         };
     }
 
-    public void entry() {
-        eventManager.addListener(PlayingEventType.PLAYER_SET_SCORE, setScoreListener);
-        eventManager.addListener(PlayingEventType.NEXT_PLAYER, nextPlayerListener);
-        eventManager.addListener(PlayingEventType.PLAYER_DEACTIVATE, deactivateListener);
-        eventManager.addListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
-    }
-
-    public void exit() {
-        eventManager.removeListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
-        eventManager.removeListener(PlayingEventType.PLAYER_DEACTIVATE, deactivateListener);
-        eventManager.removeListener(PlayingEventType.NEXT_PLAYER, nextPlayerListener);
-        eventManager.removeListener(PlayingEventType.PLAYER_SET_SCORE, setScoreListener);
-    }
-
-    public void onViewReady() {
+    public void loadInfoFromThisRoom() {
         scorePlayerList.clear();
         for (Player player: thisRoom.getPlayerList()) {
             scorePlayerList.add(new ScorePlayer(player));
@@ -98,8 +85,28 @@ public class ScorePlayerManager {
             }
         if (thisPlayerIndex == 0)
             isHost = true;
+        else
+            isHost = false;
         currentPlayerIndex = 0;
+    }
 
+    @Override
+    public void entry() {
+        eventManager.addListener(PlayingEventType.PLAYER_SET_SCORE, setScoreListener);
+        eventManager.addListener(PlayingEventType.NEXT_PLAYER, nextPlayerListener);
+        eventManager.addListener(PlayingEventType.PLAYER_DEACTIVATE, deactivateListener);
+        eventManager.addListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
+    }
+
+    @Override
+    public void exit() {
+        eventManager.removeListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
+        eventManager.removeListener(PlayingEventType.PLAYER_DEACTIVATE, deactivateListener);
+        eventManager.removeListener(PlayingEventType.NEXT_PLAYER, nextPlayerListener);
+        eventManager.removeListener(PlayingEventType.PLAYER_SET_SCORE, setScoreListener);
+    }
+
+    public void onViewReady() {
         eventManager.trigger(new SetNumberPlayerEvent(scorePlayerList.size()));
         for (int i = 0; i < scorePlayerList.size(); i++) {
             ScorePlayer scorePlayer = scorePlayerList.get(i);
@@ -140,7 +147,7 @@ public class ScorePlayerManager {
         eventManager.trigger(new PlayerSetScoreEvent(value));
     }
 
-    int chooseBiggestScorePlayer() {
+    public int chooseBiggestScorePlayer() {
         int maxScore = 0;
         int maxIndex = 0;
         for (int i = 0; i < scorePlayerList.size(); i++) {
@@ -153,7 +160,7 @@ public class ScorePlayerManager {
         return nextPlayer();
     }
 
-    void deactivatePlayer(int playerIndex) {
+    public void deactivatePlayer(int playerIndex) {
         eventManager.trigger(new PlayerDeactivateEvent(playerIndex));
     }
 

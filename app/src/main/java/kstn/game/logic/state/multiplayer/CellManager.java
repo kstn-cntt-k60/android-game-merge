@@ -1,7 +1,5 @@
 package kstn.game.logic.state.multiplayer;
 
-import kstn.game.logic.data.ManagerDAO;
-import kstn.game.logic.data.QuestionModel;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
@@ -9,33 +7,33 @@ import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.state.IEntryExit;
 
-public class QuestionManager implements IEntryExit {
+public class CellManager implements IEntryExit {
     private final EventManager eventManager;
-    private final ManagerDAO managerDAO;
 
-    String question;
-    String answer;
+    private String answer;
+    private String nonSpaceAnswer;
 
-    public String getQuestion() {
-        return question;
-    }
+    String getAnswer() { return answer; }
+    String getNonSpaceAnswer() { return nonSpaceAnswer; }
 
-    public String getAnswer() {
-        return answer;
-    }
+    boolean[] isOpenedCells;
 
-    private EventListener nextQuestionListener;
+    private final EventListener nextQuestionListener;
 
-    public QuestionManager(EventManager eventManager, ManagerDAO managerDAO) {
+    CellManager(EventManager eventManager) {
         this.eventManager = eventManager;
-        this.managerDAO = managerDAO;
 
         nextQuestionListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
                 NextQuestionEvent event1 = (NextQuestionEvent) event;
-                question = event1.getQuestion();
                 answer = event1.getAnswer();
+                String tmp = answer.replaceAll("\\s+", "");
+                nonSpaceAnswer = tmp.toUpperCase();
+
+                isOpenedCells = new boolean[nonSpaceAnswer.length()];
+                for (int i = 0; i < isOpenedCells.length; i++)
+                    isOpenedCells[i] = false;
             }
         };
     }
@@ -50,16 +48,15 @@ public class QuestionManager implements IEntryExit {
         eventManager.removeListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
     }
 
-    public void nextQuestion() {
-        QuestionModel questionModel = managerDAO.getRandomQuestion();
-        eventManager.trigger(new NextQuestionEvent(
-                questionModel.getQuestion(), questionModel.getAnswer()));
+    public void openCell(int cellIndex) {
+
     }
 
-    public boolean sameAsAnswer(String answer) {
-        String tmp = answer.toUpperCase();
-        String tmp2 = this.answer.toUpperCase();
-        return tmp.equals(tmp2);
+    public void openMultipleCells(char ch) {
+
     }
 
+    public boolean allCellsAreOpened() {
+        return false;
+    }
 }

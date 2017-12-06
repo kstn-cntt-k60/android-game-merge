@@ -42,7 +42,7 @@ public class PlayerDeactivateEvent extends GameEventData {
         public EventData parseFrom(InputStream in) throws IOException {
             PlayerMessage.PlayerDeactivate msg = PlayerMessage.PlayerDeactivate
                     .parseDelimitedFrom(in);
-            return new PlayerSetScoreEvent(msg.getPlayerIndex());
+            return new PlayerDeactivateEvent(msg.getPlayerIndex());
         }
     }
 }
