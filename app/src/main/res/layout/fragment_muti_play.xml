@@ -6,12 +6,15 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context="kstn.game.view.thang.fragment.MutiPlayFragment">
-    <GridView
-        android:id="@+id/gv"
-        android:numColumns="3"
-        android:layout_weight="1.5"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"></GridView>
+   <GridLayout
+       android:numColumns="3"
+       android:id="@+id/gv"
+       android:layout_gravity="center"
+       android:gravity="center"
+       android:horizontalSpacing="10dp"
+       android:layout_weight="1.5"
+       android:layout_width="match_parent"
+       android:layout_height="0dp"></GridLayout>
     <LinearLayout
         android:layout_weight="2.4"
         android:weightSum="2.4"
@@ -401,7 +404,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
-            android:layout_marginEnd="383dp"
             android:layout_marginTop="54dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"

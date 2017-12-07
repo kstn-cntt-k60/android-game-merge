@@ -1,14 +1,37 @@
 package kstn.game.logic.state.multiplayer;
 
+import kstn.game.R;
+
 public class Player {
-    private final int ipAddress;
-    private final String name;
-    private final int avatarId;
+    private  int ipAddress;
+    private String name="No Name";
+    private  int avatarId = R.drawable.unknown_avatar;
+    private int Score =0;
 
     public Player(int ipAddress, String name, int avatarId) {
         this.ipAddress = ipAddress;
         this.name = name;
         this.avatarId = avatarId;
+    }
+
+    public Player() {
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAvatarId(int avatarId) {
+        this.avatarId = avatarId;
+    }
+
+    public int getScore() {
+        return Score;
+    }
+
+    public void setScore(int score) {
+
+        Score = score;
     }
 
     public int getIpAddress() {

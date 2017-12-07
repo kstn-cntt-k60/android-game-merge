@@ -8,13 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import kstn.game.R;
+import kstn.game.logic.playing_event.StartPlayingEvent;
 import kstn.game.logic.playing_event.room.ExitRoomEvent;
 import kstn.game.logic.state.multiplayer.Player;
-import kstn.game.logic.state_event.TransitToPlayingState;
 import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.state.multiplayer.IWaitRoom;
 import kstn.game.view.thang.adapter.WaitPlayAdapter;
@@ -60,28 +61,25 @@ public class WaitRoomFragment extends Fragment implements IWaitRoom {
 
             }
         });
-
         btnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                stateManager.eventManager.queue(new TransitToPlayingState());
-            }
-        });
+                @Override
+                public void onClick(View view) {
+                    if(data.size()<1) {
+                        stateManager.eventManager.queue(new StartPlayingEvent());
+                    } else{
+                        Toast.makeText(getActivity(),"Chưa đủ người chơi, vui lòng chờ chút!",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
     }
 
     @Override
     public void addPlayer(Player player) {
-        Boolean flag = true;
-        for(Player player1: data){
-            if(player1.getIpAddress()==player.getIpAddress()){
-                flag = false;
-                break;
-            }
-        }
-        if(flag) {
+        if(data.size()<3) {
             data.add(player);
             adapter.notifyDataSetChanged();
         }
+
     }
 
     @Override
