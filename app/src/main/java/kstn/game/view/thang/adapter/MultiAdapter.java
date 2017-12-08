@@ -26,9 +26,9 @@ public class MultiAdapter extends BaseAdapter {
     public MultiAdapter(ArrayList<Player> data, Context context) {
         this.data = data;
             this.context = context;
-//            for(int i=0;i<data.size();i++){
-//                dataImg.add(new ImageView(context));
-//        }
+            for(int i=0;i<data.size();i++){
+                dataImg.add(new ImageView(context));
+        }
     }
 
     public ArrayList<ImageView> getDataImg() {
@@ -58,9 +58,8 @@ public class MultiAdapter extends BaseAdapter {
         TextView txtScore = view.findViewById(R.id.txtScorePlayer);
         ImageView img = view.findViewById(R.id.imgPlayer);
         img.setImageResource(data.get(i).getAvatarId());
-
         if(i==0) img.setBackgroundColor(Color.YELLOW);
-        dataImg.add(img);
+        dataImg.set(i,img);
         txtName.setText(data.get(i).getName());
         txtScore.setText(data.get(i).getScore()+"");
         return view;

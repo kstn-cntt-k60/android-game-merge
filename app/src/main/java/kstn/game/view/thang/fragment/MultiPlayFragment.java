@@ -38,6 +38,7 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
     private TextView txtCauHoi;
     private ArrayList<Player> data = new ArrayList<>();
     private MultiAdapter adapter;
+    private GridView gv;
 
     int height;
     View guessView, giveAnswerView;
@@ -99,9 +100,8 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
         super.onViewCreated(view, savedInstanceState);
         charCellManager.onViewCreated(view);
         // grid view
-        GridView gv = (GridView) view.findViewById(R.id.gv);
-        adapter = new MultiAdapter(data,getActivity());
-        gv.setAdapter(adapter);
+        gv = (GridView) view.findViewById(R.id.gv);
+
         // lay tham so man hinh
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -135,6 +135,8 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
         for(int i=0;i<num;i++){
             data.add(new Player());
         }
+        adapter = new MultiAdapter(data,getActivity());
+        gv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         Log.i("MultiPlayer", "Setnumberplayer " + data.size());
     }
@@ -163,9 +165,12 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
         currentPlayerIndex = playerIndex;
         adapter.getDataImg().get(playerIndex).setBackgroundColor(Color.YELLOW);
         for(int i=0;i<data.size();i++){
-            if(i!=playerIndex) adapter.getDataImg().get(i).setBackgroundColor(Color.parseColor("#752c74"));
+            if(i!=playerIndex)
+                adapter.getDataImg().get(i).setBackgroundColor(Color.parseColor("#752c74"));
         }
+        Log.i("NextPlayer","NextPlayer " + playerIndex);
         adapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -177,7 +182,6 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
     @Override
     public void deactivatePlayer(int playerIndex){
             adapter.getDataImg().get(playerIndex).setBackgroundColor(Color.parseColor("#FF66655F"));
-            adapter.notifyDataSetChanged();
     }
 
     public void entry(){
