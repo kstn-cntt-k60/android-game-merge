@@ -9,6 +9,7 @@ import kstn.game.logic.network.Connection;
 public abstract class GameEventData implements EventData {
     private final EventType eventType;
     private Connection connection;
+    private boolean local = true;
 
     public GameEventData(EventType eventType) {
         this.eventType = eventType;
@@ -33,13 +34,18 @@ public abstract class GameEventData implements EventData {
     }
 
     @Override
-    public long getTimeStamp() {
-        return 0;
+    public String getName() {
+        return null;
     }
 
     @Override
-    public String getName() {
-        return null;
+    public boolean isLocal() {
+        return local;
+    }
+
+    @Override
+    public void setLocal(boolean local) {
+        this.local = local;
     }
 
     @Override

@@ -18,7 +18,6 @@ import kstn.game.logic.playing_event.ShowToastEvent;
 import kstn.game.logic.playing_event.SongFailEvent;
 import kstn.game.logic.playing_event.SongTingTingEvent;
 import kstn.game.logic.playing_event.StartPlayingEvent;
-import kstn.game.logic.playing_event.answer.AnswerEvent;
 import kstn.game.logic.playing_event.cell.OpenCellEvent;
 import kstn.game.logic.playing_event.cell.OpenMultipleCellEvent;
 import kstn.game.logic.playing_event.guess.GuessResultEvent;
@@ -37,7 +36,6 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
     private final ClientFactory clientFactory;
     private final int port = 2017;
     final Map<EventType, EventData.Parser> parserMap = new HashMap<>();
-    private final Map<EventType, Boolean> isReceiving = new HashMap<>();
     private Endpoint endpoint = null;
     private Server server = null;
     private EventListener listener;
@@ -52,9 +50,8 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
         listener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
-                if (!isReceiving.get(event.getEventType())) {
+                if (event.isLocal())
                     endpoint.send(event);
-                }
             }
         };
         initParserMap();
@@ -98,10 +95,8 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
     }
 
     private void addListeners() {
-        isReceiving.clear();
         for (EventType eventType: parserMap.keySet()) {
             eventManager.addListener(eventType, listener);
-            isReceiving.put(eventType, false);
         }
     }
 
@@ -143,9 +138,8 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
 
     @Override
     public void onReceiveData(EventData event) {
-        isReceiving.put(event.getEventType(), true);
+        event.setLocal(false);
         eventManager.trigger(event);
-        isReceiving.put(event.getEventType(), false);
     }
 
     public void shutdown() {

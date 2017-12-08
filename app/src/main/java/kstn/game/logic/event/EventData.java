@@ -8,9 +8,6 @@ import kstn.game.logic.network.Connection;
 public interface EventData extends Serializable {
 	EventType getEventType();
 
-	// In millisecond
-	long getTimeStamp();
-
 	void setConnection(Connection connection);
 
 	Connection getConnection();
@@ -21,4 +18,7 @@ public interface EventData extends Serializable {
 		EventData parseFrom(InputStream in) throws IOException;
 	}
 
+	boolean isLocal();
+
+	void setLocal(boolean local);
 }
