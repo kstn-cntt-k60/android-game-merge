@@ -1,7 +1,5 @@
 package kstn.game.logic.state.multiplayer.ministate;
 
-import android.util.Log;
-
 import kstn.game.logic.cone.Cone;
 import kstn.game.logic.state.multiplayer.MultiPlayerManager;
 import kstn.game.logic.state.multiplayer.ScorePlayerManager;
@@ -27,12 +25,10 @@ public class WaitOtherPlayersState extends State {
     @Override
     public void entry() {
         cone.disable();
-
     }
 
     @Override
     public void nextPlayer(int playerIndex) {
-        Log.i("NextPlayer2",""+playerIndex);
         if (scorePlayerManager.currentIsThisPlayer())
             multiPlayerManager.makeTransitionTo(rotatableState);
     }

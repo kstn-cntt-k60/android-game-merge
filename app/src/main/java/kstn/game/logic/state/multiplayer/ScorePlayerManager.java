@@ -9,6 +9,7 @@ import kstn.game.logic.event.EventManager;
 import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.player.NextPlayerEvent;
+import kstn.game.logic.playing_event.player.PlayerActivateEvent;
 import kstn.game.logic.playing_event.player.PlayerDeactivateEvent;
 import kstn.game.logic.playing_event.player.PlayerSetAvatarEvent;
 import kstn.game.logic.playing_event.player.PlayerSetNameEvent;
@@ -23,8 +24,8 @@ public class ScorePlayerManager implements IEntryExit {
 
     private final EventListener setScoreListener;
     private final EventListener nextPlayerListener;
+    private final EventListener activateListener;
     private final EventListener deactivateListener;
-    private final EventListener nextQuestionListener;
 
     final List<ScorePlayer> scorePlayerList = new ArrayList<>();
     int thisIpAddress;
@@ -55,19 +56,19 @@ public class ScorePlayerManager implements IEntryExit {
             }
         };
 
+        activateListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                PlayerActivateEvent event1 = (PlayerActivateEvent) event;
+                scorePlayerList.get(event1.getPlayerIndex()).activate();
+            }
+        };
+
         deactivateListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
                 PlayerDeactivateEvent event1 = (PlayerDeactivateEvent) event;
                 scorePlayerList.get(event1.getPlayerIndex()).deactivate();
-            }
-        };
-
-        nextQuestionListener = new EventListener() {
-            @Override
-            public void onEvent(EventData event) {
-                for (ScorePlayer scorePlayer: scorePlayerList)
-                    scorePlayer.activate();
             }
         };
     }
@@ -94,16 +95,16 @@ public class ScorePlayerManager implements IEntryExit {
     public void entry() {
         eventManager.addListener(PlayingEventType.PLAYER_SET_SCORE, setScoreListener);
         eventManager.addListener(PlayingEventType.NEXT_PLAYER, nextPlayerListener);
+        eventManager.addListener(PlayingEventType.PLAYER_ACTIVATE, activateListener);
         eventManager.addListener(PlayingEventType.PLAYER_DEACTIVATE, deactivateListener);
-        eventManager.addListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
 
         playerReady(thisIpAddress);
     }
 
     @Override
     public void exit() {
-        eventManager.removeListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
         eventManager.removeListener(PlayingEventType.PLAYER_DEACTIVATE, deactivateListener);
+        eventManager.removeListener(PlayingEventType.PLAYER_ACTIVATE, activateListener);
         eventManager.removeListener(PlayingEventType.NEXT_PLAYER, nextPlayerListener);
         eventManager.removeListener(PlayingEventType.PLAYER_SET_SCORE, setScoreListener);
     }
@@ -160,7 +161,7 @@ public class ScorePlayerManager implements IEntryExit {
         return count;
     }
 
-    public int chooseBiggestScorePlayer() {
+    public void chooseBiggestScorePlayer() {
         int maxScore = 0;
         int maxIndex = 0;
         for (int i = 0; i < scorePlayerList.size(); i++) {
@@ -170,7 +171,17 @@ public class ScorePlayerManager implements IEntryExit {
             }
         }
         deactivateAllExcept(maxIndex);
-        return nextPlayer();
+    }
+
+    public void activatePlayer(int playerIndex) {
+        eventManager.queue(new PlayerActivateEvent(playerIndex));
+        scorePlayerList.get(playerIndex).activate();
+    }
+
+    public void activateAllPlayers() {
+        for (int i = 0; i < scorePlayerList.size(); i++) {
+            activatePlayer(i);
+        }
     }
 
     public void deactivateCurrentPlayer() {
@@ -183,9 +194,17 @@ public class ScorePlayerManager implements IEntryExit {
     }
 
     public void deactivateAllExcept(int playerIndex) {
+        currentPlayerIndex = playerIndex;
+        eventManager.queue(new NextPlayerEvent(playerIndex));
+
         for (int i = 0; i < scorePlayerList.size(); i++) {
-            if (i != playerIndex && scorePlayerList.get(i).isActive())
+            if (i == playerIndex) {
+                if (!scorePlayerList.get(i).isActive())
+                    activatePlayer(i);
+            }
+            else if (scorePlayerList.get(i).isActive()){
                 deactivatePlayer(i);
+            }
         }
     }
 

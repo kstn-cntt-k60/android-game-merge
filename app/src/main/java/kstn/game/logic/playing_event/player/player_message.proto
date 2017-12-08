@@ -6,6 +6,10 @@ message NextPlayer {
     int32 playerIndex = 1;
 }
 
+message PlayerActivate {
+    int32 playerIndex = 1;
+}
+
 message PlayerDeactivate {
     int32 playerIndex = 1;
 }

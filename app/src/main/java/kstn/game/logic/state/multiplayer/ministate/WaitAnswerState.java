@@ -18,6 +18,7 @@ public class WaitAnswerState extends State {
     private State waitOtherPlayersState;
     private State rotatableState;
     private RotatingState rotatingState;
+    private State waitGuessResultState;
 
     public void setWaitOtherPlayersState(State state) {
         waitOtherPlayersState = state;
@@ -46,16 +47,21 @@ public class WaitAnswerState extends State {
     public void answer(char ch) {
         int times = cellManager.openMultipleCells(ch);
         if (times == 0) {
-            multiPlayerManager.makeTransitionTo(waitOtherPlayersState);
-            scorePlayerManager.nextPlayer();
             eventManager.trigger(new ShowToastEvent("Bạn đã đoán sai"));
             eventManager.trigger(new SongFailEvent());
+
             if (scorePlayerManager.countActivePlayers() == 1) {
-                // TODO: must give guess
+                multiPlayerManager.makeTransitionTo(waitGuessResultState);
+            }
+            else {
+                scorePlayerManager.nextPlayer();
+                multiPlayerManager.makeTransitionTo(waitOtherPlayersState);
             }
         }
         else {
             int preResult = rotatingState.result;
+            multiPlayerManager.makeTransitionTo(rotatableState);
+
             int preScore = scorePlayerManager.getScore();
             if (ConeResult.isScore(preResult)) {
                 scorePlayerManager.setScore(
@@ -76,7 +82,6 @@ public class WaitAnswerState extends State {
 
             eventManager.trigger(new ShowToastEvent(Integer.toString(diffScore)));
             eventManager.trigger(new SongTingTingEvent());
-            multiPlayerManager.makeTransitionTo(rotatableState);
         }
     }
 

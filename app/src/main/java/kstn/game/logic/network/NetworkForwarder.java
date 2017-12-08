@@ -23,6 +23,7 @@ import kstn.game.logic.playing_event.cell.OpenCellEvent;
 import kstn.game.logic.playing_event.cell.OpenMultipleCellEvent;
 import kstn.game.logic.playing_event.guess.GuessResultEvent;
 import kstn.game.logic.playing_event.player.NextPlayerEvent;
+import kstn.game.logic.playing_event.player.PlayerActivateEvent;
 import kstn.game.logic.playing_event.player.PlayerDeactivateEvent;
 import kstn.game.logic.playing_event.player.PlayerReadyEvent;
 import kstn.game.logic.playing_event.player.PlayerSetScoreEvent;
@@ -77,6 +78,7 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
 
         // Player
         parserMap.put(PlayingEventType.NEXT_PLAYER, new NextPlayerEvent.Parser());
+        parserMap.put(PlayingEventType.PLAYER_ACTIVATE, new PlayerActivateEvent.Parser());
         parserMap.put(PlayingEventType.PLAYER_DEACTIVATE, new PlayerDeactivateEvent.Parser());
         parserMap.put(PlayingEventType.PLAYER_READY, new PlayerReadyEvent.Parser());
         parserMap.put(PlayingEventType.PLAYER_SET_SCORE, new PlayerSetScoreEvent.Parser());

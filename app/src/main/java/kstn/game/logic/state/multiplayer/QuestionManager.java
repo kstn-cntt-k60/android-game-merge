@@ -50,7 +50,7 @@ public class QuestionManager implements IEntryExit {
         eventManager.removeListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
     }
 
-    public void nextQuestion() {
+    void nextQuestion() {
         QuestionModel questionModel = managerDAO.getRandomQuestion();
         eventManager.queue(new NextQuestionEvent(
                 questionModel.getQuestion(), questionModel.getAnswer()));

@@ -3,10 +3,12 @@ package kstn.game.logic.state.multiplayer.ministate;
 import kstn.game.logic.cone.Cone;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.playing_event.guess.AcceptRequestGuessEvent;
+import kstn.game.logic.state.multiplayer.CellManager;
 import kstn.game.logic.state.multiplayer.MultiPlayerManager;
 
 public class RotatableState extends State {
     private final EventManager eventManager;
+    private final CellManager cellManager;
     private final MultiPlayerManager multiPlayerManager;
     private final Cone cone;
 
@@ -21,9 +23,11 @@ public class RotatableState extends State {
 
     public RotatableState(
                 EventManager eventManager,
+                CellManager cellManager,
                 MultiPlayerManager multiPlayerManager,
                 Cone cone) {
         this.eventManager = eventManager;
+        this.cellManager = cellManager;
         this.multiPlayerManager = multiPlayerManager;
         this.cone = cone;
     }
@@ -31,6 +35,10 @@ public class RotatableState extends State {
     @Override
     public void entry() {
         cone.enable();
+
+        if (cellManager.allCellsAreOpened()) {
+            multiPlayerManager.makeTransitionTo(waitGuessResultState);
+        }
     }
 
     @Override
@@ -45,7 +53,6 @@ public class RotatableState extends State {
 
     @Override
     public void requestGuess() {
-        eventManager.trigger(new AcceptRequestGuessEvent());
         multiPlayerManager.makeTransitionTo(waitGuessResultState);
     }
 }

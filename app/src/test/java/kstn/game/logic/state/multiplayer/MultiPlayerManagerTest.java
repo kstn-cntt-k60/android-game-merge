@@ -51,13 +51,13 @@ public class MultiPlayerManagerTest {
 
     private MultiPlayerManager createManager(EventManager eventManager,
                                              ScorePlayerManager scoreManager,
-                                             QuestionManager questionManager,
-                                             CellManager cellManager,
                                              LevelManager levelManager,
+                                             CellManager cellManager,
                                              WifiInfo wifiInfo) {
         MultiPlayerManager manager =  new MultiPlayerManager(
                 eventManager, scoreManager,
-                questionManager, cellManager,
+                getMockedQuestionManager(),
+                cellManager,
                 levelManager, wifiInfo,
                 getMockedNetworkForwarder()
         );
@@ -70,22 +70,9 @@ public class MultiPlayerManagerTest {
         return createManager(
                 getMockedEventManager(),
                 getMockedScoreManager(),
-                getMockedQuestionManager(),
-                getMockedCellManager(),
                 levelManager,
+                getMockedCellManager(),
                 getMockedWifiInfo()
-        );
-    }
-
-    private MultiPlayerManager createManager(EventManager eventManager,
-                                             ScorePlayerManager scoreManager,
-                                             QuestionManager questionManager,
-                                             CellManager cellManager,
-                                             WifiInfo wifiInfo) {
-        return createManager(
-                eventManager, scoreManager,
-                questionManager, cellManager,
-                getMockedLevelManager(), wifiInfo
         );
     }
 
@@ -93,7 +80,7 @@ public class MultiPlayerManagerTest {
         return createManager(
                 getMockedEventManager(),
                 getMockedScoreManager(),
-                getMockedQuestionManager(),
+                getMockedLevelManager(),
                 cellManager,
                 getMockedWifiInfo()
         );
@@ -101,37 +88,31 @@ public class MultiPlayerManagerTest {
 
     private MultiPlayerManager createManager(EventManager eventManager,
                                              ScorePlayerManager scoreManager,
-                                             QuestionManager questionManager,
+                                             LevelManager levelManager,
                                              WifiInfo wifiInfo) {
         return createManager(
-                eventManager, scoreManager, questionManager,
+                eventManager, scoreManager, levelManager,
                 getMockedCellManager(), wifiInfo
         );
     }
 
     private MultiPlayerManager createManager(EventManager eventManager,
                                              ScorePlayerManager scoreManager,
-                                             QuestionManager questionManager) {
+                                             LevelManager levelManager) {
         WifiInfo wifiInfo = mock(WifiInfo.class);
-        return createManager(eventManager, scoreManager, questionManager, wifiInfo);
-    }
-
-    private MultiPlayerManager createManager(QuestionManager questionManager) {
-        return createManager(getMockedEventManager(),
-                getMockedScoreManager(), questionManager);
+        return createManager(eventManager, scoreManager, levelManager, wifiInfo);
     }
 
     private MultiPlayerManager createManager(EventManager eventManager,
                                              ScorePlayerManager scoreManager,
                                              WifiInfo wifiInfo) {
-        QuestionManager questionManager = mock(QuestionManager.class);
-        return createManager(eventManager, scoreManager, questionManager, wifiInfo);
+        return createManager(eventManager, scoreManager,
+                getMockedLevelManager(), wifiInfo);
     }
 
     private MultiPlayerManager createManager(EventManager eventManager,
                                              ScorePlayerManager scoreManager) {
-        QuestionManager questionManager = mock(QuestionManager.class);
-        return createManager(eventManager, scoreManager, questionManager);
+        return createManager(eventManager, scoreManager, getMockedLevelManager());
     }
 
     private MultiPlayerManager createManager(EventManager eventManager) {
@@ -326,22 +307,22 @@ public class MultiPlayerManagerTest {
     }
 
     @Test
-    public void nextQuestion_InListener_WhenViewIsReady_AllReady_AndIsHost() {
+    public void nextLevel_InListener_WhenViewIsReady_AllReady_AndIsHost() {
         EventManager eventManager = getEventManager();
         ScorePlayerManager scoreManager = getMockedScoreManager();
-        QuestionManager questionManager = getMockedQuestionManager();
+        LevelManager levelManager = getMockedLevelManager();
 
         when(scoreManager.thisPlayerIsHost()).thenReturn(true);
         when(scoreManager.areAllPlayersReady()).thenReturn(true);
 
         MultiPlayerManager manager = createManager(
-                eventManager, scoreManager, questionManager);
+                eventManager, scoreManager, levelManager);
         manager.entry();
 
         manager.viewIsReady = true;
 
         eventManager.trigger(new PlayerReadyEvent(2233));
-        verify(questionManager).nextQuestion();
+        verify(levelManager).nextLevel();
     }
 
     @Test
@@ -407,39 +388,39 @@ public class MultiPlayerManagerTest {
     public void onViewReady_nextQuestion_AndTransitRotatableState_WhenAllPlayerReady_AndIsHost() {
         EventManager eventManager = getEventManager();
         ScorePlayerManager scoreManager = getMockedScoreManager();
-        QuestionManager questionManager = getMockedQuestionManager();
+        LevelManager levelManager = getMockedLevelManager();
         State rotatableState = getMockedState();
 
         when(scoreManager.thisPlayerIsHost()).thenReturn(true);
         when(scoreManager.areAllPlayersReady()).thenReturn(true);
 
         MultiPlayerManager manager = createManager(
-                eventManager, scoreManager, questionManager);
+                eventManager, scoreManager, levelManager);
         manager.setRotatableState(rotatableState);
         manager.entry();
         manager.onViewReady();
 
-        verify(questionManager).nextQuestion();
+        verify(levelManager).nextLevel();
         Assert.assertSame(manager.currentState, rotatableState);
     }
 
     @Test
-    public void onViewReady_NotNextQuestion_WhenAllPlayerReady_AndIsClient() {
+    public void onViewReady_NotNextLevel_WhenAllPlayerReady_AndIsClient() {
         EventManager eventManager = getEventManager();
         ScorePlayerManager scoreManager = getMockedScoreManager();
-        QuestionManager questionManager = getMockedQuestionManager();
+        LevelManager levelManager = getMockedLevelManager();
         State rotatableState = getMockedState();
 
         when(scoreManager.thisPlayerIsHost()).thenReturn(false);
         when(scoreManager.areAllPlayersReady()).thenReturn(true);
 
         MultiPlayerManager manager = createManager(
-                eventManager, scoreManager, questionManager);
+                eventManager, scoreManager, levelManager);
         manager.setRotatableState(rotatableState);
         manager.entry();
         manager.onViewReady();
 
-        verify(questionManager, never()).nextQuestion();
+        verify(levelManager, never()).nextLevel();
         Assert.assertNotSame(manager.currentState, rotatableState);
     }
 
@@ -498,13 +479,6 @@ public class MultiPlayerManagerTest {
 
         verify(state1).exit();
         verify(state2).entry();
-    }
-
-    @Test
-    public void setUpQuestionManager() {
-        QuestionManager questionManager = getMockedQuestionManager();
-        MultiPlayerManager manager = createManager(questionManager);
-        EntryExitUtil.assertSetUpEntryExit(manager, questionManager);
     }
 
     @Test

@@ -11,5 +11,7 @@ public interface IPlayerManager {
 
     void setScore(int value);
 
+    void activatePlayer(int playerIndex);
+
     void deactivatePlayer(int playerIndex);
 }

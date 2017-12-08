@@ -65,7 +65,9 @@ public class MultiPlayerFactory {
         );
 
         LevelManager levelManager = new LevelManager(
-                stateManager.eventManager
+                stateManager.eventManager,
+                questionManager,
+                scorePlayerManager
         );
 
         MultiPlayerManager playerManager = new MultiPlayerManager(
@@ -85,7 +87,8 @@ public class MultiPlayerFactory {
                 cone
         );
         RotatableState rotatableState = new RotatableState(
-                stateManager.eventManager, playerManager, cone
+                stateManager.eventManager,
+                cellManager, playerManager, cone
         );
 
         RotatingState rotatingState = new RotatingState(
@@ -104,12 +107,16 @@ public class MultiPlayerFactory {
         WaitGuessResultState waitGuessResultState = new WaitGuessResultState(
                 stateManager.eventManager,
                 questionManager,
+                levelManager,
                 scorePlayerManager,
+                cellManager,
                 playerManager
         );
 
         WaitChooseCellState waitChooseCellState = new WaitChooseCellState(
-                cellManager, playerManager);
+                stateManager.eventManager,
+                cellManager, playerManager
+        );
 
         // Set up dependencies
         playerManager.setWaitOtherPlayersState(waitOtherPlayersState);
@@ -125,11 +132,12 @@ public class MultiPlayerFactory {
         rotatingState.setWaitChooseCellState(waitChooseCellState);
         rotatingState.setWaitAnswerState(waitAnswerState);
 
-        waitAnswerState.setWaitOtherPlayersState(waitAnswerState);
+        waitAnswerState.setWaitOtherPlayersState(waitOtherPlayersState);
         waitAnswerState.setRotatableState(rotatableState);
         waitAnswerState.setRotatingState(rotatingState);
 
         waitChooseCellState.setRotatableState(rotatableState);
+        waitChooseCellState.setWaitGuessResultState(waitGuessResultState);
 
         waitGuessResultState.setWaitOtherPlayersState(waitOtherPlayersState);
         waitGuessResultState.setRotatableState(rotatableState);

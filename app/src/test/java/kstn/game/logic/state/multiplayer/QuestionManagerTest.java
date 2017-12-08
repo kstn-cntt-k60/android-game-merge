@@ -46,6 +46,7 @@ public class QuestionManagerTest {
 
         when(managerDAO.getRandomQuestion()).thenReturn(new QuestionModel(question, answer));
         questionManager.nextQuestion();
+        update(eventManager);
 
         NextQuestionEvent event = (NextQuestionEvent) assertTriggeredReturn(listener);
         Assert.assertEquals(event.getQuestion(), question);

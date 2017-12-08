@@ -5,6 +5,7 @@ import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.player.NextPlayerEvent;
+import kstn.game.logic.playing_event.player.PlayerActivateEvent;
 import kstn.game.logic.playing_event.player.PlayerDeactivateEvent;
 import kstn.game.logic.playing_event.player.PlayerSetAvatarEvent;
 import kstn.game.logic.playing_event.player.PlayerSetNameEvent;
@@ -16,6 +17,7 @@ public class PlayerProxy implements IEntryExit {
     private final IPlayerManager playerManager;
     private final EventManager eventManager;
 
+    private EventListener activateListener;
     private EventListener deactivateListener;
     private EventListener setNameListener;
     private EventListener setAvatarListener;
@@ -68,6 +70,14 @@ public class PlayerProxy implements IEntryExit {
             }
         };
 
+        activateListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                PlayerActivateEvent activateEvent = (PlayerActivateEvent) event;
+                playerManager.activatePlayer(activateEvent.getPlayerIndex());
+            }
+        };
+
         deactivateListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
@@ -82,6 +92,7 @@ public class PlayerProxy implements IEntryExit {
         eventManager.addListener(PlayingEventType.SET_NUMBER_PLAYER, setNumberPlayerListener);
         eventManager.addListener(PlayingEventType.PlAYER_SET_AVATAR, setAvatarListener);
         eventManager.addListener(PlayingEventType.PLAYER_SET_NAME, setNameListener);
+        eventManager.addListener(PlayingEventType.PLAYER_ACTIVATE, activateListener);
         eventManager.addListener(PlayingEventType.PLAYER_DEACTIVATE, deactivateListener);
         eventManager.addListener(PlayingEventType.PLAYER_SET_SCORE, setScoreListener);
         eventManager.addListener(PlayingEventType.NEXT_PLAYER, nextPlayerListener);
@@ -92,6 +103,7 @@ public class PlayerProxy implements IEntryExit {
         eventManager.removeListener(PlayingEventType.NEXT_PLAYER, nextPlayerListener);
         eventManager.removeListener(PlayingEventType.PLAYER_SET_SCORE, setScoreListener);
         eventManager.removeListener(PlayingEventType.PLAYER_DEACTIVATE, deactivateListener);
+        eventManager.removeListener(PlayingEventType.PLAYER_ACTIVATE, activateListener);
         eventManager.removeListener(PlayingEventType.PLAYER_SET_NAME, setNameListener);
         eventManager.removeListener(PlayingEventType.PlAYER_SET_AVATAR, setAvatarListener);
         eventManager.removeListener(PlayingEventType.SET_NUMBER_PLAYER, setNumberPlayerListener);

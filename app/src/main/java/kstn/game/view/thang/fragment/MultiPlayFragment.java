@@ -138,26 +138,18 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
         adapter = new MultiAdapter(data,getActivity());
         gv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        Log.i("MultiPlayer", "Setnumberplayer " + data.size());
     }
 
     @Override
     public void setAvatar(int playerIndex, int avatarId) {
-        Log.i("Set","set Avartar");
-        Log.i("Set","playerIndex "+playerIndex);
         data.get(playerIndex).setAvatarId(avatarId);
         adapter.notifyDataSetChanged();
-        Log.i("MultiPlayer", "SetAvatar");
     }
 
     @Override
     public void setName(int playerIndex, String name) {
-        Log.i("Set","set Name");
-        Log.i("Set","playerIndex "+playerIndex);
-        Log.i("Set","playerIndex "+name);
         data.get(playerIndex).setName(name);
         adapter.notifyDataSetChanged();
-        Log.i("MultiPlayer", "SetName");
     }
 
     @Override
@@ -168,7 +160,6 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
             if(i!=playerIndex)
                 adapter.getDataImg().get(i).setBackgroundColor(Color.parseColor("#752c74"));
         }
-        Log.i("NextPlayer","NextPlayer " + playerIndex);
         adapter.notifyDataSetChanged();
 
     }
@@ -182,6 +173,11 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
     @Override
     public void deactivatePlayer(int playerIndex){
             adapter.getDataImg().get(playerIndex).setBackgroundColor(Color.parseColor("#FF66655F"));
+    }
+
+    @Override
+    public void activatePlayer(int playerIndex) {
+        // TODO
     }
 
     public void entry(){

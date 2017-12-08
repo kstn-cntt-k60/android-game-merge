@@ -9,10 +9,23 @@ import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 
 import static kstn.game.logic.event.EventUtil.*;
+import static org.mockito.Mockito.mock;
 
 public class LevelManagerTest {
+    private ScorePlayerManager getMockedScoreManager()  {
+        return mock(ScorePlayerManager.class);
+    }
+
+    private QuestionManager getMockedQuestionManager() {
+        return mock(QuestionManager.class);
+    }
+
     private LevelManager createManager(EventManager eventManager) {
-        return new LevelManager(eventManager);
+        return new LevelManager(
+                eventManager,
+                getMockedQuestionManager(),
+                getMockedScoreManager()
+        );
     }
 
     @Test
@@ -28,7 +41,7 @@ public class LevelManagerTest {
         LevelManager manager = createManager(eventManager);
         manager.level = 3;
         manager.entry();
-        Assert.assertEquals(manager.getLevel(), 0);
+        Assert.assertEquals(manager.level, 0);
     }
 
     @Test
@@ -38,6 +51,6 @@ public class LevelManagerTest {
         manager.entry();
         manager.level = 4;
         eventManager.trigger(new NextQuestionEvent("", ""));
-        Assert.assertEquals(manager.getLevel(), 5);
+        Assert.assertEquals(manager.level, 5);
     }
 }

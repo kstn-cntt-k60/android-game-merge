@@ -64,9 +64,9 @@ public class MultiPlayerManager implements IEntryExit {
 
     public MultiPlayerManager(EventManager eventManager,
                               final ScorePlayerManager scoreManager,
-                              final QuestionManager questionManager,
+                              QuestionManager questionManager,
                               CellManager cellManager,
-                              LevelManager levelManager,
+                              final LevelManager levelManager,
                               WifiInfo wifiInfo,
                               NetworkForwarder networkForwarder) {
         this.eventManager = eventManager;
@@ -145,7 +145,7 @@ public class MultiPlayerManager implements IEntryExit {
                 PlayerReadyEvent event1 = (PlayerReadyEvent) event;
                 scoreManager.playerReady(event1.getIpAddress());
                 if (viewIsReady && scoreManager.areAllPlayersReady()) {
-                    questionManager.nextQuestion();
+                    levelManager.nextLevel();
                     makeTransitionTo(rotatableState);
                 }
             }
@@ -194,7 +194,7 @@ public class MultiPlayerManager implements IEntryExit {
         }
 
         if (scoreManager.thisPlayerIsHost() && scoreManager.areAllPlayersReady()) {
-            questionManager.nextQuestion();
+            levelManager.nextLevel();
             makeTransitionTo(rotatableState);
         }
         viewIsReady = true;
