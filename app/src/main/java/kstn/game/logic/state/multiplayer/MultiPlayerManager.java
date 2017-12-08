@@ -135,8 +135,8 @@ public class MultiPlayerManager implements IEntryExit {
         playerReadyListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
-                Log.i("PlayerReadyListener", "Okay");
                 PlayerReadyEvent event1 = (PlayerReadyEvent) event;
+                Log.i("ReadyListener", "Okay " + event1.getIpAddress());
                 scoreManager.playerReady(event1.getIpAddress());
                 if (viewIsReady && scoreManager.areAllPlayersReady()) {
                     questionManager.nextQuestion();

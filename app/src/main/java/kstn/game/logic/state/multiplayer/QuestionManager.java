@@ -35,6 +35,7 @@ public class QuestionManager implements IEntryExit {
         nextQuestionListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
+                Log.i("QuestionListener", "Next Question");
                 NextQuestionEvent event1 = (NextQuestionEvent) event;
                 question = event1.getQuestion();
                 answer = event1.getAnswer();
@@ -53,7 +54,6 @@ public class QuestionManager implements IEntryExit {
     }
 
     public void nextQuestion() {
-        Log.i("QuestionManager", "Next Question");
         QuestionModel questionModel = managerDAO.getRandomQuestion();
         eventManager.trigger(new NextQuestionEvent(
                 questionModel.getQuestion(), questionModel.getAnswer()));
