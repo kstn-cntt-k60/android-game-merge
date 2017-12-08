@@ -11,7 +11,7 @@
        android:id="@+id/gv"
        android:gravity="center"
        android:horizontalSpacing="10dp"
-       android:layout_weight="1.5"
+       android:layout_weight="1.7"
        android:stretchMode="columnWidth"
        android:layout_width="match_parent"
        android:layout_height="0dp"></GridView>
@@ -240,17 +240,14 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
             <TextView
-
                 android:layout_marginRight="5dp"
                 android:background="@drawable/button_mini"
                 android:id="@+id/txt17"
                 android:textSize="20dp"
                 android:gravity="center"
-
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -380,7 +377,7 @@
     <android.support.constraint.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4.8">
+        android:layout_weight="4.6">
 
         <TextView
             android:id="@+id/txtNoiDungKim"
