@@ -13,3 +13,13 @@ message NextQuestion {
 
 message StartPlaying {
 }
+
+message ShowToast {
+    string text = 1;
+}
+
+message SongTingTing {
+}
+
+message SongFail {
+}

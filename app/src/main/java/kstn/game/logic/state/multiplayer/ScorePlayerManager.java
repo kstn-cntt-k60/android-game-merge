@@ -118,15 +118,15 @@ public class ScorePlayerManager implements IEntryExit {
         }
     }
 
-    boolean currentIsThisPlayer() {
+    public boolean currentIsThisPlayer() {
         return currentPlayerIndex == thisPlayerIndex;
     }
 
-    boolean thisPlayerIsHost() {
+    public boolean thisPlayerIsHost() {
         return isHost;
     }
 
-    int nextPlayer() {
+    public int nextPlayer() {
         int i = (currentPlayerIndex + 1) % scorePlayerList.size();
         for (; i != currentPlayerIndex; i = (i + 1) % scorePlayerList.size()) {
             if (scorePlayerList.get(i).isActive()) {
@@ -139,11 +139,11 @@ public class ScorePlayerManager implements IEntryExit {
         return -1;
     }
 
-    int getScore() {
+    public int getScore() {
         return scorePlayerList.get(currentPlayerIndex).getScore();
     }
 
-    void setScore(int value) {
+    public void setScore(int value) {
         eventManager.trigger(new PlayerSetScoreEvent(value));
     }
 
@@ -164,14 +164,14 @@ public class ScorePlayerManager implements IEntryExit {
         eventManager.trigger(new PlayerDeactivateEvent(playerIndex));
     }
 
-    void deactivateAllExcept(int playerIndex) {
+    public void deactivateAllExcept(int playerIndex) {
         for (int i = 0; i < scorePlayerList.size(); i++) {
             if (i != playerIndex && scorePlayerList.get(i).isActive())
                 deactivatePlayer(i);
         }
     }
 
-    void playerReady(int ipAddress) {
+    public void playerReady(int ipAddress) {
         for (int i = 0; i < scorePlayerList.size(); i++) {
             if (scorePlayerList.get(i).getPlayer().getIpAddress() == ipAddress) {
                 scorePlayerList.get(i).ready();
@@ -180,7 +180,7 @@ public class ScorePlayerManager implements IEntryExit {
         }
     }
 
-    boolean areAllPlayersReady() {
+    public boolean areAllPlayersReady() {
         for (ScorePlayer scorePlayer: scorePlayerList) {
             if (!scorePlayer.isReady())
                 return false;

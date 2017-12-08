@@ -78,7 +78,7 @@ public class KeyboardManager {
         stateManager.eventManager.addListener(
                 PlayingEventType.NEXT_QUESTION, nextQuestionListener);
         stateManager.eventManager.addListener(
-                PlayingEventType.ROTATE_RESULT, coneResultListener);
+                PlayingEventType.CONE_RESULT, coneResultListener);
         stateManager.eventManager.addListener(
                 PlayingEventType.GIVE_ANSWER, giveAnswerListener);
         stateManager.eventManager.addListener(
@@ -91,7 +91,7 @@ public class KeyboardManager {
         stateManager.eventManager.removeListener(
                 PlayingEventType.GIVE_ANSWER, giveAnswerListener);
         stateManager.eventManager.removeListener(
-                PlayingEventType.ROTATE_RESULT, coneResultListener);
+                PlayingEventType.CONE_RESULT, coneResultListener);
         stateManager.eventManager.removeListener(
                 PlayingEventType.NEXT_QUESTION, nextQuestionListener);
     }

@@ -11,7 +11,13 @@ import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.event.EventType;
+import kstn.game.logic.playing_event.ConeResultEvent;
+import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
+import kstn.game.logic.playing_event.ShowToastEvent;
+import kstn.game.logic.playing_event.SongFailEvent;
+import kstn.game.logic.playing_event.SongTingTingEvent;
+import kstn.game.logic.playing_event.StartPlayingEvent;
 import kstn.game.logic.playing_event.answer.AnswerEvent;
 import kstn.game.logic.playing_event.cell.OpenCellEvent;
 import kstn.game.logic.playing_event.cell.OpenMultipleCellEvent;
@@ -77,6 +83,14 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
         parserMap.put(PlayingEventType.REQUEST_JOIN_ROOM, new RequestJoinRoomEvent.Parser());
         parserMap.put(PlayingEventType.ACCEPT_JOIN_ROOM, new AcceptJoinRoomEvent.Parser());
         parserMap.put(PlayingEventType.EXIT_ROOM, new ExitRoomEvent.Parser());
+
+        // Playing
+        parserMap.put(PlayingEventType.CONE_RESULT, new ConeResultEvent.Parser());
+        parserMap.put(PlayingEventType.NEXT_QUESTION, new NextQuestionEvent.Parser());
+        parserMap.put(PlayingEventType.START_PLAYING, new StartPlayingEvent.Parser());
+        parserMap.put(PlayingEventType.SHOW_TOAST, new ShowToastEvent.Parser());
+        parserMap.put(PlayingEventType.SONG_TINGTING, new SongTingTingEvent.Parser());
+        parserMap.put(PlayingEventType.SONG_FAIL, new SongFailEvent.Parser());
     }
 
     private void addListeners() {

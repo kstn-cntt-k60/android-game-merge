@@ -107,4 +107,11 @@ public class ScorePlayerManagerInitTest extends ScorePlayerManagerFixture {
         verify(setNameListener).onEvent(new PlayerSetNameEvent(1, player2.getName()));
         verify(setNameListener).onEvent(new PlayerSetNameEvent(2, player3.getName()));
     }
+
+    @Test
+    public void loadInfo_setCurrentPlayerIndex_ToZero() {
+        manager.currentPlayerIndex = 3;
+        manager.loadInfoFromThisRoom();
+        Assert.assertEquals(manager.currentPlayerIndex, 0);
+    }
 }

@@ -7,15 +7,15 @@ import java.io.OutputStream;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.GameEventData;
 
-public class StartPlayingEvent extends GameEventData {
+public class SongFailEvent extends GameEventData {
 
-    public StartPlayingEvent() {
-        super(PlayingEventType.START_PLAYING);
+    public SongFailEvent() {
+        super(PlayingEventType.SONG_FAIL);
     }
 
     @Override
     public void serialize(OutputStream out) throws IOException {
-        PlayingMessage.StartPlaying msg = PlayingMessage.StartPlaying.newBuilder()
+        PlayingMessage.SongFail msg = PlayingMessage.SongFail.newBuilder()
                 .build();
         msg.writeDelimitedTo(out);
     }
@@ -23,8 +23,8 @@ public class StartPlayingEvent extends GameEventData {
     public static class Parser implements EventData.Parser {
         @Override
         public EventData parseFrom(InputStream in) throws IOException {
-            PlayingMessage.StartPlaying msg = PlayingMessage.StartPlaying.parseDelimitedFrom(in);
-            return new StartPlayingEvent();
+            PlayingMessage.SongFail msg = PlayingMessage.SongFail.parseDelimitedFrom(in);
+            return new SongFailEvent();
         }
     }
 }

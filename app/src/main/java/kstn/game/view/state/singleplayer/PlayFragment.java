@@ -61,13 +61,13 @@ public class PlayFragment extends Fragment {
     }
 
     public void entry() {
-        stateManager.eventManager.addListener(PlayingEventType.ROTATE_RESULT, rotateResultListener);
+        stateManager.eventManager.addListener(PlayingEventType.CONE_RESULT, rotateResultListener);
         stateManager.eventManager.addListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
     }
 
     public void exit() {
         stateManager.eventManager.removeListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
-        stateManager.eventManager.removeListener(PlayingEventType.ROTATE_RESULT, rotateResultListener);
+        stateManager.eventManager.removeListener(PlayingEventType.CONE_RESULT, rotateResultListener);
     }
 
     public void setStateManager(ViewStateManager stateManager) {

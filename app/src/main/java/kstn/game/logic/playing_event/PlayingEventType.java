@@ -3,7 +3,6 @@ package kstn.game.logic.playing_event;
 import kstn.game.logic.event.EventType;
 
 public enum PlayingEventType implements EventType {
-    PLAYING_READY(2296),
     GAME_OVER(1997),
     OPEN_MULTIPLE_CELL(2399),
     GIVE_CHOOSE_CELL(2356),
@@ -18,8 +17,7 @@ public enum PlayingEventType implements EventType {
     GIVE_ANSWER(2300),
     ANSWER(2301),
     PLAYER_STATE_CHANGE(2398),
-    NEXT_LEVEL(2303),
-    ROTATE_RESULT(2304),
+    CONE_RESULT(2304),
     NEXT_QUESTION(2323),
     BONUS(2355),
 
@@ -42,6 +40,10 @@ public enum PlayingEventType implements EventType {
     CLICK_ROOM(17403),
     EXIT_ROOM(17404),
     SET_ROOM_PLAYER_LIST(17405),
+
+    SHOW_TOAST(17406),
+    SONG_FAIL(17407),
+    SONG_TINGTING(17408),
     ;
     PlayingEventType(int value) {
         this.value = value;

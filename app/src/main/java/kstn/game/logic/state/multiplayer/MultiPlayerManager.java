@@ -21,6 +21,7 @@ public class MultiPlayerManager implements IEntryExit {
     private final ScorePlayerManager scoreManager;
     private final QuestionManager questionManager;
     private final CellManager cellManager;
+    private final LevelManager levelManager;
     private final WifiInfo wifiInfo;
 
     State currentState;
@@ -58,11 +59,13 @@ public class MultiPlayerManager implements IEntryExit {
                               final ScorePlayerManager scoreManager,
                               final QuestionManager questionManager,
                               CellManager cellManager,
+                              LevelManager levelManager,
                               WifiInfo wifiInfo) {
         this.eventManager = eventManager;
         this.scoreManager = scoreManager;
         this.questionManager = questionManager;
         this.cellManager = cellManager;
+        this.levelManager = levelManager;
         this.wifiInfo = wifiInfo;
 
         coneAccelListener = new EventListener() {
@@ -134,7 +137,7 @@ public class MultiPlayerManager implements IEntryExit {
                 scoreManager.playerReady(event1.getIpAddress());
                 if (viewIsReady && scoreManager.areAllPlayersReady()) {
                     questionManager.nextQuestion();
-                    currentState = rotatableState;
+                    makeTransitionTo(rotatableState);
                 }
             }
         };
@@ -147,10 +150,7 @@ public class MultiPlayerManager implements IEntryExit {
         scoreManager.entry();
         questionManager.entry();
         cellManager.entry();
-
-        currentState = waitOtherPlayersState;
-
-        // TODO: clear level
+        levelManager.entry();
 
         eventManager.addListener(ConeEventType.ACCELERATE, coneAccelListener);
         eventManager.addListener(ConeEventType.STOP, coneStopListener);
@@ -161,16 +161,21 @@ public class MultiPlayerManager implements IEntryExit {
         eventManager.addListener(PlayingEventType.CANCEL_GUESS, cancelGuessListener);
         eventManager.addListener(PlayingEventType.NEXT_PLAYER, nextPlayerListener);
 
+        currentState = waitOtherPlayersState;
+        currentState.entry();
+
         if (scoreManager.thisPlayerIsHost()) {
             eventManager.addListener(PlayingEventType.PLAYER_READY, playerReadyListener);
-        }
-        else {
-            eventManager.trigger(new PlayerReadyEvent(wifiInfo.getIP()));
         }
     }
 
     void onViewReady() {
         scoreManager.onViewReady();
+
+        if (!scoreManager.thisPlayerIsHost()) {
+            eventManager.trigger(new PlayerReadyEvent(wifiInfo.getIP()));
+        }
+
         if (scoreManager.thisPlayerIsHost() && scoreManager.areAllPlayersReady()) {
             questionManager.nextQuestion();
             currentState = rotatableState;
@@ -183,8 +188,6 @@ public class MultiPlayerManager implements IEntryExit {
         if (scoreManager.thisPlayerIsHost()) {
             eventManager.removeListener(PlayingEventType.PLAYER_READY, playerReadyListener);
         }
-        else {
-        }
 
         eventManager.removeListener(PlayingEventType.NEXT_PLAYER, nextPlayerListener);
         eventManager.removeListener(PlayingEventType.CANCEL_GUESS, cancelGuessListener);
@@ -195,6 +198,7 @@ public class MultiPlayerManager implements IEntryExit {
         eventManager.removeListener(ConeEventType.STOP, coneStopListener);
         eventManager.removeListener(ConeEventType.ACCELERATE, coneAccelListener);
 
+        levelManager.exit();
         cellManager.exit();
         questionManager.exit();
         scoreManager.exit();

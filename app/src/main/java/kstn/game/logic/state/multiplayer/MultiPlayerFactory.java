@@ -4,6 +4,9 @@ import kstn.game.logic.cone.Cone;
 import kstn.game.logic.data.ManagerDAO;
 import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.state.LogicStateManager;
+import kstn.game.logic.state.multiplayer.ministate.RotatableState;
+import kstn.game.logic.state.multiplayer.ministate.RotatingState;
+import kstn.game.logic.state.multiplayer.ministate.WaitOtherPlayersState;
 import kstn.game.view.screen.View;
 import kstn.game.view.screen.ViewManager;
 
@@ -53,13 +56,39 @@ public class MultiPlayerFactory {
                 stateManager.eventManager
         );
 
+        LevelManager levelManager = new LevelManager(
+                stateManager.eventManager
+        );
+
         MultiPlayerManager playerManager = new MultiPlayerManager(
                 stateManager.eventManager,
                 scorePlayerManager,
                 questionManager,
                 cellManager,
+                levelManager,
                 wifiInfo
         );
+
+        // Init All States
+        WaitOtherPlayersState waitOtherPlayersState = new WaitOtherPlayersState(
+                scorePlayerManager,
+                playerManager
+        );
+        RotatableState rotatableState = new RotatableState(playerManager);
+        RotatingState rotatingState = new RotatingState(
+                stateManager.eventManager,
+                scorePlayerManager,
+                playerManager
+        );
+
+        // Set up dependencies
+        playerManager.setWaitOtherPlayersState(waitOtherPlayersState);
+        playerManager.setRotatableState(rotatableState);
+
+        rotatableState.setRotatingState(rotatingState);
+
+        rotatingState.setWaitOtherPlayersState(waitOtherPlayersState);
+        rotatingState.setRotatableState(rotatableState);
 
         return new LogicPlayingState(
                 stateManager,

@@ -27,12 +27,9 @@ import static kstn.game.logic.event.EventUtil.*;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static kstn.game.logic.state.multiplayer.ministate.StateUtil.*;
 
 public class MultiPlayerManagerTest {
-    private State getMockedState() {
-        return mock(State.class);
-    }
-
     private ScorePlayerManager getMockedScoreManager() {
         return mock(ScorePlayerManager.class);
     }
@@ -40,6 +37,8 @@ public class MultiPlayerManagerTest {
     private QuestionManager getMockedQuestionManager() { return mock(QuestionManager.class); }
 
     private CellManager getMockedCellManager() { return mock(CellManager.class); }
+
+    private LevelManager getMockedLevelManager() { return mock(LevelManager.class); }
 
     private WifiInfo getMockedWifiInfo() {
         return mock(WifiInfo.class);
@@ -49,10 +48,39 @@ public class MultiPlayerManagerTest {
                                              ScorePlayerManager scoreManager,
                                              QuestionManager questionManager,
                                              CellManager cellManager,
+                                             LevelManager levelManager,
                                              WifiInfo wifiInfo) {
-        return new MultiPlayerManager(
+        MultiPlayerManager manager =  new MultiPlayerManager(
                 eventManager, scoreManager,
-                questionManager, cellManager, wifiInfo);
+                questionManager, cellManager,
+                levelManager, wifiInfo
+        );
+        manager.setWaitOtherPlayersState(getMockedState());
+        manager.setRotatableState(getMockedState());
+        return manager;
+    }
+
+    private MultiPlayerManager createManager(LevelManager levelManager) {
+        return createManager(
+                getMockedEventManager(),
+                getMockedScoreManager(),
+                getMockedQuestionManager(),
+                getMockedCellManager(),
+                levelManager,
+                getMockedWifiInfo()
+        );
+    }
+
+    private MultiPlayerManager createManager(EventManager eventManager,
+                                             ScorePlayerManager scoreManager,
+                                             QuestionManager questionManager,
+                                             CellManager cellManager,
+                                             WifiInfo wifiInfo) {
+        return createManager(
+                eventManager, scoreManager,
+                questionManager, cellManager,
+                getMockedLevelManager(), wifiInfo
+        );
     }
 
     private MultiPlayerManager createManager(CellManager cellManager) {
@@ -292,7 +320,7 @@ public class MultiPlayerManagerTest {
     }
 
     @Test
-    public void nextQuestion_InListener_WhenViewIsReady_AndIsHost() {
+    public void nextQuestion_InListener_WhenViewIsReady_AllReady_AndIsHost() {
         EventManager eventManager = getEventManager();
         ScorePlayerManager scoreManager = getMockedScoreManager();
         QuestionManager questionManager = getMockedQuestionManager();
@@ -315,18 +343,26 @@ public class MultiPlayerManagerTest {
         EventManager eventManager = getEventManager();
         ScorePlayerManager scoreManager = getMockedScoreManager();
         State rotatableState = getMockedState();
+        State waitOtherPlayersState = getMockedState();
 
         when(scoreManager.thisPlayerIsHost()).thenReturn(true);
         when(scoreManager.areAllPlayersReady()).thenReturn(true);
 
         MultiPlayerManager manager = createManager(eventManager, scoreManager);
+        manager.setWaitOtherPlayersState(waitOtherPlayersState);
         manager.setRotatableState(rotatableState);
+
+        verify(waitOtherPlayersState, never()).entry();
         manager.entry();
+        verify(waitOtherPlayersState).entry();
 
         manager.viewIsReady = true;
 
+        verify(rotatableState, never()).entry();
         eventManager.trigger(new PlayerReadyEvent(2233));
+        verify(waitOtherPlayersState).exit();
         Assert.assertSame(manager.currentState, rotatableState);
+        verify(rotatableState).entry();
     }
 
     @Test
@@ -334,18 +370,20 @@ public class MultiPlayerManagerTest {
         EventManager eventManager = getEventManager();
         ScorePlayerManager scoreManager = getMockedScoreManager();
         State rotatableState = getMockedState();
+        State waitOtherPlayersState = getMockedState();
 
         when(scoreManager.thisPlayerIsHost()).thenReturn(true);
         when(scoreManager.areAllPlayersReady()).thenReturn(false);
 
         MultiPlayerManager manager = createManager(eventManager, scoreManager);
+        manager.setWaitOtherPlayersState(waitOtherPlayersState);
         manager.setRotatableState(rotatableState);
         manager.entry();
 
         manager.viewIsReady = true;
 
         eventManager.trigger(new PlayerReadyEvent(2233));
-        Assert.assertSame(manager.currentState, null);
+        Assert.assertSame(manager.currentState, waitOtherPlayersState);
         Assert.assertNotSame(manager.currentState, rotatableState);
     }
 
@@ -406,7 +444,7 @@ public class MultiPlayerManagerTest {
     }
 
     @Test
-    public void entry_Send_PlayerReadyEvent_WhenIsClient() {
+    public void onViewReady_Send_PlayerReadyEvent_WhenIsClient() {
         final int ip = 44556;
         EventManager eventManager = getEventManager();
         ScorePlayerManager scorePlayerManager = getMockedScoreManager();
@@ -420,7 +458,7 @@ public class MultiPlayerManagerTest {
 
         MultiPlayerManager manager = createManager(
                 eventManager, scorePlayerManager, wifiInfo);
-        manager.entry();
+        manager.onViewReady();
 
         EventData event = assertTriggeredReturn(playerReadyListener);
         assertPlayerReadyEventEquals(event, new PlayerReadyEvent(ip));
@@ -468,5 +506,22 @@ public class MultiPlayerManagerTest {
         CellManager cellManager = getMockedCellManager();
         MultiPlayerManager manager = createManager(cellManager);
         EntryExitUtil.assertSetUpEntryExit(manager, cellManager);
+    }
+
+    @Test
+    public void setUpLevelManager() {
+        LevelManager levelManager = getMockedLevelManager();
+        MultiPlayerManager manager = createManager(levelManager);
+
+        EntryExitUtil.assertSetUpEntryExit(manager, levelManager);
+    }
+
+    @Test
+    public void entry_CallEntry_WaitOtherState() {
+        MultiPlayerManager manager = createManager();
+        State waitOthersPlayerState = getMockedState();
+        manager.setWaitOtherPlayersState(waitOthersPlayerState);
+        manager.entry();
+        verify(waitOthersPlayerState).entry();
     }
 }

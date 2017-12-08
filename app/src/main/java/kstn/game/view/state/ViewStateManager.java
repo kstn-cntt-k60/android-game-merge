@@ -120,7 +120,7 @@ public class ViewStateManager {
         createdRoomsState = new ViewCreatedRoomsState(this);
         roomCreatorState = new ViewRoomCreatorState(this);
         waitRoomState = new ViewWaitRoomState(this);
-        playingState = new ViewPlayingState(eventManager);
+        playingState = new ViewPlayingState(this);
         resultState = new ViewMultiResultState(this);
         statState = new ViewStatState(this);
         listenToAllStateEvents();

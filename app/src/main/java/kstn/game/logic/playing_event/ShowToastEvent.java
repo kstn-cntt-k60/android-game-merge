@@ -7,15 +7,22 @@ import java.io.OutputStream;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.GameEventData;
 
-public class StartPlayingEvent extends GameEventData {
+public class ShowToastEvent extends GameEventData {
+    private final String text;
 
-    public StartPlayingEvent() {
-        super(PlayingEventType.START_PLAYING);
+    public ShowToastEvent(String text) {
+        super(PlayingEventType.SHOW_TOAST);
+        this.text = text;
+    }
+
+    public String getText() {
+        return text;
     }
 
     @Override
     public void serialize(OutputStream out) throws IOException {
-        PlayingMessage.StartPlaying msg = PlayingMessage.StartPlaying.newBuilder()
+        PlayingMessage.ShowToast msg = PlayingMessage.ShowToast.newBuilder()
+                .setText(text)
                 .build();
         msg.writeDelimitedTo(out);
     }
@@ -23,8 +30,8 @@ public class StartPlayingEvent extends GameEventData {
     public static class Parser implements EventData.Parser {
         @Override
         public EventData parseFrom(InputStream in) throws IOException {
-            PlayingMessage.StartPlaying msg = PlayingMessage.StartPlaying.parseDelimitedFrom(in);
-            return new StartPlayingEvent();
+            PlayingMessage.ShowToast msg = PlayingMessage.ShowToast.parseDelimitedFrom(in);
+            return new ShowToastEvent(msg.getText());
         }
     }
 }

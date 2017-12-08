@@ -11,7 +11,7 @@ public abstract class State implements IEntryExit {
 
     public void coneAccel(float startAngle, float speed) {}
 
-    public void coneStop(int value) {}
+    public void coneStop(int coneIndex) {}
 
     public void chooseCell(int cellIndex) {}
 

@@ -41,26 +41,24 @@ public class SongManager {
     }
 
     public void onViewCreated(android.view.View view) {
-
     }
 
-    public void startConeRotation() {
+    private void startConeRotation() {
         coneRotation = MediaPlayer.create(stateManager.activity, R.raw.nhac_hieu);
         coneRotation.start();
     }
 
-    public void endConeRotation()
-    {
+    private void endConeRotation() {
         if (coneRotation != null)
             coneRotation.stop();
     }
 
-    public void startTingTing() {
+    void startTingTing() {
         tingTing = MediaPlayer.create(stateManager.activity, R.raw.tingting);
         tingTing.start();
     }
 
-    public void startFail() {
+    void startFail() {
         fail = MediaPlayer.create(stateManager.activity, R.raw.failure);
         fail.start();
     }
