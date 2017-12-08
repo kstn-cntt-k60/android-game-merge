@@ -8,6 +8,6 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 public class ManagerDatabase extends SQLiteAssetHelper {
     public ManagerDatabase(Context context) {
-        super(context,"CauHoiDataBase1.sqlite", null, 1);
+        super(context,"database.sqlite", null, 1);
     }
 }

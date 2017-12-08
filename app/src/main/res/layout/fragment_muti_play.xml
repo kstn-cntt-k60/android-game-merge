@@ -5,7 +5,7 @@
     android:weightSum="10"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context="kstn.game.view.thang.fragment.MutiPlayFragment">
+    tools:context="kstn.game.view.thang.fragment.MultiPlayFragment">
    <GridLayout
        android:numColumns="3"
        android:id="@+id/gv"

@@ -17,6 +17,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import kstn.game.R;
+import kstn.game.logic.cone.ConeResult;
+import kstn.game.logic.event.EventData;
+import kstn.game.logic.event.EventListener;
+import kstn.game.logic.playing_event.ConeResultEvent;
+import kstn.game.logic.playing_event.NextQuestionEvent;
+import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.state.multiplayer.Player;
 import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.state.multiplayer.IPlayerManager;
@@ -25,25 +31,64 @@ import kstn.game.view.state.singleplayer.KeyboardManager;
 import kstn.game.view.state.singleplayer.SongManager;
 import kstn.game.view.thang.adapter.MultiAdapter;
 
-public class MutiPlayFragment extends Fragment implements IPlayerManager{
+public class MultiPlayFragment extends Fragment implements IPlayerManager{
+    private int currentPlayerIndex =0;
     private Button btnDoan;
     private TextView txtNoiDungKim;
     private TextView txtCauHoi;
     private ArrayList<Player> data;
     private MultiAdapter adapter;
+
     int height;
     View guessView, giveAnswerView;
     private Animation scaleAnimation;
+
     private ViewStateManager stateManager;
     private SongManager songManager;
     private CharCellManager charCellManager;
     private  KeyboardManager keyboardManager;
 
-    public MutiPlayFragment() {
+    // Listeners
+    private EventListener rotateResultListener;
+    private EventListener nextQuestionListener;
+
+    public MultiPlayFragment() {
         // Required empty public constructor
-        songManager = new SongManager(stateManager);
-        charCellManager = new CharCellManager(stateManager);
-        keyboardManager = new KeyboardManager(stateManager);
+        rotateResultListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event_) {
+                ConeResultEvent event = (ConeResultEvent)event_;
+                handleRotateResult(event.getResult());
+            }
+        };
+
+        nextQuestionListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event_) {
+                NextQuestionEvent event = (NextQuestionEvent)event_;
+                handleNextQuestion(event.getQuestion(), event.getAnswer());
+            }
+        };
+    }
+
+    public void setCurrentPlayerIndex(int currentPlayerIndex) {
+        this.currentPlayerIndex = currentPlayerIndex;
+    }
+
+    public void setSongManager(SongManager songManager) {
+        this.songManager = songManager;
+    }
+
+    public void setCharCellManager(CharCellManager charCellManager) {
+        this.charCellManager = charCellManager;
+    }
+
+    public void setKeyboardManager(KeyboardManager keyboardManager) {
+        this.keyboardManager = keyboardManager;
+    }
+
+    public void setStateManager(ViewStateManager stateManager) {
+        this.stateManager = stateManager;
     }
 
 
@@ -114,16 +159,46 @@ public class MutiPlayFragment extends Fragment implements IPlayerManager{
 
     @Override
     public void nextPlayer(int playerIndex) {
-
+        currentPlayerIndex = (currentPlayerIndex+1)%data.size();
     }
 
     @Override
     public void setScore(int value) {
-
+        data.get(currentPlayerIndex).setScore(value);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void deactivatePlayer(int playerIndex) {
+    public void deactivatePlayer(int playerIndex){
+            //TODO
+    }
+    public void entry(){
+        currentPlayerIndex =0;
+        stateManager.eventManager.addListener(PlayingEventType.ROTATE_RESULT, rotateResultListener);
+        stateManager.eventManager.addListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
+    }
+    public void exit(){
+        stateManager.eventManager.removeListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
+        stateManager.eventManager.removeListener(PlayingEventType.ROTATE_RESULT, rotateResultListener);
+    }
+    public void handleNextQuestion(String question, String answer) {
+        txtCauHoi.setText(question);
+    }
 
+    private void handleRotateResult(int result) {
+        final String text = ConeResult.getString(result);
+        scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                txtNoiDungKim.setText(text);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {}
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+        });
+        txtNoiDungKim.startAnimation(scaleAnimation);
     }
 }
