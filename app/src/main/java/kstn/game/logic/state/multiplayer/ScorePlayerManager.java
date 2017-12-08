@@ -148,6 +148,10 @@ public class ScorePlayerManager implements IEntryExit {
         // currentPlayerIndex = playerIndex;
     }
 
+    public void revalidateCurrentPlayerIndex() {
+        eventManager.trigger(new NextPlayerEvent(currentPlayerIndex));
+    }
+
     public int getScore() {
         return scorePlayerList.get(currentPlayerIndex).getScore();
     }

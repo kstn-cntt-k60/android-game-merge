@@ -55,6 +55,10 @@ public class WaitGuessResultState extends State {
         if (questionManager.sameAsAnswer(result)) {
             eventManager.trigger(new SongTingTingEvent());
             eventManager.trigger(new ShowToastEvent("Đã đoán đúng"));
+
+            int preScore = scorePlayerManager.getScore();
+            scorePlayerManager.setScore(preScore + 1000);
+            eventManager.trigger(new ShowToastEvent("+1000"));
             multiPlayerManager.makeTransitionTo(rotatableState);
             levelManager.nextLevel();
         }
@@ -65,6 +69,7 @@ public class WaitGuessResultState extends State {
             multiPlayerManager.makeTransitionTo(waitOtherPlayersState);
             if (scorePlayerManager.countActivePlayers() == 0) {
                 levelManager.nextLevel();
+                scorePlayerManager.revalidateCurrentPlayerIndex();
             }
             else {
                 scorePlayerManager.nextPlayer();

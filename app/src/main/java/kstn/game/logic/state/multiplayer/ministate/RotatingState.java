@@ -34,19 +34,19 @@ public class RotatingState extends State {
     }
 
     public void setRotatableState(State state) {
-        this.rotatableState = state;
+        rotatableState = state;
     }
 
     public void setWaitChooseCellState(State state) {
-        this.waitChooseCellState = state;
+        waitChooseCellState = state;
     }
 
     public void setWaitAnswerState(State state) {
-        this.waitAnswerState = state;
+        waitAnswerState = state;
     }
 
     public void setWaitGuessResultState(State state) {
-        this.waitGuessResultState = state;
+        waitGuessResultState = state;
     }
 
     int result;
@@ -128,10 +128,10 @@ public class RotatingState extends State {
 
             case ConeResult.BONUS:
                 int rand = random.nextInt(9);
-                scorePlayerManager.setScore(
-                        scorePlayerManager.getScore() + (rand + 1) * 100);
-                eventManager.trigger(new ShowToastEvent(
-                        "" + scorePlayerManager.getScore()));
+                int preScore = scorePlayerManager.getScore();
+                int diffScore = (rand + 1) * 100;
+                scorePlayerManager.setScore(preScore + diffScore);
+                eventManager.trigger(new ShowToastEvent("+" + diffScore));
                 eventManager.trigger(new SongTingTingEvent());
                 multiPlayerManager.makeTransitionTo(rotatableState);
                 break;

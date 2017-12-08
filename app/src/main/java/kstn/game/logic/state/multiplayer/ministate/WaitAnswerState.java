@@ -33,7 +33,7 @@ public class WaitAnswerState extends State {
     }
 
     public void setWaitGuessResultState(State state) {
-        waitOtherPlayersState = state;
+        waitGuessResultState = state;
     }
 
     public WaitAnswerState(
@@ -85,7 +85,13 @@ public class WaitAnswerState extends State {
             }
             int diffScore = scorePlayerManager.getScore() - preScore;
 
-            eventManager.trigger(new ShowToastEvent(Integer.toString(diffScore)));
+            String stringDiffScore;
+            if (diffScore >= 0)
+                stringDiffScore = "+" + diffScore;
+            else
+                stringDiffScore = Integer.toString(diffScore);
+
+            eventManager.trigger(new ShowToastEvent(stringDiffScore));
             eventManager.trigger(new SongTingTingEvent());
         }
     }

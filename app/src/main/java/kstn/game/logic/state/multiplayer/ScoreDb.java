@@ -1,9 +1,5 @@
 package kstn.game.logic.state.multiplayer;
 
-/**
- * Created by thang on 12/1/2017.
- */
-
 public class ScoreDb {
     private int id;
     private  String name;
