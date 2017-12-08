@@ -135,6 +135,7 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
         for(int i=0;i<num;i++){
             data.add(new Player());
         }
+        data.get(0).setIdColor(Color.YELLOW);
         adapter = new MultiAdapter(data,getActivity());
         gv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -155,10 +156,10 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
     @Override
     public void nextPlayer(int playerIndex) {
         currentPlayerIndex = playerIndex;
-        adapter.getDataImg().get(playerIndex).setBackgroundColor(Color.YELLOW);
+        data.get(playerIndex).setIdColor(Color.YELLOW);
         for(int i=0;i<data.size();i++){
             if(i!=playerIndex)
-                adapter.getDataImg().get(i).setBackgroundColor(Color.parseColor("#752c74"));
+               data.get(i).setIdColor(Color.parseColor("#752c74"));
         }
         adapter.notifyDataSetChanged();
 
@@ -172,7 +173,8 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
 
     @Override
     public void deactivatePlayer(int playerIndex){
-            adapter.getDataImg().get(playerIndex).setBackgroundColor(Color.parseColor("#FF66655F"));
+            data.get(playerIndex).setIdColor(Color.parseColor("#FF66655F"));
+            adapter.notifyDataSetChanged();
     }
 
     @Override

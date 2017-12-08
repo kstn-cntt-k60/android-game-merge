@@ -1,5 +1,7 @@
 package kstn.game.logic.state.multiplayer;
 
+import android.graphics.Color;
+
 import kstn.game.R;
 
 public class Player {
@@ -7,6 +9,15 @@ public class Player {
     private String name="No Name";
     private  int avatarId = R.drawable.unknown_avatar;
     private int Score =0;
+    private int IdColor= Color.parseColor("#752c74");
+
+    public int getIdColor() {
+        return IdColor;
+    }
+
+    public void setIdColor(int idColor) {
+        IdColor = idColor;
+    }
 
     public Player(int ipAddress, String name, int avatarId) {
         this.ipAddress = ipAddress;
