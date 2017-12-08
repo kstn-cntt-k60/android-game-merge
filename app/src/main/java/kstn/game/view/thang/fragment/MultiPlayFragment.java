@@ -1,5 +1,6 @@
 package kstn.game.view.thang.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -160,6 +161,11 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
     @Override
     public void nextPlayer(int playerIndex) {
         currentPlayerIndex = playerIndex;
+        adapter.getDataImg().get(playerIndex).setBackgroundColor(Color.YELLOW);
+        for(int i=0;i<data.size();i++){
+            if(i!=playerIndex) adapter.getDataImg().get(i).setBackgroundColor(Color.parseColor("#752c74"));
+        }
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -170,7 +176,8 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
 
     @Override
     public void deactivatePlayer(int playerIndex){
-            //TODO
+            adapter.getDataImg().get(playerIndex).setBackgroundColor(Color.parseColor("#FF66655F"));
+            adapter.notifyDataSetChanged();
     }
 
     public void entry(){
