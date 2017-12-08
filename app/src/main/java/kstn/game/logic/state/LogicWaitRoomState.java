@@ -214,7 +214,7 @@ public class LogicWaitRoomState extends LogicGameState {
 
     void exitWhenIsClient() {
         exitBoth();
-        if (stateManager.getNextState() == stateManager.getCreatedRoomsState()) {
+        if (stateManager.getNextState() != stateManager.getPlayingState()) {
             networkForwarder.shutdown();
         }
     }
@@ -270,7 +270,7 @@ public class LogicWaitRoomState extends LogicGameState {
             process.succeed();
 
         udpForwarder.shutdown();
-        if (stateManager.getNextState() == stateManager.getCreatedRoomsState()) {
+        if (stateManager.getNextState() != stateManager.getPlayingState()) {
             networkForwarder.shutdown();
         }
     }

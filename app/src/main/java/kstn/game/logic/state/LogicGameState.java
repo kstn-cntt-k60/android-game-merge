@@ -24,6 +24,7 @@ public abstract class LogicGameState {
 
         @Override
         public void onSuccess() {
+            stateManager.llEventManager.update();
             LogicGameState.this.onViewReady();
         }
 

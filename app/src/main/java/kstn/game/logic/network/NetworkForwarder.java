@@ -36,10 +36,10 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
     private final ClientFactory clientFactory;
     private final int port = 2017;
     final Map<EventType, EventData.Parser> parserMap = new HashMap<>();
+    private final Map<EventType, Boolean> isReceiving = new HashMap<>();
     private Endpoint endpoint = null;
     private Server server = null;
     private EventListener listener;
-    private boolean isReceiving = false;
 
     public NetworkForwarder(EventManager eventManager,
                             ServerFactory serverFactory,
@@ -51,14 +51,16 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
         listener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
-                if (!isReceiving)
+                if (!isReceiving.get(event.getEventType())) {
                     endpoint.send(event);
+                }
             }
         };
         initParserMap();
     }
 
     private void initParserMap() {
+        parserMap.clear();
         // Cone
         parserMap.put(ConeEventType.MOVE, new ConeMoveEventData.Parser());
         parserMap.put(ConeEventType.ACCELERATE, new ConeAccelerateEventData.Parser());
@@ -94,8 +96,10 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
     }
 
     private void addListeners() {
+        isReceiving.clear();
         for (EventType eventType: parserMap.keySet()) {
             eventManager.addListener(eventType, listener);
+            isReceiving.put(eventType, false);
         }
     }
 
@@ -121,7 +125,6 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
         server = serverFactory.create(port, parserMap);
         endpoint = server.getEndpoint();
         if (endpoint != null) {
-            isReceiving = false;
             endpoint.setReceiveDataListener(this);
             addListeners();
         }
@@ -131,7 +134,6 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
         shutdown();
         endpoint = clientFactory.connect(ipAddress, port, parserMap);
         if (endpoint != null) {
-            isReceiving = false;
             endpoint.setReceiveDataListener(this);
             addListeners();
         }
@@ -139,9 +141,9 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
 
     @Override
     public void onReceiveData(EventData event) {
-        isReceiving = true;
+        isReceiving.put(event.getEventType(), true);
         eventManager.trigger(event);
-        isReceiving = false;
+        isReceiving.put(event.getEventType(), false);
     }
 
     public void shutdown() {

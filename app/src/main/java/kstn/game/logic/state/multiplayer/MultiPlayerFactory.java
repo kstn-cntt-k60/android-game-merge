@@ -2,6 +2,7 @@ package kstn.game.logic.state.multiplayer;
 
 import kstn.game.logic.cone.Cone;
 import kstn.game.logic.data.ManagerDAO;
+import kstn.game.logic.network.NetworkForwarder;
 import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.state.LogicStateManager;
 import kstn.game.logic.state.multiplayer.ministate.RotatableState;
@@ -13,6 +14,7 @@ import kstn.game.view.screen.ViewManager;
 public class MultiPlayerFactory {
     private final LogicStateManager stateManager;
     private final WifiInfo wifiInfo;
+    private final NetworkForwarder networkForwarder;
     private final ViewManager root;
     private final View backgroundView;
     private final Cone cone;
@@ -22,6 +24,7 @@ public class MultiPlayerFactory {
 
     public MultiPlayerFactory(LogicStateManager stateManager,
                               WifiInfo wifiInfo,
+                              NetworkForwarder networkForwarder,
                               ViewManager root,
                               View backgroundView,
                               Cone cone,
@@ -30,6 +33,7 @@ public class MultiPlayerFactory {
     ) {
         this.stateManager = stateManager;
         this.wifiInfo = wifiInfo;
+        this.networkForwarder = networkForwarder;
         this.root = root;
         this.backgroundView = backgroundView;
         this.cone = cone;
@@ -67,7 +71,8 @@ public class MultiPlayerFactory {
                 questionManager,
                 cellManager,
                 levelManager,
-                wifiInfo
+                wifiInfo,
+                networkForwarder
         );
 
         // Init All States

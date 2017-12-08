@@ -46,11 +46,13 @@ public enum PlayingEventType implements EventType {
     SONG_FAIL(17407),
     SONG_TINGTING(17408),
     ;
+
     PlayingEventType(int value) {
         this.value = value;
     }
 
     private int value;
+
     @Override
     public int getValue() {
         return value;

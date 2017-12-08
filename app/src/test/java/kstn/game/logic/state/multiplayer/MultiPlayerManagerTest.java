@@ -10,6 +10,7 @@ import kstn.game.logic.cone.ConeStopEventData;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
+import kstn.game.logic.network.NetworkForwarder;
 import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.answer.AnswerEvent;
@@ -44,6 +45,10 @@ public class MultiPlayerManagerTest {
         return mock(WifiInfo.class);
     }
 
+    private NetworkForwarder getMockedNetworkForwarder() {
+        return mock(NetworkForwarder.class);
+    }
+
     private MultiPlayerManager createManager(EventManager eventManager,
                                              ScorePlayerManager scoreManager,
                                              QuestionManager questionManager,
@@ -53,7 +58,8 @@ public class MultiPlayerManagerTest {
         MultiPlayerManager manager =  new MultiPlayerManager(
                 eventManager, scoreManager,
                 questionManager, cellManager,
-                levelManager, wifiInfo
+                levelManager, wifiInfo,
+                getMockedNetworkForwarder()
         );
         manager.setWaitOtherPlayersState(getMockedState());
         manager.setRotatableState(getMockedState());

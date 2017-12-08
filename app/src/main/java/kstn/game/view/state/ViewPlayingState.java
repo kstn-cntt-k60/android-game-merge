@@ -27,7 +27,6 @@ public class ViewPlayingState extends ViewGameState {
 
     @Override
     public void entry() {
-        super.postEntry();
         toastManager.entry();
         multiPlayerSongManager.entry();
 
@@ -43,6 +42,8 @@ public class ViewPlayingState extends ViewGameState {
         charCellManager.entry();
         playerProxy.entry();
         stateManager.activity.addFragment(fragment);
+
+        super.postEntry();
     }
 
     @Override

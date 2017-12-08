@@ -8,6 +8,9 @@ import kstn.game.logic.cone.ConeStopEventData;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
+import kstn.game.logic.network.Connection;
+import kstn.game.logic.network.Endpoint;
+import kstn.game.logic.network.NetworkForwarder;
 import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.answer.AnswerEvent;
@@ -17,6 +20,7 @@ import kstn.game.logic.playing_event.player.NextPlayerEvent;
 import kstn.game.logic.playing_event.player.PlayerReadyEvent;
 import kstn.game.logic.state.IEntryExit;
 import kstn.game.logic.state.multiplayer.ministate.State;
+import kstn.game.logic.state_event.TransitToCreatedRoomsState;
 
 public class MultiPlayerManager implements IEntryExit {
     private final EventManager eventManager;
@@ -25,6 +29,7 @@ public class MultiPlayerManager implements IEntryExit {
     private final CellManager cellManager;
     private final LevelManager levelManager;
     private final WifiInfo wifiInfo;
+    private final NetworkForwarder networkForwarder;
 
     State currentState;
     private State waitOtherPlayersState; // client default start state
@@ -62,13 +67,15 @@ public class MultiPlayerManager implements IEntryExit {
                               final QuestionManager questionManager,
                               CellManager cellManager,
                               LevelManager levelManager,
-                              WifiInfo wifiInfo) {
+                              WifiInfo wifiInfo,
+                              NetworkForwarder networkForwarder) {
         this.eventManager = eventManager;
         this.scoreManager = scoreManager;
         this.questionManager = questionManager;
         this.cellManager = cellManager;
         this.levelManager = levelManager;
         this.wifiInfo = wifiInfo;
+        this.networkForwarder = networkForwarder;
 
         coneAccelListener = new EventListener() {
             @Override
@@ -136,7 +143,6 @@ public class MultiPlayerManager implements IEntryExit {
             @Override
             public void onEvent(EventData event) {
                 PlayerReadyEvent event1 = (PlayerReadyEvent) event;
-                Log.i("ReadyListener", "Okay " + event1.getIpAddress());
                 scoreManager.playerReady(event1.getIpAddress());
                 if (viewIsReady && scoreManager.areAllPlayersReady()) {
                     questionManager.nextQuestion();
@@ -170,6 +176,14 @@ public class MultiPlayerManager implements IEntryExit {
         if (scoreManager.thisPlayerIsHost()) {
             eventManager.addListener(PlayingEventType.PLAYER_READY, playerReadyListener);
         }
+
+        networkForwarder.setOnConnectionErrorListener(
+                new Endpoint.OnConnectionErrorListener() {
+            @Override
+            public void onConnectionError(Connection connection) {
+                eventManager.queue(new TransitToCreatedRoomsState());
+            }
+        });
     }
 
     void onViewReady() {
@@ -181,13 +195,15 @@ public class MultiPlayerManager implements IEntryExit {
 
         if (scoreManager.thisPlayerIsHost() && scoreManager.areAllPlayersReady()) {
             questionManager.nextQuestion();
-            currentState = rotatableState;
+            makeTransitionTo(rotatableState);
         }
         viewIsReady = true;
     }
 
     @Override
     public void exit() {
+        networkForwarder.shutdown();
+
         if (scoreManager.thisPlayerIsHost()) {
             eventManager.removeListener(PlayingEventType.PLAYER_READY, playerReadyListener);
         }

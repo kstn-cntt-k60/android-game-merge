@@ -45,10 +45,6 @@ public class Root implements GameViewClient {
     private ViewStateManager viewStateManager = null;
     private LogicStateManager logicStateManager = null;
 
-    public EventManager getUiEventManager() {
-        return uiEventManager;
-    }
-
     public Root(MainActivity activity, GameAnimationView gameView) {
         this.activity = activity;
         this.context = activity;
@@ -84,6 +80,7 @@ public class Root implements GameViewClient {
 
         viewStateManager = new ViewStateManager(this.activity, uiEventManager, wifiInfo);
         logicStateManager = new LogicStateManager(
+                llEventManager,
                 viewStateManager,
                 viewGroup, processManager, timeManager,
                 eventManager, assetManager, wifiInfo,
@@ -128,5 +125,4 @@ public class Root implements GameViewClient {
         long timeStamp = System.currentTimeMillis();
         llEventManager.queue(new RootPauseEvent(timeStamp));
     }
-
 }

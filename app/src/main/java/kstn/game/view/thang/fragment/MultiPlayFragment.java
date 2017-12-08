@@ -145,17 +145,19 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
     public void setAvatar(int playerIndex, int avatarId) {
         data.get(playerIndex).setAvatarId(avatarId);
         adapter.notifyDataSetChanged();
+        Log.i("MultiPlayer", "SetAvatar");
     }
 
     @Override
     public void setName(int playerIndex, String name) {
         data.get(playerIndex).setName(name);
         adapter.notifyDataSetChanged();
+        Log.i("MultiPlayer", "SetName");
     }
 
     @Override
     public void nextPlayer(int playerIndex) {
-        currentPlayerIndex = (currentPlayerIndex+1)%data.size();
+        currentPlayerIndex = playerIndex;
     }
 
     @Override

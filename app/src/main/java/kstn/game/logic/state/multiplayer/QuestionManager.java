@@ -1,7 +1,5 @@
 package kstn.game.logic.state.multiplayer;
 
-import android.util.Log;
-
 import kstn.game.logic.data.ManagerDAO;
 import kstn.game.logic.data.QuestionModel;
 import kstn.game.logic.event.EventData;
@@ -35,7 +33,6 @@ public class QuestionManager implements IEntryExit {
         nextQuestionListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
-                Log.i("QuestionListener", "Next Question");
                 NextQuestionEvent event1 = (NextQuestionEvent) event;
                 question = event1.getQuestion();
                 answer = event1.getAnswer();
@@ -64,5 +61,4 @@ public class QuestionManager implements IEntryExit {
         String tmp2 = this.answer.toUpperCase();
         return tmp.equals(tmp2);
     }
-
 }

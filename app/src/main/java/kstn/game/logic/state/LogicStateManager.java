@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import java.io.IOException;
 
 import kstn.game.MainActivity;
+import kstn.game.app.event.LLBaseEventManager;
 import kstn.game.app.root.BaseTimeManager;
 import kstn.game.logic.cone.Cone;
 import kstn.game.logic.event.EventData;
@@ -42,12 +43,16 @@ public class LogicStateManager {
     private final LogicWaitRoomState waitRoomState;
     private final LogicPlayingState playingState;
     private final LogicGameState resultState = null;
+
     // Single SinglePlayerModel
     private final LogicSinglePlayerState singlePlayerState;
     public final LogicSingleResultState singleResultState;
+
     // bxh
     private final LogicStatState statState;
+
     // Managers
+    public final LLBaseEventManager llEventManager;
     public final ViewStateManager viewStateManager;
     public final ViewGroup root;
     public final ProcessManager processManager;
@@ -64,6 +69,8 @@ public class LogicStateManager {
     public LogicGameState getRoomCreatorState() {
         return roomCreatorState;
     }
+
+    public LogicGameState getPlayingState() { return playingState; }
 
     private void listenToAllStateEvents() {
         eventManager.addListener(StateEventType.MENU, new EventListener() {
@@ -136,7 +143,8 @@ public class LogicStateManager {
         });
     }
 
-    public LogicStateManager(ViewStateManager viewStateManager,
+    public LogicStateManager(LLBaseEventManager llEventManager,
+                             ViewStateManager viewStateManager,
                              ViewGroup root,
                              ProcessManager processManager,
                              BaseTimeManager timeManager,
@@ -147,6 +155,7 @@ public class LogicStateManager {
                              ServerFactory serverFactory,
                              ClientFactory clientFactory,
                              MainActivity mainActivity) {
+        this.llEventManager = llEventManager;
         this.viewStateManager = viewStateManager;
         this.root = root;
         this.processManager = processManager;
@@ -211,7 +220,8 @@ public class LogicStateManager {
 
 
         MultiPlayerFactory multiPlayerFactory = new MultiPlayerFactory(
-                this, wifiInfo,
+                this,
+                wifiInfo, networkForwarder,
                 root, backgroundView, cone,
                 thisPlayer, thisRoom
         );

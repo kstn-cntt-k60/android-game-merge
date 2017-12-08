@@ -6,7 +6,6 @@ import java.io.OutputStream;
 
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.GameEventData;
-import kstn.game.logic.playing_event.player.NextPlayerEvent;
 
 public class NextQuestionEvent extends GameEventData {
     private final String question;
