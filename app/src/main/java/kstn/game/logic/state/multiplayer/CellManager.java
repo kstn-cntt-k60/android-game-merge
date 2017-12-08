@@ -90,6 +90,9 @@ public class CellManager implements IEntryExit {
     }
 
     public boolean allCellsAreOpened() {
+        if (nonSpaceAnswer == null)
+            return false;
+
         for (int i = 0; i < nonSpaceAnswer.length(); i++) {
             if (!isOpenedCells[i])
                 return false;

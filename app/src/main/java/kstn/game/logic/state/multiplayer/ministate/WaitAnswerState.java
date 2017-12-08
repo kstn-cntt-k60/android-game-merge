@@ -32,6 +32,10 @@ public class WaitAnswerState extends State {
         this.rotatingState = rotatingState;
     }
 
+    public void setWaitGuessResultState(State state) {
+        waitOtherPlayersState = state;
+    }
+
     public WaitAnswerState(
             EventManager eventManager,
             CellManager cellManager,
@@ -51,6 +55,7 @@ public class WaitAnswerState extends State {
             eventManager.trigger(new SongFailEvent());
 
             if (scorePlayerManager.countActivePlayers() == 1) {
+                scorePlayerManager.deactivateCurrentPlayer();
                 multiPlayerManager.makeTransitionTo(waitGuessResultState);
             }
             else {

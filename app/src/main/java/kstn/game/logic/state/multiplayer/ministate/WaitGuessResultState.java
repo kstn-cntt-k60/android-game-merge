@@ -2,6 +2,8 @@ package kstn.game.logic.state.multiplayer.ministate;
 
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.playing_event.ShowToastEvent;
+import kstn.game.logic.playing_event.SongFailEvent;
+import kstn.game.logic.playing_event.SongTingTingEvent;
 import kstn.game.logic.playing_event.guess.AcceptRequestGuessEvent;
 import kstn.game.logic.state.multiplayer.CellManager;
 import kstn.game.logic.state.multiplayer.LevelManager;
@@ -51,15 +53,17 @@ public class WaitGuessResultState extends State {
     public void guessResult(String result) {
         eventManager.trigger(new ShowToastEvent("Đã đoán: " + result));
         if (questionManager.sameAsAnswer(result)) {
+            eventManager.trigger(new SongTingTingEvent());
             eventManager.trigger(new ShowToastEvent("Đã đoán đúng"));
             multiPlayerManager.makeTransitionTo(rotatableState);
             levelManager.nextLevel();
         }
         else {
+            eventManager.trigger(new SongFailEvent());
             eventManager.trigger(new ShowToastEvent("Đã đoán sai"));
             scorePlayerManager.deactivateCurrentPlayer();
             multiPlayerManager.makeTransitionTo(waitOtherPlayersState);
-            if (scorePlayerManager.countActivePlayers() == 1) {
+            if (scorePlayerManager.countActivePlayers() == 0) {
                 levelManager.nextLevel();
             }
             else {
@@ -70,7 +74,7 @@ public class WaitGuessResultState extends State {
 
     @Override
     public void cancelGuess() {
-        if (scorePlayerManager.countActivePlayers() == 1) {
+        if (scorePlayerManager.countActivePlayers() == 0) {
             eventManager.trigger(new AcceptRequestGuessEvent());
         }
         else if (cellManager.allCellsAreOpened()) {
