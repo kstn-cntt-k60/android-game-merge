@@ -1,7 +1,5 @@
 package kstn.game.logic.state.multiplayer;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,6 +149,15 @@ public class ScorePlayerManager implements IEntryExit {
         eventManager.trigger(new PlayerSetScoreEvent(value));
     }
 
+    public int countActivePlayers() {
+        int count = 0;
+        for (ScorePlayer scorePlayer: scorePlayerList) {
+            if (scorePlayer.isActive())
+                count++;
+        }
+        return count;
+    }
+
     public int chooseBiggestScorePlayer() {
         int maxScore = 0;
         int maxIndex = 0;
@@ -162,6 +169,10 @@ public class ScorePlayerManager implements IEntryExit {
         }
         deactivateAllExcept(maxIndex);
         return nextPlayer();
+    }
+
+    public void deactivateCurrentPlayer() {
+        deactivatePlayer(currentPlayerIndex);
     }
 
     public void deactivatePlayer(int playerIndex) {

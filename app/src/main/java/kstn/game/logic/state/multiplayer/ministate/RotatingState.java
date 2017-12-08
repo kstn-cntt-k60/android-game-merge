@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import kstn.game.logic.cone.Cone;
 import kstn.game.logic.cone.ConeResult;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.playing_event.ShowToastEvent;
@@ -16,9 +17,9 @@ import kstn.game.logic.state.multiplayer.ScorePlayerManager;
 
 public class RotatingState extends State {
     private Random random = new Random();
-    private final MultiPlayerManager multiPlayerManager;
-    private final ScorePlayerManager scorePlayerManager;
     private final EventManager eventManager;
+    private final ScorePlayerManager scorePlayerManager;
+    private final MultiPlayerManager multiPlayerManager;
 
     private List<Integer> coneCells = new ArrayList<>(20);
 

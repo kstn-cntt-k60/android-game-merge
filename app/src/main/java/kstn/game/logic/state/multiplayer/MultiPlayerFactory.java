@@ -7,6 +7,9 @@ import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.state.LogicStateManager;
 import kstn.game.logic.state.multiplayer.ministate.RotatableState;
 import kstn.game.logic.state.multiplayer.ministate.RotatingState;
+import kstn.game.logic.state.multiplayer.ministate.WaitAnswerState;
+import kstn.game.logic.state.multiplayer.ministate.WaitChooseCellState;
+import kstn.game.logic.state.multiplayer.ministate.WaitGuessResultState;
 import kstn.game.logic.state.multiplayer.ministate.WaitOtherPlayersState;
 import kstn.game.view.screen.View;
 import kstn.game.view.screen.ViewManager;
@@ -78,23 +81,58 @@ public class MultiPlayerFactory {
         // Init All States
         WaitOtherPlayersState waitOtherPlayersState = new WaitOtherPlayersState(
                 scorePlayerManager,
-                playerManager
+                playerManager,
+                cone
         );
-        RotatableState rotatableState = new RotatableState(playerManager);
+        RotatableState rotatableState = new RotatableState(
+                stateManager.eventManager, playerManager, cone
+        );
+
         RotatingState rotatingState = new RotatingState(
                 stateManager.eventManager,
                 scorePlayerManager,
                 playerManager
         );
 
+        WaitAnswerState waitAnswerState = new WaitAnswerState(
+                stateManager.eventManager,
+                cellManager,
+                scorePlayerManager,
+                playerManager
+        );
+
+        WaitGuessResultState waitGuessResultState = new WaitGuessResultState(
+                stateManager.eventManager,
+                questionManager,
+                scorePlayerManager,
+                playerManager
+        );
+
+        WaitChooseCellState waitChooseCellState = new WaitChooseCellState(
+                cellManager, playerManager);
+
         // Set up dependencies
         playerManager.setWaitOtherPlayersState(waitOtherPlayersState);
         playerManager.setRotatableState(rotatableState);
 
+        waitOtherPlayersState.setRotatableState(rotatableState);
+
         rotatableState.setRotatingState(rotatingState);
+        rotatableState.setWaitGuessResultState(waitGuessResultState);
 
         rotatingState.setWaitOtherPlayersState(waitOtherPlayersState);
         rotatingState.setRotatableState(rotatableState);
+        rotatingState.setWaitChooseCellState(waitChooseCellState);
+        rotatingState.setWaitAnswerState(waitAnswerState);
+
+        waitAnswerState.setWaitOtherPlayersState(waitAnswerState);
+        waitAnswerState.setRotatableState(rotatableState);
+        waitAnswerState.setRotatingState(rotatingState);
+
+        waitChooseCellState.setRotatableState(rotatableState);
+
+        waitGuessResultState.setWaitOtherPlayersState(waitOtherPlayersState);
+        waitGuessResultState.setRotatableState(rotatableState);
 
         return new LogicPlayingState(
                 stateManager,
