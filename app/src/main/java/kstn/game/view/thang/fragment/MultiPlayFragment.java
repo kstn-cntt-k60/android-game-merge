@@ -1,48 +1,58 @@
-package kstn.game.view.state.singleplayer;
+package kstn.game.view.thang.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import kstn.game.R;
 import kstn.game.logic.cone.ConeResult;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
+import kstn.game.logic.playing_event.ConeResultEvent;
 import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
-import kstn.game.logic.playing_event.ConeResultEvent;
+import kstn.game.logic.state.multiplayer.Player;
 import kstn.game.view.state.ViewStateManager;
+import kstn.game.view.state.multiplayer.IPlayerManager;
+import kstn.game.view.state.singleplayer.CharCellManager;
+import kstn.game.view.state.singleplayer.KeyboardManager;
+import kstn.game.view.state.singleplayer.SongManager;
+import kstn.game.view.thang.adapter.MultiAdapter;
 
-public class PlayFragment extends Fragment {
-    private ViewStateManager stateManager;
-    private SongManager songManager;
-    private ScoreManager scoreManager;
-    private LifeManager lifeManager;
-    private CharCellManager charCellManager;
-    private TextView txtLevel;
-    private TextView txtCauHoi;
+public class MultiPlayFragment extends Fragment implements IPlayerManager{
+    private int currentPlayerIndex =0;
+    private Button btnDoan;
     private TextView txtNoiDungKim;
-    private  KeyboardManager keyboardManager;
+    private TextView txtCauHoi;
+    private ArrayList<Player> data;
+    private MultiAdapter adapter;
 
-     int height;
+    int height;
     View guessView, giveAnswerView;
-
-    Button btnDoan;
     private Animation scaleAnimation;
+
+    private ViewStateManager stateManager;
+    private CharCellManager charCellManager;
+    private  KeyboardManager keyboardManager;
 
     // Listeners
     private EventListener rotateResultListener;
     private EventListener nextQuestionListener;
-    private EventListener nextLevelListener;
-    public PlayFragment() {
+
+    public MultiPlayFragment() {
+        // Required empty public constructor
         rotateResultListener = new EventListener() {
             @Override
             public void onEvent(EventData event_) {
@@ -58,48 +68,10 @@ public class PlayFragment extends Fragment {
                 handleNextQuestion(event.getQuestion(), event.getAnswer());
             }
         };
-        nextLevelListener = new EventListener() {
-            @Override
-            public void onEvent(EventData event) {
-                if(txtLevel!=null){
-                    txtLevel.setText((Integer.parseInt(txtLevel.getText().toString())+1)+"");
-                }
-            }
-        };
     }
 
-    public void entry() {
-        stateManager.eventManager.addListener(PlayingEventType.CONE_RESULT, rotateResultListener);
-        stateManager.eventManager.addListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
-        stateManager.eventManager.addListener(PlayingEventType.NEXT_LEVEL, nextLevelListener);
-    }
-
-    public void exit() {
-        stateManager.eventManager.removeListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
-        stateManager.eventManager.removeListener(PlayingEventType.CONE_RESULT, rotateResultListener);
-        stateManager.eventManager.removeListener(PlayingEventType.NEXT_LEVEL,nextLevelListener);
-    }
-
-    public void setStateManager(ViewStateManager stateManager) {
-        this.stateManager = stateManager;
-
-        songManager = new SongManager(stateManager);
-        scoreManager = new ScoreManager(stateManager, songManager);
-        lifeManager = new LifeManager(stateManager, songManager);
-        charCellManager = new CharCellManager(stateManager);
-        keyboardManager = new KeyboardManager(stateManager);
-    }
-
-    public void setSongManager(SongManager songManager) {
-        this.songManager = songManager;
-    }
-
-    public void setScoreManager(ScoreManager scoreManager) {
-        this.scoreManager = scoreManager;
-    }
-
-    public void setLifeManager(LifeManager lifeManager) {
-        this.lifeManager = lifeManager;
+    public void setCurrentPlayerIndex(int currentPlayerIndex) {
+        this.currentPlayerIndex = currentPlayerIndex;
     }
 
     public void setCharCellManager(CharCellManager charCellManager) {
@@ -110,37 +82,39 @@ public class PlayFragment extends Fragment {
         this.keyboardManager = keyboardManager;
     }
 
+    public void setStateManager(ViewStateManager stateManager) {
+        this.stateManager = stateManager;
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View result = inflater.inflate(R.layout.fragment_play, container, false);
-        result.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return false;
-            }
-        });
-        return result;
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_muti_play, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        songManager.onViewCreated(view);
-        scoreManager.onViewCreated(view);
-        lifeManager.onViewCreated(view);
         charCellManager.onViewCreated(view);
 
+        // grid view
+        GridView gv = (GridView) view.findViewById(R.id.gv);
+
+        adapter = new MultiAdapter(data,getActivity());
+        adapter.notifyDataSetChanged();
+        // lay tham so man hinh
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
 
-        // ánh xạ các biến
-        txtLevel = view.findViewById(R.id.txtLevel);
+        // anh xa
         txtCauHoi = view.findViewById(R.id.txtCauHoi);
+        btnDoan = view.findViewById(R.id.btnDoan);
         txtNoiDungKim = view.findViewById(R.id.txtNoiDungKim);
-
+        // alert
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         guessView = inflater.inflate(R.layout.giaodien_alert_doan, null);
         giveAnswerView = inflater.inflate(R.layout.giaodien_alert_letter, null);
@@ -148,7 +122,6 @@ public class PlayFragment extends Fragment {
         keyboardManager.onViewGuessKeyboard(guessView, height);
         keyboardManager.onViewGiveAnswer(giveAnswerView, height);
 
-        btnDoan = view.findViewById(R.id.btnDoan);
         btnDoan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,6 +130,54 @@ public class PlayFragment extends Fragment {
         });
 
         scaleAnimation = AnimationUtils.loadAnimation(getActivity(),R.anim.scale);
+    }
+
+    @Override
+    public void setNumberPlayer(int num) {
+        data = new ArrayList<>();
+        for(int i=0;i<num;i++){
+            data.add(new Player());
+        }
+        Log.i("MultiPlayer", "Setnumberplayer " + num);
+    }
+
+    @Override
+    public void setAvatar(int playerIndex, int avatarId) {
+        data.get(playerIndex).setAvatarId(avatarId);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setName(int playerIndex, String name) {
+        data.get(playerIndex).setName(name);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void nextPlayer(int playerIndex) {
+        currentPlayerIndex = (currentPlayerIndex+1)%data.size();
+    }
+
+    @Override
+    public void setScore(int value) {
+        data.get(currentPlayerIndex).setScore(value);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void deactivatePlayer(int playerIndex){
+            //TODO
+    }
+
+    public void entry(){
+        currentPlayerIndex =0;
+        stateManager.eventManager.addListener(PlayingEventType.CONE_RESULT, rotateResultListener);
+        stateManager.eventManager.addListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
+    }
+
+    public void exit(){
+        stateManager.eventManager.removeListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
+        stateManager.eventManager.removeListener(PlayingEventType.CONE_RESULT, rotateResultListener);
     }
 
     public void handleNextQuestion(String question, String answer) {

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import kstn.game.R;
 import kstn.game.logic.playing_event.room.ClickRoomEvent;
-import kstn.game.logic.state_event.TransitToWaitRoom;
 import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.thang.Model.Room;
 

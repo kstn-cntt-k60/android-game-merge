@@ -20,31 +20,33 @@
             <ImageView
 
                 android:src="@drawable/rr1"
-                android:layout_weight="3.4"
+                android:layout_weight="3.6"
                 android:scaleX="1.5"
                 android:scaleY="1.5"
                 android:layout_width="match_parent"
                 android:layout_height="0dp" />
             <TextView
+                android:background="#b5125e"
                 android:id="@+id/txtNameRank2"
                 android:textStyle="bold"
                 android:textSize="20dp"
                 android:gravity="center"
                 android:textColor="#FFFF00"
                 android:text="abcxyz"
-                android:layout_weight="1"
+                android:layout_weight="0.7"
                 android:layout_width="match_parent"
                 android:layout_height="0dp" />
+
             <TextView
                 android:id="@+id/txtScoreR2"
-                android:textStyle="bold"
-                android:textSize="15dp"
-                android:gravity="center"
-                android:textColor="#FFFF00"
-                android:text="100000"
-                android:layout_weight="0.6"
                 android:layout_width="match_parent"
-                android:layout_height="0dp" />
+                android:layout_height="0dp"
+                android:layout_weight="0.7"
+                android:gravity="center_horizontal"
+                android:text="100000"
+                android:textColor="#FFFF00"
+                android:textSize="15dp"
+                android:textStyle="bold" />
 
 
         </LinearLayout>
@@ -66,20 +68,21 @@
                 android:id="@+id/txtNameRank1"
                 android:textStyle="bold"
                 android:textSize="20dp"
+                android:background="#b5125e"
                 android:gravity="center"
                 android:textColor="#FFFF00"
                 android:text="abcxyz"
-                android:layout_weight="1"
+                android:layout_weight="0.7"
                 android:layout_width="match_parent"
                 android:layout_height="0dp" />
             <TextView
                 android:id="@+id/txtScoreR1"
                 android:textStyle="bold"
                 android:textSize="15dp"
-                android:gravity="center"
+                android:gravity="center_horizontal"
                 android:textColor="#FFFF00"
                 android:text="100000"
-                android:layout_weight="0.6"
+                android:layout_weight="0.9"
                 android:layout_width="match_parent"
                 android:layout_height="0dp" />
 
@@ -94,26 +97,27 @@
             <ImageView
 
                 android:src="@drawable/rr2"
-                android:layout_weight="3.4"
+                android:layout_weight="3.7"
                 android:scaleX="1.3"
                 android:scaleY="1.3"
                 android:layout_width="match_parent"
                 android:layout_height="0dp" />
             <TextView
+                android:background="#b5125e"
                 android:id="@+id/txtNameRank3"
                 android:textStyle="bold"
                 android:textSize="20dp"
                 android:gravity="center"
                 android:textColor="#FFFF00"
                 android:text="abcxyz"
-                android:layout_weight="1"
+                android:layout_weight="0.7"
                 android:layout_width="match_parent"
                 android:layout_height="0dp" />
             <TextView
                 android:id="@+id/txtScoreR3"
                 android:textStyle="bold"
                 android:textSize="15dp"
-                android:gravity="center"
+                android:gravity="center_horizontal"
                 android:textColor="#FFFF00"
                 android:text="100000"
                 android:layout_weight="0.6"

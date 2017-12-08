@@ -1,5 +1,7 @@
 package kstn.game.logic.state.multiplayer;
 
+import android.util.Log;
+
 import kstn.game.logic.cone.ConeAccelerateEventData;
 import kstn.game.logic.cone.ConeEventType;
 import kstn.game.logic.cone.ConeStopEventData;
@@ -133,6 +135,7 @@ public class MultiPlayerManager implements IEntryExit {
         playerReadyListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
+                Log.i("PlayerReadyListener", "Okay");
                 PlayerReadyEvent event1 = (PlayerReadyEvent) event;
                 scoreManager.playerReady(event1.getIpAddress());
                 if (viewIsReady && scoreManager.areAllPlayersReady()) {

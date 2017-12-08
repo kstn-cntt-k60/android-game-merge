@@ -1,5 +1,7 @@
 package kstn.game.logic.state.multiplayer;
 
+import android.util.Log;
+
 import kstn.game.logic.data.ManagerDAO;
 import kstn.game.logic.data.QuestionModel;
 import kstn.game.logic.event.EventData;
@@ -51,6 +53,7 @@ public class QuestionManager implements IEntryExit {
     }
 
     public void nextQuestion() {
+        Log.i("QuestionManager", "Next Question");
         QuestionModel questionModel = managerDAO.getRandomQuestion();
         eventManager.trigger(new NextQuestionEvent(
                 questionModel.getQuestion(), questionModel.getAnswer()));

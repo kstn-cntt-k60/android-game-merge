@@ -19,6 +19,7 @@ public enum PlayingEventType implements EventType {
     PLAYER_STATE_CHANGE(2398),
     CONE_RESULT(2304),
     NEXT_QUESTION(2323),
+    NEXT_LEVEL(2324),
     BONUS(2355),
 
     REQUEST_JOIN_ROOM(2400),

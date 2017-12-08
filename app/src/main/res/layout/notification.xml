@@ -23,7 +23,7 @@
             android:layout_gravity="center"
 
             android:id="@+id/checkbox1"
-            android:background="@android:color/darker_gray"
+            android:background="#09fb00"
 
             android:gravity="center"
             android:textSize="20dp"

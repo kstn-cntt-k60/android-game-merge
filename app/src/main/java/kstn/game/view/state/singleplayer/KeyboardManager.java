@@ -141,9 +141,6 @@ public class KeyboardManager {
 
         txtConeResult = view.findViewById(R.id.txtConeResult);
         txtConeResult.setText("");
-
-        dialogGiveAnswer.getHopthoai().setCancelable(false);
-        dialogGiveAnswer.getHopthoai().setCanceledOnTouchOutside(false);
     }
 
     public void showDialogGiveAnswer(){

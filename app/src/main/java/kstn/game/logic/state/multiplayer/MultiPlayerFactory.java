@@ -46,6 +46,7 @@ public class MultiPlayerFactory {
         );
 
         ManagerDAO managerDAO = new ManagerDAO(stateManager.mainActivity);
+        managerDAO.open();
 
         QuestionManager questionManager = new QuestionManager(
                 stateManager.eventManager,

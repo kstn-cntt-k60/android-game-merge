@@ -96,6 +96,8 @@ public class ScorePlayerManager implements IEntryExit {
         eventManager.addListener(PlayingEventType.NEXT_PLAYER, nextPlayerListener);
         eventManager.addListener(PlayingEventType.PLAYER_DEACTIVATE, deactivateListener);
         eventManager.addListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
+
+        playerReady(thisIpAddress);
     }
 
     @Override
