@@ -1,5 +1,7 @@
 package kstn.game.logic.state.multiplayer;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,6 +111,7 @@ public class ScorePlayerManager implements IEntryExit {
     }
 
     public void onViewReady() {
+        Log.i("ScoreManager","OK");
         eventManager.trigger(new SetNumberPlayerEvent(scorePlayerList.size()));
         for (int i = 0; i < scorePlayerList.size(); i++) {
             ScorePlayer scorePlayer = scorePlayerList.get(i);

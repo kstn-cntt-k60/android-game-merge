@@ -1,6 +1,6 @@
 package kstn.game.view.state;
 
-import kstn.game.logic.state_event.TransitToMenuState;
+import kstn.game.logic.state_event.TransitToCreatedRoomsState;
 import kstn.game.view.state.multiplayer.WaitRoomProxy;
 import kstn.game.view.thang.fragment.WaitRoomFragment;
 
@@ -25,7 +25,7 @@ public class ViewWaitRoomState extends  ViewGameState {
 
     @Override
     public boolean onBack() {
-        stateManager.eventManager.queue(new TransitToMenuState());
+        stateManager.eventManager.queue(new TransitToCreatedRoomsState());
         return false;
     }
 

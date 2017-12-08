@@ -28,7 +28,6 @@ import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.state.multiplayer.IPlayerManager;
 import kstn.game.view.state.singleplayer.CharCellManager;
 import kstn.game.view.state.singleplayer.KeyboardManager;
-import kstn.game.view.state.singleplayer.SongManager;
 import kstn.game.view.thang.adapter.MultiAdapter;
 
 public class MultiPlayFragment extends Fragment implements IPlayerManager{
@@ -36,7 +35,7 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
     private Button btnDoan;
     private TextView txtNoiDungKim;
     private TextView txtCauHoi;
-    private ArrayList<Player> data;
+    private ArrayList<Player> data = new ArrayList<>();
     private MultiAdapter adapter;
 
     int height;
@@ -98,12 +97,10 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         charCellManager.onViewCreated(view);
-
         // grid view
         GridView gv = (GridView) view.findViewById(R.id.gv);
-
         adapter = new MultiAdapter(data,getActivity());
-        adapter.notifyDataSetChanged();
+        gv.setAdapter(adapter);
         // lay tham so man hinh
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -134,28 +131,33 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
 
     @Override
     public void setNumberPlayer(int num) {
-        data = new ArrayList<>();
         for(int i=0;i<num;i++){
             data.add(new Player());
         }
-        Log.i("MultiPlayer", "Setnumberplayer " + num);
+        adapter.notifyDataSetChanged();
+        Log.i("MultiPlayer", "Setnumberplayer " + data.size());
     }
 
     @Override
     public void setAvatar(int playerIndex, int avatarId) {
+        Log.i("Set","set Avartar");
+        Log.i("Set","playerIndex "+playerIndex);
         data.get(playerIndex).setAvatarId(avatarId);
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void setName(int playerIndex, String name) {
+        Log.i("Set","set Name");
+        Log.i("Set","playerIndex "+playerIndex);
+        Log.i("Set","playerIndex "+name);
         data.get(playerIndex).setName(name);
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void nextPlayer(int playerIndex) {
-        currentPlayerIndex = (currentPlayerIndex+1)%data.size();
+        currentPlayerIndex =  playerIndex;
     }
 
     @Override

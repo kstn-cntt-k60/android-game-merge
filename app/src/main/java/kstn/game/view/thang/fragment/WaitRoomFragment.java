@@ -77,8 +77,17 @@ public class WaitRoomFragment extends Fragment implements IWaitRoom {
     @Override
     public void addPlayer(Player player) {
         if(data.size()<3) {
-            data.add(player);
-            adapter.notifyDataSetChanged();
+            Boolean flag = true;
+            for(Player player1:data){
+                if(player1.getIpAddress()==player.getIpAddress()){
+                    flag=false;
+                    break;
+                }
+            }
+            if(flag) {
+                data.add(player);
+                adapter.notifyDataSetChanged();
+            }
         }
 
     }
