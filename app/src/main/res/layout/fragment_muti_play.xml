@@ -7,12 +7,12 @@
     android:layout_height="match_parent"
     tools:context="kstn.game.view.thang.fragment.MultiPlayFragment">
    <GridView
-       android:numColumns="3"
+       android:numColumns="auto_fit"
        android:id="@+id/gv"
-       android:layout_gravity="center"
        android:gravity="center"
        android:horizontalSpacing="10dp"
        android:layout_weight="1.5"
+       android:stretchMode="columnWidth"
        android:layout_width="match_parent"
        android:layout_height="0dp"></GridView>
     <LinearLayout

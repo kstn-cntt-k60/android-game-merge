@@ -1,7 +1,6 @@
 package kstn.game.view.thang.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,13 +46,10 @@ public class MultiAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = LayoutInflater.from(context);
         view = inflater.inflate(R.layout.giao_dien_user,viewGroup,false);
-        TextView txtName = view.findViewById(R.id.txtName);
-        TextView txtScore = view.findViewById(R.id.txtScore);
-        ImageView img = view.findViewById(R.id.img);
-        if(data.get(i).getAvatarId()!=R.drawable.unknown_avatar){
-            img.setImageResource(data.get(i).getAvatarId());
-            img.setBackgroundColor(Color.parseColor("#CCFF905"));
-        }
+        TextView txtName = view.findViewById(R.id.txtNamePlayer);
+        TextView txtScore = view.findViewById(R.id.txtScorePlayer);
+        ImageView img = view.findViewById(R.id.imgPlayer);
+        img.setImageResource(data.get(i).getAvatarId());
         txtName.setText(data.get(i).getName());
         txtScore.setText(data.get(i).getScore()+"");
         return view;
