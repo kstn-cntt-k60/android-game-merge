@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,8 +157,8 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
     public void nextPlayer(int playerIndex) {
         currentPlayerIndex = playerIndex;
         data.get(playerIndex).setIdColor(Color.YELLOW);
-        for(int i=0;i<data.size();i++){
-            if(i!=playerIndex)
+        for(int i = 0; i < data.size(); i++){
+            if(i != playerIndex && data.get(i).isActive())
                data.get(i).setIdColor(Color.parseColor("#752c74"));
         }
         adapter.notifyDataSetChanged();
@@ -172,14 +173,16 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
 
     @Override
     public void deactivatePlayer(int playerIndex){
-            data.get(playerIndex).setIdColor(Color.parseColor("#FF66655F"));
-            adapter.notifyDataSetChanged();
+        data.get(playerIndex).setActive(false);
+        data.get(playerIndex).setIdColor(Color.parseColor("#FF66655F"));
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void activatePlayer(int playerIndex) {
-            data.get(playerIndex).setIdColor(Color.parseColor("#752c74"));
-            adapter.notifyDataSetChanged();
+        data.get(playerIndex).setActive(true);
+        data.get(playerIndex).setIdColor(Color.parseColor("#752c74"));
+        adapter.notifyDataSetChanged();
     }
 
     public void entry(){

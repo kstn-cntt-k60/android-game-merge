@@ -10,6 +10,11 @@ public class Player {
     private int avatarId = R.drawable.unknown_avatar;
     private int Score = 0;
     private int IdColor = Color.parseColor("#752c74");
+    private boolean active = true;
+
+    public boolean isActive() { return active; }
+
+    public void setActive(boolean active) { this.active = active; }
 
     public int getIdColor() {
         return IdColor;
