@@ -11,11 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import kstn.game.R;
-import kstn.game.logic.state.multiplayer.Player;
-
-/**
- * Created by thang on 12/5/2017.
- */
+import kstn.game.view.thang.model.Player;
 
 public class MultiAdapter extends BaseAdapter {
     private ArrayList<Player> data;
@@ -25,10 +21,7 @@ public class MultiAdapter extends BaseAdapter {
     public MultiAdapter(ArrayList<Player> data, Context context) {
         this.data = data;
             this.context = context;
-
     }
-
-
 
     @Override
     public int getCount() {

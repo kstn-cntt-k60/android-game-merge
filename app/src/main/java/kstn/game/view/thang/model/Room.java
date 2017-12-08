@@ -1,8 +1,4 @@
-package kstn.game.view.thang.Model;
-
-/**
- * Created by thang on 11/27/2017.
- */
+package kstn.game.view.thang.model;
 
 public class Room {
     private  int ipAddress;

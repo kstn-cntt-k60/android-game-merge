@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import kstn.game.R;
 import kstn.game.logic.playing_event.room.ClickRoomEvent;
 import kstn.game.view.state.ViewStateManager;
-import kstn.game.view.thang.Model.Room;
+import kstn.game.view.thang.model.Room;
 
 /**
  * Created by thang on 11/9/2017.

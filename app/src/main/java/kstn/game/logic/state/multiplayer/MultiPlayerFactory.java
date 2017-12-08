@@ -114,7 +114,6 @@ public class MultiPlayerFactory {
         );
 
         WaitChooseCellState waitChooseCellState = new WaitChooseCellState(
-                stateManager.eventManager,
                 cellManager, playerManager
         );
 

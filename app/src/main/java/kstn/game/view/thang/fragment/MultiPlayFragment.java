@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +23,11 @@ import kstn.game.logic.event.EventListener;
 import kstn.game.logic.playing_event.ConeResultEvent;
 import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
-import kstn.game.logic.state.multiplayer.Player;
 import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.state.multiplayer.IPlayerManager;
 import kstn.game.view.state.singleplayer.CharCellManager;
 import kstn.game.view.state.singleplayer.KeyboardManager;
+import kstn.game.view.thang.model.Player;
 import kstn.game.view.thang.adapter.MultiAdapter;
 
 public class MultiPlayFragment extends Fragment implements IPlayerManager{

@@ -13,21 +13,17 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.ListIterator;
 
 import kstn.game.R;
-import kstn.game.logic.playing_event.room.AcceptJoinRoomEvent;
-import kstn.game.logic.playing_event.room.ClickRoomEvent;
 import kstn.game.logic.playing_event.room.SetThisRoomEvent;
-import kstn.game.logic.state.multiplayer.Player;
 import kstn.game.logic.state_event.TransitToCreatedRoomsState;
 import kstn.game.logic.state_event.TransitToRoomCreator;
 import kstn.game.logic.state_event.TransitToWaitRoom;
 import kstn.game.view.state.ViewStateManager;
 import kstn.game.view.state.multiplayer.ICreatedRooms;
 import kstn.game.view.state.singleplayer.DialogManager;
-import kstn.game.view.thang.Model.Room;
+import kstn.game.view.thang.model.Room;
 import kstn.game.view.thang.adapter.NotifiAdapter;
 
 public class CreatedRoomFragment extends Fragment implements ICreatedRooms{
