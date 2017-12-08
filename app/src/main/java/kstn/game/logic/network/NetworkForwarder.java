@@ -66,7 +66,7 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
         parserMap.put(ConeEventType.ACCELERATE, new ConeAccelerateEventData.Parser());
 
         // Answer
-        parserMap.put(PlayingEventType.ANSWER, new AnswerEvent.Parser());
+        // parserMap.put(PlayingEventType.ANSWER, new AnswerEvent.Parser());
 
         // Cell
         parserMap.put(PlayingEventType.OPEN_CELL, new OpenCellEvent.Parser());

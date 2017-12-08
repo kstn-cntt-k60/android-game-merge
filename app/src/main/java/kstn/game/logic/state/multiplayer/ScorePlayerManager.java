@@ -132,7 +132,8 @@ public class ScorePlayerManager implements IEntryExit {
         int i = (currentPlayerIndex + 1) % scorePlayerList.size();
         for (; i != currentPlayerIndex; i = (i + 1) % scorePlayerList.size()) {
             if (scorePlayerList.get(i).isActive()) {
-                eventManager.trigger(new NextPlayerEvent(i));
+                eventManager.queue(new NextPlayerEvent(i));
+                currentPlayerIndex = i;
                 return i;
             }
         }
@@ -146,7 +147,8 @@ public class ScorePlayerManager implements IEntryExit {
     }
 
     public void setScore(int value) {
-        eventManager.trigger(new PlayerSetScoreEvent(value));
+        eventManager.queue(new PlayerSetScoreEvent(value));
+        scorePlayerList.get(currentPlayerIndex).setScore(value);
     }
 
     public int countActivePlayers() {
@@ -176,7 +178,8 @@ public class ScorePlayerManager implements IEntryExit {
     }
 
     public void deactivatePlayer(int playerIndex) {
-        eventManager.trigger(new PlayerDeactivateEvent(playerIndex));
+        eventManager.queue(new PlayerDeactivateEvent(playerIndex));
+        scorePlayerList.get(playerIndex).deactivate();
     }
 
     public void deactivateAllExcept(int playerIndex) {
