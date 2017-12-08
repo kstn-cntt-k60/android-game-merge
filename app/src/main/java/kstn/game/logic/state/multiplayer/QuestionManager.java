@@ -52,10 +52,8 @@ public class QuestionManager implements IEntryExit {
 
     void nextQuestion() {
         QuestionModel questionModel = managerDAO.getRandomQuestion();
-        eventManager.queue(new NextQuestionEvent(
+        eventManager.trigger(new NextQuestionEvent(
                 questionModel.getQuestion(), questionModel.getAnswer()));
-        question = questionModel.getQuestion();
-        answer = getAnswer();
     }
 
     public boolean sameAsAnswer(String answer) {

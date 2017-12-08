@@ -47,7 +47,6 @@ public class LevelManager implements IEntryExit {
             questionManager.nextQuestion();
         }
         else if (level == 4) {
-            // TODO
             eventManager.queue(new TransitToCreatedRoomsState());
         }
         else {

@@ -130,6 +130,7 @@ public class MultiPlayerFactory {
         rotatingState.setRotatableState(rotatableState);
         rotatingState.setWaitChooseCellState(waitChooseCellState);
         rotatingState.setWaitAnswerState(waitAnswerState);
+        rotatingState.setWaitGuessResultState(waitGuessResultState);
 
         waitAnswerState.setWaitOtherPlayersState(waitOtherPlayersState);
         waitAnswerState.setRotatableState(rotatableState);

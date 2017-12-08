@@ -133,8 +133,8 @@ public class ScorePlayerManager implements IEntryExit {
         int i = (currentPlayerIndex + 1) % scorePlayerList.size();
         for (; i != currentPlayerIndex; i = (i + 1) % scorePlayerList.size()) {
             if (scorePlayerList.get(i).isActive()) {
-                eventManager.queue(new NextPlayerEvent(i));
-                currentPlayerIndex = i;
+                eventManager.trigger(new NextPlayerEvent(i));
+                // currentPlayerIndex = i;
                 return i;
             }
         }
@@ -143,13 +143,18 @@ public class ScorePlayerManager implements IEntryExit {
         return -1;
     }
 
+    public void setCurrentPlayer(int playerIndex) {
+        eventManager.trigger(new NextPlayerEvent(playerIndex));
+        // currentPlayerIndex = playerIndex;
+    }
+
     public int getScore() {
         return scorePlayerList.get(currentPlayerIndex).getScore();
     }
 
     public void setScore(int value) {
-        eventManager.queue(new PlayerSetScoreEvent(value));
-        scorePlayerList.get(currentPlayerIndex).setScore(value);
+        eventManager.trigger(new PlayerSetScoreEvent(value));
+        // scorePlayerList.get(currentPlayerIndex).setScore(value);
     }
 
     public int countActivePlayers() {
@@ -174,8 +179,10 @@ public class ScorePlayerManager implements IEntryExit {
     }
 
     public void activatePlayer(int playerIndex) {
-        eventManager.queue(new PlayerActivateEvent(playerIndex));
-        scorePlayerList.get(playerIndex).activate();
+        if (!scorePlayerList.get(playerIndex).isActive()) {
+            eventManager.trigger(new PlayerActivateEvent(playerIndex));
+            // scorePlayerList.get(playerIndex).activate();
+        }
     }
 
     public void activateAllPlayers() {
@@ -189,20 +196,19 @@ public class ScorePlayerManager implements IEntryExit {
     }
 
     public void deactivatePlayer(int playerIndex) {
-        eventManager.queue(new PlayerDeactivateEvent(playerIndex));
-        scorePlayerList.get(playerIndex).deactivate();
+        if (scorePlayerList.get(playerIndex).isActive()) {
+            eventManager.trigger(new PlayerDeactivateEvent(playerIndex));
+            // scorePlayerList.get(playerIndex).deactivate();
+        }
     }
 
     public void deactivateAllExcept(int playerIndex) {
-        currentPlayerIndex = playerIndex;
-        eventManager.queue(new NextPlayerEvent(playerIndex));
-
+        setCurrentPlayer(playerIndex);
         for (int i = 0; i < scorePlayerList.size(); i++) {
             if (i == playerIndex) {
-                if (!scorePlayerList.get(i).isActive())
-                    activatePlayer(i);
+                activatePlayer(i);
             }
-            else if (scorePlayerList.get(i).isActive()){
+            else {
                 deactivatePlayer(i);
             }
         }

@@ -27,6 +27,7 @@ public class RotatingState extends State {
     private State rotatableState;
     private State waitChooseCellState;
     private State waitAnswerState;
+    private State waitGuessResultState;
 
     public void setWaitOtherPlayersState(State state) {
         waitOtherPlayersState = state;
@@ -42,6 +43,10 @@ public class RotatingState extends State {
 
     public void setWaitAnswerState(State state) {
         this.waitAnswerState = state;
+    }
+
+    public void setWaitGuessResultState(State state) {
+        this.waitGuessResultState = state;
     }
 
     int result;
@@ -105,8 +110,14 @@ public class RotatingState extends State {
             case ConeResult.LOST_LIFE:
                 eventManager.trigger(new ShowToastEvent("Mất lượt"));
                 eventManager.trigger(new SongFailEvent());
-                multiPlayerManager.makeTransitionTo(waitOtherPlayersState);
-                scorePlayerManager.nextPlayer();
+                if (scorePlayerManager.countActivePlayers() == 1) {
+                    scorePlayerManager.deactivateCurrentPlayer();
+                    multiPlayerManager.makeTransitionTo(waitGuessResultState);
+                }
+                else {
+                    multiPlayerManager.makeTransitionTo(waitOtherPlayersState);
+                    scorePlayerManager.nextPlayer();
+                }
                 break;
 
             case ConeResult.DIV_2:
