@@ -179,7 +179,8 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
 
     @Override
     public void activatePlayer(int playerIndex) {
-        // TODO
+            data.get(playerIndex).setIdColor(Color.parseColor("#752c74"));
+            adapter.notifyDataSetChanged();
     }
 
     public void entry(){
