@@ -405,8 +405,8 @@ public class SinglePlayerManager {
         @Override
         void answer(char ch) {
             stateManager.eventManager.trigger(new OpenMultipleCellEvent(ch));
-            openMultiCells(ch);
             int count = countCharOccurrences(nonSpaceAnswer, ch);
+            openMultiCells(ch);
             if (count == 0) {
                 player.setLife(player.getLife() - 1);
                 notifyState();
@@ -451,7 +451,7 @@ public class SinglePlayerManager {
     private int countCharOccurrences(String str, char ch) {
         int count = 0;
         for (int i = 0; i < str.length(); i++)
-            if (str.charAt(i) == ch)
+            if (str.charAt(i) == ch && !isOpenedCells[i])
                 count++;
         return count;
     }
