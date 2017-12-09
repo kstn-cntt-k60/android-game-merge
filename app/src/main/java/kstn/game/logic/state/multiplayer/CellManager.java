@@ -82,7 +82,7 @@ public class CellManager implements IEntryExit {
     public int openMultipleCells(char ch) {
         int count = 0;
         for (int i = 0; i < nonSpaceAnswer.length(); i++) {
-            if (nonSpaceAnswer.charAt(i) == ch)
+            if (nonSpaceAnswer.charAt(i) == ch && !isOpenedCells[i])
                 count++;
         }
         eventManager.trigger(new OpenMultipleCellEvent(ch));
