@@ -6,6 +6,7 @@ import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.network.WifiInfo;
 import kstn.game.logic.state_event.StateEventType;
+import kstn.game.view.state.multiplayer.GameResultInfo;
 
 public class ViewStateManager {
     private ViewGameState prevState = null;
@@ -120,8 +121,9 @@ public class ViewStateManager {
         createdRoomsState = new ViewCreatedRoomsState(this);
         roomCreatorState = new ViewRoomCreatorState(this);
         waitRoomState = new ViewWaitRoomState(this);
-        playingState = new ViewPlayingState(this);
-        resultState = new ViewMultiResultState(this);
+        GameResultInfo gameResultInfo = new GameResultInfo();
+        playingState = new ViewPlayingState(this, gameResultInfo);
+        resultState = new ViewMultiResultState(this, gameResultInfo);
         statState = new ViewStatState(this);
         listenToAllStateEvents();
         currentState = menuState;

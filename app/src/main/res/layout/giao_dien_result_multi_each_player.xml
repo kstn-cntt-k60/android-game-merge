@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:weightSum="5"
+    android:background="@drawable/shape_listview"
+    android:layout_width="match_parent"
+    android:layout_height="100dp">
+    <TextView
+        android:background="@drawable/shape_listview"
+        android:id="@+id/txtSTT"
+        android:textColor="#FFFF00"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:text="1"
+        android:textStyle="bold"
+        android:layout_weight="0.5"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" />
+    <ImageView
+        android:id="@+id/img"
+        android:layout_weight="1.5"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" />
+    <TextView
+        android:textStyle="bold"
+        android:text="No Name"
+        android:gravity="center"
+        android:background="@drawable/shape_listview"
+        android:textColor="#FFFF00"
+        android:layout_weight="1.5"
+        android:id="@+id/txtName"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_weight="1.5"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+    <TextView
+        android:gravity="center"
+        android:text="100000"
+        android:textStyle="bold"
+        android:textColor="#FFFF00"
+        android:id="@+id/txtScore"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/imgStar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginTop="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+</LinearLayout>

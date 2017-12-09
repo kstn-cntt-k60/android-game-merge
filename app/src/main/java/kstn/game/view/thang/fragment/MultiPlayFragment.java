@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +24,12 @@ import kstn.game.logic.playing_event.ConeResultEvent;
 import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.view.state.ViewStateManager;
+import kstn.game.view.state.multiplayer.GameResultInfo;
 import kstn.game.view.state.multiplayer.IPlayerManager;
 import kstn.game.view.state.singleplayer.CharCellManager;
 import kstn.game.view.state.singleplayer.KeyboardManager;
-import kstn.game.view.thang.model.Player;
 import kstn.game.view.thang.adapter.MultiAdapter;
+import kstn.game.view.thang.model.Player;
 
 public class MultiPlayFragment extends Fragment implements IPlayerManager{
     private int currentPlayerIndex =0;
@@ -47,6 +47,7 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
     private ViewStateManager stateManager;
     private CharCellManager charCellManager;
     private  KeyboardManager keyboardManager;
+    private GameResultInfo gameResultInfo;
 
     // Listeners
     private EventListener rotateResultListener;
@@ -81,6 +82,10 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
 
     public void setKeyboardManager(KeyboardManager keyboardManager) {
         this.keyboardManager = keyboardManager;
+    }
+
+    public void setGameResultInfo(GameResultInfo gameResultInfo) {
+        this.gameResultInfo = gameResultInfo;
     }
 
     public void setStateManager(ViewStateManager stateManager) {
@@ -194,6 +199,15 @@ public class MultiPlayFragment extends Fragment implements IPlayerManager{
     public void exit(){
         stateManager.eventManager.removeListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
         stateManager.eventManager.removeListener(PlayingEventType.CONE_RESULT, rotateResultListener);
+        gameResultInfo.clear();
+        gameResultInfo.setTopPlayerIndex(currentPlayerIndex);
+       gameResultInfo.addPlayer(data.get(currentPlayerIndex));
+       for(int i=0;i<data.size();i++){
+           if(i!=currentPlayerIndex){
+               gameResultInfo.addPlayer(data.get(i));
+           }
+
+       }
     }
 
     public void handleNextQuestion(String question, String answer) {

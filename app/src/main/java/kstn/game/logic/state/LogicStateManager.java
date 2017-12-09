@@ -42,7 +42,7 @@ public class LogicStateManager {
     private final LogicRoomCreatorState roomCreatorState;
     private final LogicWaitRoomState waitRoomState;
     private final LogicPlayingState playingState;
-    private final LogicGameState resultState = null;
+    private final LogicGameState resultState;
 
     // Single SinglePlayerModel
     private final LogicSinglePlayerState singlePlayerState;
@@ -135,6 +135,7 @@ public class LogicStateManager {
                 makeTransitionTo(resultState);
             }
         });
+
         eventManager.addListener(StateEventType.STAT, new EventListener() {
             @Override
             public void onEvent(EventData event) {
@@ -226,6 +227,8 @@ public class LogicStateManager {
                 thisPlayer, thisRoom
         );
         playingState = multiPlayerFactory.create();
+
+        resultState = new LogicResultState(root, backgroundView);
 
         // ----------------------------------
         listenToAllStateEvents();

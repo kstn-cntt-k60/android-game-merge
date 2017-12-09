@@ -5,7 +5,7 @@ import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.state.IEntryExit;
-import kstn.game.logic.state_event.TransitToCreatedRoomsState;
+import kstn.game.logic.state_event.TransitToResultState;
 
 public class LevelManager implements IEntryExit {
     private final EventManager eventManager;
@@ -47,7 +47,7 @@ public class LevelManager implements IEntryExit {
             questionManager.nextQuestion();
         }
         else if (level == 4) {
-            eventManager.queue(new TransitToCreatedRoomsState());
+            eventManager.queue(new TransitToResultState());
         }
         else {
             scorePlayerManager.activateAllPlayers();

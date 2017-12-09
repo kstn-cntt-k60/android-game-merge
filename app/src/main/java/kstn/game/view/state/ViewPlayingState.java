@@ -1,5 +1,6 @@
 package kstn.game.view.state;
 
+import kstn.game.view.state.multiplayer.GameResultInfo;
 import kstn.game.view.state.singleplayer.CharCellManager;
 import kstn.game.view.state.singleplayer.KeyboardManager;
 import kstn.game.view.thang.fragment.MultiPlayFragment;
@@ -16,11 +17,13 @@ public class ViewPlayingState extends ViewGameState {
     private CharCellManager charCellManager;
     private KeyboardManager keyboardManager;
     private MultiPlayFragment fragment;
+    private GameResultInfo gameResultInfo;
 
-    public ViewPlayingState(ViewStateManager stateManager) {
+    public ViewPlayingState(ViewStateManager stateManager, GameResultInfo gameResultInfo) {
         super(stateManager);
         charCellManager = new CharCellManager(stateManager);
         keyboardManager = new KeyboardManager(stateManager);
+        this.gameResultInfo = gameResultInfo;
         multiPlayerSongManager = new MultiPlayerSongManager(stateManager);
         toastManager = new ToastManager(stateManager.eventManager, stateManager.activity);
     }
@@ -34,6 +37,7 @@ public class ViewPlayingState extends ViewGameState {
         fragment.setStateManager(stateManager);
         fragment.setCharCellManager(charCellManager);
         fragment.setKeyboardManager(keyboardManager);
+        fragment.setGameResultInfo(gameResultInfo);
         fragment.entry();
 
         playerProxy = new PlayerProxy(stateManager.eventManager, fragment);
