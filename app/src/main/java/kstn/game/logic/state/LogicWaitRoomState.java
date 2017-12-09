@@ -49,8 +49,6 @@ public class LogicWaitRoomState extends LogicGameState {
     private final EventListener startPlayingListener;
     private final EventListener exitRoomListener;
 
-    private Cone cone;
-
     private class BroadcastProcess extends Process {
         private long currentTime = 0;
 
@@ -110,8 +108,6 @@ public class LogicWaitRoomState extends LogicGameState {
         this.networkForwarder = networkForwarder;
         this.activeConnections = activeConnections;
 
-        this.cone = cone;
-
         requestJoinRoomListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
@@ -151,9 +147,6 @@ public class LogicWaitRoomState extends LogicGameState {
         root.addView(backgroundView);
         activeConnections.clear();
 
-        // Test
-        cone.entry();
-
         thisRoom.entry();
         if (stateManager.getPrevState() == stateManager.getCreatedRoomsState()) {
             entryWhenIsClient();
@@ -169,8 +162,6 @@ public class LogicWaitRoomState extends LogicGameState {
 
     @Override
     public void exit() {
-        // Test
-        cone.exit();
         super.preExit();
         if (isHost) {
             exitWhenIsHost();

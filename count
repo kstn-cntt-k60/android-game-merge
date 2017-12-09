@@ -1,4 +1,36 @@
 #!/bin/bash
+echo "-------------------------------------------------------------------------------"
+echo "The Number Lines of Source Code"
+echo "-------------------------------------------------------------------------------"
+find | grep -E "\.java$" | grep -v -E "R\.java$" \
+    | grep -vE "Config\.java$" | grep -vE "Message\.java$" | grep -v "test/java/" \
+    | xargs wc -l
+echo "-------------------------------------------------------------------------------"
+echo "The Number Lines of Test Code"
+echo "-------------------------------------------------------------------------------"
+find | grep -E "\.java$" | grep -v -E "R\.java$" \
+    | grep -vE "Config\.java$" | grep -vE "Message\.java$" | grep "test/java" \
+    | xargs wc -l
+echo "-------------------------------------------------------------------------------"
 find | grep -E "\.java$" | grep -v -E "R\.java$" \
     | grep -vE "Config\.java$" | grep -vE "Message\.java$" \
-    | xargs wc -l
+    | xargs wc -l | grep total | grep -vE "\." 
+echo "-------------------------------------------------------------------------------"
+
+echo ""
+echo ""
+
+source_line_count=$(find | grep -E "\.java$" | grep -v -E "R\.java$" \
+    | grep -vE "Config\.java$" | grep -vE "Message\.java$" | grep -v "test/java/" \
+    | wc -l)
+
+test_line_count=$(find | grep -E "\.java$" | grep -v -E "R\.java$" \
+    | grep -vE "Config\.java$" | grep -vE "Message\.java$" | grep "test/java" \
+    | wc -l)
+
+
+echo "-------------------------------------------------------------------------------"
+echo "The Number Classes of Source Code: $source_line_count"
+echo "The Number Classes of Test Code: $test_line_count"
+echo "Total: $((source_line_count + test_line_count))"
+echo "-------------------------------------------------------------------------------"
