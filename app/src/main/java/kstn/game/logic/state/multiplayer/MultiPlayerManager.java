@@ -1,7 +1,5 @@
 package kstn.game.logic.state.multiplayer;
 
-import android.util.Log;
-
 import kstn.game.logic.cone.ConeAccelerateEventData;
 import kstn.game.logic.cone.ConeEventType;
 import kstn.game.logic.cone.ConeStopEventData;
@@ -19,10 +17,12 @@ import kstn.game.logic.playing_event.guess.GuessResultEvent;
 import kstn.game.logic.playing_event.player.NextPlayerEvent;
 import kstn.game.logic.playing_event.player.PlayerReadyEvent;
 import kstn.game.logic.state.IEntryExit;
+import kstn.game.logic.state.LogicStateManager;
 import kstn.game.logic.state.multiplayer.ministate.State;
 import kstn.game.logic.state_event.TransitToCreatedRoomsState;
 
 public class MultiPlayerManager implements IEntryExit {
+    private final LogicStateManager stateManager;
     private final EventManager eventManager;
     private final ScorePlayerManager scoreManager;
     private final QuestionManager questionManager;
@@ -62,13 +62,15 @@ public class MultiPlayerManager implements IEntryExit {
 
     boolean viewIsReady;
 
-    public MultiPlayerManager(EventManager eventManager,
+    public MultiPlayerManager(LogicStateManager stateManager,
+                              EventManager eventManager,
                               final ScorePlayerManager scoreManager,
                               QuestionManager questionManager,
                               CellManager cellManager,
                               final LevelManager levelManager,
                               WifiInfo wifiInfo,
                               NetworkForwarder networkForwarder) {
+        this.stateManager = stateManager;
         this.eventManager = eventManager;
         this.scoreManager = scoreManager;
         this.questionManager = questionManager;
@@ -182,7 +184,6 @@ public class MultiPlayerManager implements IEntryExit {
             @Override
             public void onConnectionError(Connection connection) {
                 eventManager.queue(new TransitToCreatedRoomsState());
-                networkForwarder.shutdown();
             }
         });
     }
@@ -203,6 +204,10 @@ public class MultiPlayerManager implements IEntryExit {
 
     @Override
     public void exit() {
+        if (stateManager.getNextState() != stateManager.getResultState()) {
+            networkForwarder.shutdown();
+        }
+
         if (scoreManager.thisPlayerIsHost()) {
             eventManager.removeListener(PlayingEventType.PLAYER_READY, playerReadyListener);
         }

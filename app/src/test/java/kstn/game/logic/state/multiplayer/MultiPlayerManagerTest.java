@@ -21,6 +21,7 @@ import kstn.game.logic.playing_event.guess.RequestGuessEvent;
 import kstn.game.logic.playing_event.player.NextPlayerEvent;
 import kstn.game.logic.playing_event.player.PlayerReadyEvent;
 import kstn.game.logic.state.EntryExitUtil;
+import kstn.game.logic.state.LogicStateManager;
 import kstn.game.logic.state.multiplayer.ministate.State;
 
 import static org.mockito.Mockito.mock;
@@ -55,6 +56,7 @@ public class MultiPlayerManagerTest {
                                              CellManager cellManager,
                                              WifiInfo wifiInfo) {
         MultiPlayerManager manager =  new MultiPlayerManager(
+                mock(LogicStateManager.class),
                 eventManager, scoreManager,
                 getMockedQuestionManager(),
                 cellManager,

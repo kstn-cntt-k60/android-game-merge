@@ -72,6 +72,8 @@ public class LogicStateManager {
 
     public LogicGameState getPlayingState() { return playingState; }
 
+    public LogicGameState getResultState() { return resultState; }
+
     private void listenToAllStateEvents() {
         eventManager.addListener(StateEventType.MENU, new EventListener() {
             @Override

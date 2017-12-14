@@ -71,6 +71,7 @@ public class MultiPlayerFactory {
         );
 
         MultiPlayerManager playerManager = new MultiPlayerManager(
+                stateManager,
                 stateManager.eventManager,
                 scorePlayerManager,
                 questionManager,
