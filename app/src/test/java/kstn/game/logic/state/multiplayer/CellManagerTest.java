@@ -135,9 +135,11 @@ public class CellManagerTest {
     @Test
     public void openMultipleCells_ReturnNumberOfCellsJustOpened() {
         CellManager cellManager = createCellManager();
+        cellManager.isOpenedCells = new boolean[20];
+        cellManager.isOpenedCells[3] = true;
         cellManager.nonSpaceAnswer = "ADEXXUUX";
         int count = cellManager.openMultipleCells('X');
-        Assert.assertEquals(count, 3);
+        Assert.assertEquals(count, 2);
     }
 
     @Test

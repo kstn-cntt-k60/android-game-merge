@@ -3,6 +3,7 @@ package kstn.game.logic.state.multiplayer;
 import kstn.game.logic.event.EventData;
 import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
+import kstn.game.logic.playing_event.MultiGameOverEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.state.IEntryExit;
 import kstn.game.logic.state_event.TransitToResultState;
@@ -14,8 +15,9 @@ public class LevelManager implements IEntryExit {
     int level;
 
     private final EventListener nextQuestionListener;
+    private final EventListener gameOverListener;
 
-    public LevelManager(EventManager eventManager,
+    public LevelManager(final EventManager eventManager,
                         QuestionManager questionManager,
                         ScorePlayerManager scorePlayerManager) {
         this.eventManager = eventManager;
@@ -28,17 +30,30 @@ public class LevelManager implements IEntryExit {
                 level += 1;
             }
         };
+
+        gameOverListener = new EventListener() {
+            @Override
+            public void onEvent(EventData event) {
+                eventManager.queue(new TransitToResultState());
+            }
+        };
     }
 
     @Override
     public void entry() {
         level = 0;
         eventManager.addListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
+        eventManager.addListener(PlayingEventType.MULTI_GAME_OVER, gameOverListener);
     }
 
     @Override
     public void exit() {
+        eventManager.removeListener(PlayingEventType.MULTI_GAME_OVER, gameOverListener);
         eventManager.removeListener(PlayingEventType.NEXT_QUESTION, nextQuestionListener);
+    }
+
+    private void gameOver() {
+        eventManager.trigger(new MultiGameOverEvent());
     }
 
     public void nextLevel() {
@@ -47,7 +62,7 @@ public class LevelManager implements IEntryExit {
             questionManager.nextQuestion();
         }
         else if (level == 4) {
-            eventManager.queue(new TransitToResultState());
+            gameOver();
         }
         else {
             scorePlayerManager.activateAllPlayers();

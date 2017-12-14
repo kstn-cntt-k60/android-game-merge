@@ -111,6 +111,9 @@ public class LogicWaitRoomState extends LogicGameState {
         requestJoinRoomListener = new EventListener() {
             @Override
             public void onEvent(EventData event) {
+                if (thisRoom.getPlayerList().size() >= 3)
+                    return;
+
                 RequestJoinRoomEvent event1 = (RequestJoinRoomEvent) event;
                 activeConnections.addConnection(event1.getConnection());
                 eventManager.queue(new AcceptJoinRoomEvent(

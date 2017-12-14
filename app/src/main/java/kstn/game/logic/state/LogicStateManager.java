@@ -228,7 +228,7 @@ public class LogicStateManager {
         );
         playingState = multiPlayerFactory.create();
 
-        resultState = new LogicResultState(root, backgroundView);
+        resultState = new LogicResultState(root, backgroundView, networkForwarder);
 
         // ----------------------------------
         listenToAllStateEvents();

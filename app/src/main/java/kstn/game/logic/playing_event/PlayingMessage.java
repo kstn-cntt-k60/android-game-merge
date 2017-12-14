@@ -1481,6 +1481,382 @@ public final class PlayingMessage {
 
   }
 
+  public interface MultiGameOverOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:MultiGameOver)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * Protobuf type {@code MultiGameOver}
+   */
+  public  static final class MultiGameOver extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:MultiGameOver)
+      MultiGameOverOrBuilder {
+    // Use MultiGameOver.newBuilder() to construct.
+    private MultiGameOver(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private MultiGameOver() {
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private MultiGameOver(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return kstn.game.logic.playing_event.PlayingMessage.internal_static_MultiGameOver_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return kstn.game.logic.playing_event.PlayingMessage.internal_static_MultiGameOver_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              kstn.game.logic.playing_event.PlayingMessage.MultiGameOver.class, kstn.game.logic.playing_event.PlayingMessage.MultiGameOver.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof kstn.game.logic.playing_event.PlayingMessage.MultiGameOver)) {
+        return super.equals(obj);
+      }
+      kstn.game.logic.playing_event.PlayingMessage.MultiGameOver other = (kstn.game.logic.playing_event.PlayingMessage.MultiGameOver) obj;
+
+      boolean result = true;
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static kstn.game.logic.playing_event.PlayingMessage.MultiGameOver parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static kstn.game.logic.playing_event.PlayingMessage.MultiGameOver parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.PlayingMessage.MultiGameOver parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static kstn.game.logic.playing_event.PlayingMessage.MultiGameOver parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.PlayingMessage.MultiGameOver parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static kstn.game.logic.playing_event.PlayingMessage.MultiGameOver parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.PlayingMessage.MultiGameOver parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static kstn.game.logic.playing_event.PlayingMessage.MultiGameOver parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.PlayingMessage.MultiGameOver parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static kstn.game.logic.playing_event.PlayingMessage.MultiGameOver parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static kstn.game.logic.playing_event.PlayingMessage.MultiGameOver parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static kstn.game.logic.playing_event.PlayingMessage.MultiGameOver parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(kstn.game.logic.playing_event.PlayingMessage.MultiGameOver prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code MultiGameOver}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:MultiGameOver)
+        kstn.game.logic.playing_event.PlayingMessage.MultiGameOverOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return kstn.game.logic.playing_event.PlayingMessage.internal_static_MultiGameOver_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return kstn.game.logic.playing_event.PlayingMessage.internal_static_MultiGameOver_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                kstn.game.logic.playing_event.PlayingMessage.MultiGameOver.class, kstn.game.logic.playing_event.PlayingMessage.MultiGameOver.Builder.class);
+      }
+
+      // Construct using kstn.game.logic.playing_event.PlayingMessage.MultiGameOver.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return kstn.game.logic.playing_event.PlayingMessage.internal_static_MultiGameOver_descriptor;
+      }
+
+      public kstn.game.logic.playing_event.PlayingMessage.MultiGameOver getDefaultInstanceForType() {
+        return kstn.game.logic.playing_event.PlayingMessage.MultiGameOver.getDefaultInstance();
+      }
+
+      public kstn.game.logic.playing_event.PlayingMessage.MultiGameOver build() {
+        kstn.game.logic.playing_event.PlayingMessage.MultiGameOver result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public kstn.game.logic.playing_event.PlayingMessage.MultiGameOver buildPartial() {
+        kstn.game.logic.playing_event.PlayingMessage.MultiGameOver result = new kstn.game.logic.playing_event.PlayingMessage.MultiGameOver(this);
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof kstn.game.logic.playing_event.PlayingMessage.MultiGameOver) {
+          return mergeFrom((kstn.game.logic.playing_event.PlayingMessage.MultiGameOver)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(kstn.game.logic.playing_event.PlayingMessage.MultiGameOver other) {
+        if (other == kstn.game.logic.playing_event.PlayingMessage.MultiGameOver.getDefaultInstance()) return this;
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        kstn.game.logic.playing_event.PlayingMessage.MultiGameOver parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (kstn.game.logic.playing_event.PlayingMessage.MultiGameOver) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:MultiGameOver)
+    }
+
+    // @@protoc_insertion_point(class_scope:MultiGameOver)
+    private static final kstn.game.logic.playing_event.PlayingMessage.MultiGameOver DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new kstn.game.logic.playing_event.PlayingMessage.MultiGameOver();
+    }
+
+    public static kstn.game.logic.playing_event.PlayingMessage.MultiGameOver getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<MultiGameOver>
+        PARSER = new com.google.protobuf.AbstractParser<MultiGameOver>() {
+      public MultiGameOver parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new MultiGameOver(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<MultiGameOver> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<MultiGameOver> getParserForType() {
+      return PARSER;
+    }
+
+    public kstn.game.logic.playing_event.PlayingMessage.MultiGameOver getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface ShowToastOrBuilder extends
       // @@protoc_insertion_point(interface_extends:ShowToast)
       com.google.protobuf.MessageOrBuilder {
@@ -2763,6 +3139,11 @@ public final class PlayingMessage {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_StartPlaying_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_MultiGameOver_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_MultiGameOver_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_ShowToast_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -2789,10 +3170,10 @@ public final class PlayingMessage {
       "\n3kstn/game/logic/playing_event/playing_" +
       "message.proto\"\034\n\nConeResult\022\016\n\006result\030\001 " +
       "\001(\005\"0\n\014NextQuestion\022\020\n\010question\030\001 \001(\t\022\016\n" +
-      "\006answer\030\002 \001(\t\"\016\n\014StartPlaying\"\031\n\tShowToa" +
-      "st\022\014\n\004text\030\001 \001(\t\"\016\n\014SongTingTing\"\n\n\010Song" +
-      "FailB\037\n\035kstn.game.logic.playing_eventb\006p" +
-      "roto3"
+      "\006answer\030\002 \001(\t\"\016\n\014StartPlaying\"\017\n\rMultiGa" +
+      "meOver\"\031\n\tShowToast\022\014\n\004text\030\001 \001(\t\"\016\n\014Son" +
+      "gTingTing\"\n\n\010SongFailB\037\n\035kstn.game.logic" +
+      ".playing_eventb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2824,20 +3205,26 @@ public final class PlayingMessage {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_StartPlaying_descriptor,
         new java.lang.String[] { });
-    internal_static_ShowToast_descriptor =
+    internal_static_MultiGameOver_descriptor =
       getDescriptor().getMessageTypes().get(3);
+    internal_static_MultiGameOver_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_MultiGameOver_descriptor,
+        new java.lang.String[] { });
+    internal_static_ShowToast_descriptor =
+      getDescriptor().getMessageTypes().get(4);
     internal_static_ShowToast_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ShowToast_descriptor,
         new java.lang.String[] { "Text", });
     internal_static_SongTingTing_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_SongTingTing_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SongTingTing_descriptor,
         new java.lang.String[] { });
     internal_static_SongFail_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(6);
     internal_static_SongFail_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SongFail_descriptor,

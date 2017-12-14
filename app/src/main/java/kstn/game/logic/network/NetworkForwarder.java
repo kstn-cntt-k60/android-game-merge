@@ -12,6 +12,7 @@ import kstn.game.logic.event.EventListener;
 import kstn.game.logic.event.EventManager;
 import kstn.game.logic.event.EventType;
 import kstn.game.logic.playing_event.ConeResultEvent;
+import kstn.game.logic.playing_event.MultiGameOverEvent;
 import kstn.game.logic.playing_event.NextQuestionEvent;
 import kstn.game.logic.playing_event.PlayingEventType;
 import kstn.game.logic.playing_event.ShowToastEvent;
@@ -92,6 +93,7 @@ public class NetworkForwarder implements Endpoint.OnReceiveDataListener {
         parserMap.put(PlayingEventType.SHOW_TOAST, new ShowToastEvent.Parser());
         parserMap.put(PlayingEventType.SONG_TINGTING, new SongTingTingEvent.Parser());
         parserMap.put(PlayingEventType.SONG_FAIL, new SongFailEvent.Parser());
+        parserMap.put(PlayingEventType.MULTI_GAME_OVER, new MultiGameOverEvent.Parser());
     }
 
     private void addListeners() {

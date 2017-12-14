@@ -182,6 +182,7 @@ public class MultiPlayerManager implements IEntryExit {
             @Override
             public void onConnectionError(Connection connection) {
                 eventManager.queue(new TransitToCreatedRoomsState());
+                networkForwarder.shutdown();
             }
         });
     }
@@ -202,8 +203,6 @@ public class MultiPlayerManager implements IEntryExit {
 
     @Override
     public void exit() {
-        networkForwarder.shutdown();
-
         if (scoreManager.thisPlayerIsHost()) {
             eventManager.removeListener(PlayingEventType.PLAYER_READY, playerReadyListener);
         }
