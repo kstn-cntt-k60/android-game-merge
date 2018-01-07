@@ -17,6 +17,7 @@ public class LogicResultState extends LogicGameState {
     }
     @Override
     public void entry() {
+        networkForwarder.setOnConnectionErrorListener(null);
         root.addView(backgroundView);
     }
 

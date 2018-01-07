@@ -49,7 +49,7 @@ public class Cone {
     private EventListener moveEventListener;
     private EventListener accelEventListener;
 
-    private final double xBias = 0.05f;
+    private final double xBias = 0.02f;
     private final double minRadius = 0.2f;
     private final double minVelocity = 180f; // degree / seconds
     private final double decreaseAccel = -50f;
